@@ -1,0 +1,86 @@
+version: '3'
+
+services:
+  php:
+    container_name: portalDenucias-php
+    build:
+      context: ./docker/php
+      dockerfile: Dockerfile
+    restart: always
+    tty: true
+    volumes:
+      - ./:/var/www
+      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+    networks:
+      - portalDenucias-network
+    ports:
+      - '80100:8080' # expõe a porta do reverb/websocket
+
+  nginx:
+    container_name: portalDenucias-nginx
+    build:
+      context: ./docker/nginx
+      dockerfile: Dockerfile
+    restart: always
+    tty: true
+    ports:
+      - '1129:80'
+      - '450:443'
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - portalDenucias-network
+    depends_on:
+      - php
+
+  mysql:
+    container_name: portalDenucias-mysql
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    tty: true
+    volumes:
+      - portalDenucias-data:/var/lib/mysql/
+      - ./docker/mysql/my.cnf:/etc/mysql/my.cnf
+    networks:
+      - portalDenucias-network
+    ports:
+      - '3329:3306'
+    environment:
+      MYSQL_DATABASE: nf
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: user
+      MYSQL_PASSWORD: nf@204
+
+  phpmyadmin:
+    container_name: portalDenucias-phpmyadmin
+    image: phpmyadmin:5.2
+    restart: always
+    ports:
+      - '88101:80'
+    networks:
+      - portalDenucias-network
+    environment:
+      PMA_HOST: portalDenucias-mysql
+    depends_on:
+      - mysql
+
+  redis:
+    container_name: portalDenucias-redis
+    build:
+      context: ./docker/redis
+      dockerfile: Dockerfile
+    restart: always
+    ports:
+      - '6189:6379'
+    networks:
+      - portalDenucias-network
+
+networks:
+  portalDenucias-network:
+    driver: bridge
+
+volumes:
+  portalDenucias-data:
+    driver: local
