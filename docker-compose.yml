@@ -14,7 +14,7 @@ services:
     networks:
       - portalDenucias-network
     ports:
-      - '80100:8080' # expõe a porta do reverb/websocket
+      - '8012:8080' # expõe a porta do reverb/websocket
 
   nginx:
     container_name: portalDenucias-nginx
@@ -25,7 +25,7 @@ services:
     tty: true
     ports:
       - '1129:80'
-      - '450:443'
+      - '456:443'
     volumes:
       - ./:/var/www
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
@@ -46,9 +46,9 @@ services:
     networks:
       - portalDenucias-network
     ports:
-      - '3329:3306'
+      - '3389:3306'
     environment:
-      MYSQL_DATABASE: nf
+      MYSQL_DATABASE: portal
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: user
       MYSQL_PASSWORD: nf@204
@@ -58,7 +58,7 @@ services:
     image: phpmyadmin:5.2
     restart: always
     ports:
-      - '88101:80'
+      - '8811:80'
     networks:
       - portalDenucias-network
     environment:

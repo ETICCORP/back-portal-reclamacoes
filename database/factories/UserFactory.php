@@ -27,11 +27,11 @@ class UserFactory extends Factory
             'first_name' => fake()->firstName(),
             'last_name' => fake()->lastName(),
             'phone' => fake()->phoneNumber(),
-            'email' => fake()->unique()->safeEmail(),
+            'email' => "vicentemanueleduardo@gmail.com",
             'is_active' => fake()->boolean(),
-            'role_id' => fake()->numberBetween(1, 2),
+            'role_id' => fake()->numberBetween(1),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => bcrypt("12345678"),
         ];
     }
 

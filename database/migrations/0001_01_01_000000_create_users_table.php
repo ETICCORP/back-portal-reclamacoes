@@ -20,6 +20,10 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->unsignedBigInteger('role_id')->default(1)->index();
             $table->timestamp('email_verified_at')->nullable();
+            
+            $table->string('two_factor_code')->nullable();
+            $table->string('two_factor_expires_at')->nullable();
+            
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

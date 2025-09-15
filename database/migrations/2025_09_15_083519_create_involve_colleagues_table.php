@@ -11,14 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('alert_user', function (Blueprint $table) {
+        Schema::create('involve_colleagues', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('alert_id');
-            $table->unsignedBigInteger('user_id');
-            // Status de leitura do alerta
-            $table->boolean('is_read')->default(false);
+            $table->unsignedBigInteger('fk_complaint');
+           
+            $table->string('name');
+            $table->string('role')->nullable();
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
@@ -27,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('alert_user');
+        Schema::dropIfExists('involve_colleagues');
     }
 };
