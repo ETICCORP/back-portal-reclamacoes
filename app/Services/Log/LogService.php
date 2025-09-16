@@ -17,7 +17,7 @@ class LogService extends AbstractService
     public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
     {
         $relationships = [
-            'entity',
+            'complaint',
             'user'
         ];
 
@@ -30,7 +30,7 @@ class LogService extends AbstractService
         ?string $typeAction,
         ?string $type,
         ?string $module,
-        ?int $idEntity = null,
+        ?int $complaint_id = null,
         ?string $customMessage = null
     ): void {
         $request = request();
@@ -47,7 +47,7 @@ class LogService extends AbstractService
             'user_id'         => Auth::id(),
             'http_user_agent' => $request->userAgent(),
             'message'         => $message,
-            'entity_id'       => $idEntity,
+            'complaint_id'       => $complaint_id,
         ]);
     }
 

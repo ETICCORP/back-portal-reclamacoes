@@ -9,7 +9,8 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-
+use Illuminate\Support\Facades\Auth;
+use App\Actions\StatusAction;
 class ComplaintController extends AbstractController
 {
     public function __construct(ComplaintService $service)
@@ -17,9 +18,41 @@ class ComplaintController extends AbstractController
         $this->service = $service;
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
+    public function index(Request $request)
+    {
+        try {
+            if ($this->logRequest) {
+                $this->logRequest();
+                $this->logToDatabase(
+                    type: $this->logType,
+                    level: 'info',
+                    customMessage: "O usuario " . Auth::user()->first_name . " Visualizou todos os registros no módulo {$this->nameEntity}",
+                );
+            }
+    
+            $filters = $request['filters'] ?? $request['filtersV2'];
+            $service = $this->service->index(
+                $request['paginate'],
+                $filters,
+                $request['orderBy'],
+                $request['relationships']
+            );
+    
+            // 🔹 Se for Collection
+            $service = collect($service)->map(function ($item) {
+                $item['nextStatus'] = StatusAction::getNextStatuses($item['status']);
+                return $item;
+            });
+    
+            return response()->json($service);
+    
+        } catch (Exception $e) {
+            if ($this->logRequest) {
+                $this->logRequest($e);
+            }
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
     public function store(ComplaintRequest $request)
     {
         try {

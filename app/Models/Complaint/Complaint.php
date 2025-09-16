@@ -15,7 +15,10 @@ class Complaint extends Model
 
     protected $table = 'complaint';
     protected $primaryKey = 'id';
-
+    protected $casts = [
+        'isAnonymous' => 'boolean', // Define o cast para o atributo isAnonymous
+            'enabled' => 'boolean',
+        ];
     protected $fillable = [
         'description',
         'incidentDateTime',

@@ -30,6 +30,8 @@ class CreateLogsTable extends Migration
             $table->string('user_name')->nullable();
             $table->string('type')->nullable();
             $table->string('user_id')->nullable();
+            $table->string('complaint_id')->nullable();
+            
             $table->string('http_user_agent')->nullable();
             $table->longText('message')->nullable();
             $table->unsignedBigInteger('entity_id')->nullable();

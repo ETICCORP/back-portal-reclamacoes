@@ -11,10 +11,10 @@ trait DatabaseLogger
         ?string $typeAction = null,
         ?string $module = null,
         ?string $level = 'info',
-        ?int $idEntity = null,
+        ?int $complaint_id = null,
         ?string $customMessage = null
     ): void {
         $logService = app(LogService::class);
-        $logService->storeLog($level, $typeAction, $type, $module, $idEntity, $customMessage);
+        $logService->storeLog($level, $typeAction, $type, $module, $complaint_id, $customMessage);
     }
 }
