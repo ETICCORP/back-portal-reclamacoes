@@ -9,10 +9,13 @@ use App\Services\User\UserService;
 use App\Http\Requests\User\AuthRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Http\Controllers\AbstractController;
+use App\Http\Requests\User\ChangePasswordRequest;
 use App\Http\Requests\User\EnabledRequest;
 use App\Http\Requests\User\Verify2faRequest;
 use App\Traits\DatabaseLogger;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Monolog\Level;
 
 class UserController extends AbstractController
@@ -149,6 +152,25 @@ class UserController extends AbstractController
         }
     }
  
+
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        try {
+            $this->logRequest();
+
+            if (!Hash::check($request->current_password, Auth::user()->password)) {
+                return response()->json([
+                    "message" => "A senha antiga está incorreta."
+                ], 400);
+            }
+
+            $userPassword = $this->service->changePassword($request->validated());
+            return response()->json($userPassword, Response::HTTP_CREATED);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
  
     
     public function me()

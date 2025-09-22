@@ -26,7 +26,13 @@ class UserService extends AbstractService
         $data['password'] = Hash::make($data['password']);
         return $this->repository->store($data);
     }
-   
+    public function changePassword(array $data)
+    {
+        return $this->repository->changePassword( $data);
+    }
+
+
+
     public function login(Request $request)
     {
         $request->validate([

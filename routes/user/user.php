@@ -5,6 +5,8 @@ use App\Http\Controllers\User\UserController;
 
 Route::get('/me', [UserController::class, 'me'])
     ->name('user.me');
+    Route::put('/changePassword', [UserController::class, 'changePassword'])
+    ->name('user.changePassword');
 
 Route::get('', [UserController::class, 'index'])
     ->name('user.index')
@@ -23,10 +25,11 @@ Route::put('{id}', [UserController::class, 'update'])
     ->middleware(['can:usuario-edit']);
 
     Route::put('/enabled/{id}', [UserController::class, 'enabled'])
-    ->name('user.enabled')
-;
+    ->name('user.enabled');
 
-;
+
+
+
 Route::delete('{id}', [UserController::class, 'destroy'])
     ->name('user.destroy')
     ->middleware(['can:usuario-delete']);

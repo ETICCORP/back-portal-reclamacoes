@@ -75,13 +75,13 @@ class User extends Model implements
 
     public function can($rule)
     {
-        $permissions = $this->role->permissions->contains('name', $rule);
-        if ($permissions) {
-            return true;
+        if (!$this->role || !$this->role->permissions) {
+            return false;
         }
-        return false;
+    
+        return $this->role->permissions->contains('name', $rule);
     }
-
+    
     public function hasPermissions($names)
     {
         $results = $this->permissions()
