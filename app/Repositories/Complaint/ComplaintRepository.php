@@ -77,6 +77,12 @@ class ComplaintRepository extends AbstractRepository
     {
         return $this->model::count();
     }
+    public function getBycode($code)
+    {
+        return $this->model::where('code',$code)->first();
+    }
+
+    
 
     /**
      * Total de denúncias na semana atual

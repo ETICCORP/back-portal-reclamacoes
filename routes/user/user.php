@@ -22,6 +22,11 @@ Route::put('{id}', [UserController::class, 'update'])
     ->name('user.update')
     ->middleware(['can:usuario-edit']);
 
+    Route::put('/enabled/{id}', [UserController::class, 'enabled'])
+    ->name('user.enabled')
+;
+
+;
 Route::delete('{id}', [UserController::class, 'destroy'])
     ->name('user.destroy')
     ->middleware(['can:usuario-delete']);

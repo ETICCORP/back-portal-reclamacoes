@@ -9,6 +9,7 @@ use App\Services\User\UserService;
 use App\Http\Requests\User\AuthRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Http\Controllers\AbstractController;
+use App\Http\Requests\User\EnabledRequest;
 use App\Http\Requests\User\Verify2faRequest;
 use App\Traits\DatabaseLogger;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -117,6 +118,39 @@ class UserController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+ 
+    public function enabled(EnabledRequest $request, $id)
+    {
+        try {
+            $this->logRequest();
+            $user = $this->service->update($request->validated(), $id);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: "Usuário {$user?->first_name} atualizado com sucesso.",
+            );
+            return response()->json($user, Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: 'Usuário não encontrado.',
+            );
+            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: 'Erro ao atualizar usuário.',
+            );
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+ 
+ 
+    
     public function me()
     {
         try {

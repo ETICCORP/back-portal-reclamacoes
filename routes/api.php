@@ -17,3 +17,4 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/auth/login', [UserController::class, 'login']);
 Route::prefix('auth')->middleware('guest')->group(base_path('routes/user/auth.php'));
 Route::post('auth/2fa', [UserController::class, 'verify2fa']);
+Route::prefix('reports')->group(base_path('routes/reports/reportsFre.php'));

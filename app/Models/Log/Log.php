@@ -2,6 +2,7 @@
 
 namespace App\Models\Log;
 
+use App\Models\Complaint\Complaint;
 use App\Models\Entities\Entities;
 use App\Models\User\User;
 use Illuminate\Database\Eloquent\Model;
@@ -24,12 +25,13 @@ class Log extends Model
         'complaint_id'
     ];
 
-    public function entity()
-    {
-        return $this->belongsTo(Entities::class, 'entity_id');
-    }
+   
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+    public function complaint()
+    {
+        return $this->belongsTo(Complaint::class, 'complaint_id');
     }
 }

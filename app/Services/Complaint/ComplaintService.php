@@ -43,6 +43,11 @@ class ComplaintService extends AbstractService
     {
         return $this->repository->getTopTypes();
     }
+    public function getBycode($code)
+    {
+        return $this->repository->getBycode($code);
+    }
+    
 
     public function countByDate(?string $startDate, ?string $endDate)
     {

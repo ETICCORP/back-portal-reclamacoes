@@ -26,7 +26,7 @@ class UserService extends AbstractService
         $data['password'] = Hash::make($data['password']);
         return $this->repository->store($data);
     }
-
+   
     public function login(Request $request)
     {
         $request->validate([
@@ -119,7 +119,7 @@ class UserService extends AbstractService
             'status' => 'success',
             'message' => 'Autenticação 2FA validada com sucesso.',
             'token' => $token,
-           // 'user'  => $user
+            // 'user'  => $user
         ];
     }
 }

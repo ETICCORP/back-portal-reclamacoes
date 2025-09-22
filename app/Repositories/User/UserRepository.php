@@ -10,4 +10,8 @@ class UserRepository extends AbstractRepository
     {
         parent::__construct($model);
     }
+
+
+
+   
 }

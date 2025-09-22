@@ -5,7 +5,6 @@ use App\Http\Controllers\Permission\PermissionController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [ComplaintController::class, 'index'])->name('reports.index');
-Route::post('/', [ComplaintController::class, 'store'])->name('reports.store');
 
 Route::put('/{id}', [ComplaintController::class, 'update'])->name('reports.update');
 
