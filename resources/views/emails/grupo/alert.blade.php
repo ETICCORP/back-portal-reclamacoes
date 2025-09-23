@@ -92,9 +92,9 @@
         <h2>{{ $alert->entity->social_denomination }}</h2>
 
         <div class="info-box">
-            <p><strong>Tipo:</strong> {{ $alert->type }}</p>
+         
             <p><strong>Nível:</strong> {{ $alert->level }}</p>
-            <p><strong>Score:</strong> {{ $alert->score }}</p>
+   
             <p><strong>Data:</strong> {{ \Carbon\Carbon::parse($alert->created_at)->format('d/m/Y H:i') }}</p>
         </div>
 

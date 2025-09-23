@@ -39,7 +39,7 @@ class SendGrupoAlertEmailJob implements ShouldQueue
         Log::info("Processando Alert ID {$alert->id} | Tipo: {$alert->type}");
 
         // Buscar todos os grupos que correspondem ao tipo do alert
-        $grupoTypes = GrupoType::where('name', $alert->type)->get();
+        $grupoTypes = GrupoType::where('complaint_id', $alert->complit_id)->get();
 
         if ($grupoTypes->isEmpty()) {
             Log::warning("Nenhum GrupoType encontrado para alert tipo '{$alert->type}'");

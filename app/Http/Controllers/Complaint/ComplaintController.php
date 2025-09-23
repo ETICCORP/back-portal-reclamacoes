@@ -11,6 +11,9 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\StatusAction;
+use App\Jobs\AlertJob;
+use App\Jobs\GenerateAlertsJob;
+
 class ComplaintController extends AbstractController
 {
     public function __construct(ComplaintService $service)
@@ -58,6 +61,8 @@ class ComplaintController extends AbstractController
         try {
             $this->logRequest();
             $complaint = $this->service->storeData($request->validated());
+            AlertJob::dispatch($complaint->id);
+
             return response()->json($complaint, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);

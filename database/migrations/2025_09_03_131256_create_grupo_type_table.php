@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('grupo_type', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->longText('description')->nullable();
+           
             $table->unsignedBigInteger('grup_alert_id');
+            $table->unsignedBigInteger('complaint_id');
             $table->timestamps();
             $table->softDeletes();
         });

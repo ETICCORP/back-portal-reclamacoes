@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Complaint\ComplaintController;
+use App\Http\Controllers\Complaint\TypeComplaintsController;
 use App\Http\Controllers\Permission\PermissionController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,11 @@ Route::get('/total-last-week', [ComplaintController::class, 'totalForLastWeek'])
 Route::get('/types', [ComplaintController::class, 'getTopTypes'])->name('complaints.types');
 Route::get('/count-by-date', [ComplaintController::class, 'countByDate'])->name('complaints.countByDate');
 Route::post('/count-by-date', [ComplaintController::class, 'countByDate'])->name('countByDate.index');
+
+
+Route::get('/type', [TypeComplaintsController::class, 'index']);
+Route::post('/type', [TypeComplaintsController::class, 'store']);
+Route::get('/type/{id}', [TypeComplaintsController::class, 'show']);
+Route::put('/type/{id}', [TypeComplaintsController::class, 'update']);
+Route::delete('/type/{id}', [TypeComplaintsController::class, 'destroy']);
+

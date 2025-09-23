@@ -17,16 +17,18 @@ class GrupoAlertEmailsRepository extends AbstractRepository
             'name'        => $data['name'],
             'description' => $data['description'] ?? null,
         ]);
-
+        
         if (!empty($data['grupo_Type']) && is_array($data['grupo_Type'])) {
             $grup->grupoTypes()->createMany(
                 collect($data['grupo_Type'])->map(fn($type) => [
-                    'name' => $type,
-                   
+                    'complaint_id' => $type['complaint_id'], // precisa passar o ID real
+                    'grup_alert_id' => $grup->id,
                 ])->toArray()
             );
         }
-    
+        
+
+        
         return $grup->load('grupoTypes');
     }
     

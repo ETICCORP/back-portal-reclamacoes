@@ -32,11 +32,11 @@ Route::put('/user', [AlertUserController::class, 'update'])
 
 
 Route::get('/comment', [CommentAlertController::class, 'index'])
-    ->name('comment.index');
+    ->name('commentALert.index');
 Route::get('/comment/{id}', [CommentAlertController::class, 'show'])
-    ->name('comment.show');
+    ->name('commentALert.show');
 Route::post('/comment', [CommentAlertController::class, 'store'])
-    ->name('comment.store');
+    ->name('commentALert.store');
 
 Route::get('/me/notifications/', [AlertUserController::class, 'countActiveAlertsForAuthenticatedUser'])
     ->name('notifications.index');
