@@ -27,9 +27,9 @@ class ComplaintRequest extends BaseFormRequest
             'location'          => 'required|string|max:255',
             'suggestionAttempt' => 'nullable|string|max:255',
             'relationship'      => 'nullable|string|max:255',
-            'status'            => 'required|integer',
+            'status'            => 'required',
             'isAnonymous'       => 'required|boolean',
-            'type'              => 'required|integer',
+            'type'              => 'required',
 
             // validação dos envolvidos
             'involveColleagues'         => 'nullable|array',

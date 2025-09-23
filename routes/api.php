@@ -9,6 +9,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('role')->group(base_path('routes/user/permission/role.php'));
     Route::prefix('user')->group(base_path('routes/user/user.php'));
     Route::prefix('logs')->group(base_path('routes/logs/logs.php'));
+    Route::prefix('alert')->group(base_path('routes/alert/alert.php'));
     //Route::prefix('statistics')->group(base_path('routes/statistics/statistics.php'));
     Route::prefix('reports')->group(base_path('routes/reports/reports.php'));
     Route::prefix('comment')->group(base_path('routes/comment/comment.php'));
