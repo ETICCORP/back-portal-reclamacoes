@@ -14,15 +14,15 @@ class GrupoType extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'grupo_type';
     protected $primaryKey = 'id';
-    protected $fillable = ['complaint_id', 'grup_alert_id'];
+    protected $fillable = ['type_complaints_id', 'grup_alert_id'];
     
     public function grupoAlert()
     {
         return $this->belongsTo(GrupoAlertEmails::class, 'grup_alert_id');
     }
-    public function complaint()
+    public function typeComplaint()
     {
-        return $this->belongsTo(TypeComplaints::class, 'complaint_id');
+        return $this->belongsTo(TypeComplaints::class, 'type_complaints_id');
     }
     
     

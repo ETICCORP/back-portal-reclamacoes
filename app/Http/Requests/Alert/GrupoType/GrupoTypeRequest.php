@@ -4,6 +4,7 @@ namespace App\Http\Requests\Alert\GrupoType;
 
 use App\Http\Requests\BaseFormRequest;
 use App\Models\Alert\GrupoAlertEmails\GrupoAlertEmails;
+use App\Models\Alert\GrupoType\GrupoType;
 use App\Models\Complaint\Complaint;
 
 class GrupoTypeRequest extends BaseFormRequest
@@ -24,10 +25,8 @@ class GrupoTypeRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'complaint_id' => ['required', Complaint::exists('complaint_id', 'id')],
-            'grup_alert_id' => ['required', GrupoAlertEmails::exists('grup_alert_id', 'id')],
-            
-           
+            'type_complaints_id' => ['required', 'exists:type_complaints,id'],
+            'grup_alert_id'    => ['required', 'exists:user_grupo_alert,id'],
         ];
     }
-} 
+}

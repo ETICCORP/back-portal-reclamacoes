@@ -50,6 +50,10 @@ class Complaint extends Model
     {
         return $this->hasMany(InvolveColleagues::class, 'fk_complaint');
     }
+      public function typeReport()
+    {
+        return $this->belongsTo(TypeComplaints::class, 'type');
+    }
 
     public function reports()
     {

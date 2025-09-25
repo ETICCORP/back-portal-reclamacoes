@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Alert\GrupoAlertEmails;
 
 use App\Models\Alert\GrupoAlertEmails\GrupoAlertEmails;
@@ -17,21 +18,18 @@ class GrupoAlertEmailsRepository extends AbstractRepository
             'name'        => $data['name'],
             'description' => $data['description'] ?? null,
         ]);
-        
+
         if (!empty($data['grupo_Type']) && is_array($data['grupo_Type'])) {
             $grup->grupoTypes()->createMany(
                 collect($data['grupo_Type'])->map(fn($type) => [
-                    'complaint_id' => $type['complaint_id'], // precisa passar o ID real
+                    'type_complaints_id' => $type['type_complaints_id'],
                     'grup_alert_id' => $grup->id,
                 ])->toArray()
             );
         }
-        
 
-        
+
+
         return $grup->load('grupoTypes');
     }
-    
-
-    
 }

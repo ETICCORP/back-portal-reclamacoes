@@ -21,41 +21,58 @@ class ComplaintController extends AbstractController
         $this->service = $service;
     }
 
-    public function index(Request $request)
-    {
-        try {
-            if ($this->logRequest) {
-                $this->logRequest();
-                $this->logToDatabase(
-                    type: $this->logType,
-                    level: 'info',
-                    customMessage: "O usuario " . Auth::user()->first_name . " Visualizou todos os registros no módulo {$this->nameEntity}",
-                );
-            }
-    
-            $filters = $request['filters'] ?? $request['filtersV2'];
-            $service = $this->service->index(
-                $request['paginate'],
-                $filters,
-                $request['orderBy'],
-                $request['relationships']
+  public function index(Request $request)
+{
+    try {
+        if ($this->logRequest) {
+            $this->logRequest();
+            $this->logToDatabase(
+                type: $this->logType,
+                level: 'info',
+                customMessage: "O usuário " . Auth::user()->first_name . " visualizou todos os registros no módulo {$this->nameEntity}",
             );
-    
-            // 🔹 Se for Collection
-            $service = collect($service)->map(function ($item) {
-                $item['nextStatus'] = StatusAction::getNextStatuses($item['status']);
+        }
+
+        $filters = $request['filters'] ?? $request['filtersV2'];
+        $service = $this->service->index(
+            $request['paginate'],
+            $filters,
+            $request['orderBy'],
+            $request['relationships']
+        );
+
+        // 🔹 Se for um paginator (quando existe "paginate")
+        if ($service instanceof \Illuminate\Pagination\AbstractPaginator) {
+            $service->getCollection()->transform(function ($item) {
+                if (is_array($item)) {
+                    $item['nextStatus'] = StatusAction::getNextStatuses($item['status'] ?? null);
+                } else {
+                    $item->nextStatus = StatusAction::getNextStatuses($item->status ?? null);
+                }
                 return $item;
             });
-    
-            return response()->json($service);
-    
-        } catch (Exception $e) {
-            if ($this->logRequest) {
-                $this->logRequest($e);
-            }
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        } else {
+            // 🔹 Se for apenas collection/array
+            $service = collect($service)->map(function ($item) {
+                if (is_array($item)) {
+                    $item['nextStatus'] = StatusAction::getNextStatuses($item['status'] ?? null);
+                } else {
+                    $item->nextStatus = StatusAction::getNextStatuses($item->status ?? null);
+                }
+                return $item;
+            });
         }
+
+        return response()->json($service);
+
+    } catch (Exception $e) {
+        if ($this->logRequest) {
+            $this->logRequest($e);
+        }
+        return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+}
+
     public function store(ComplaintRequest $request)
     {
         try {

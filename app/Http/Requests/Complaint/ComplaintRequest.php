@@ -29,7 +29,7 @@ class ComplaintRequest extends BaseFormRequest
             'relationship'      => 'nullable|string|max:255',
             'status'            => 'required',
             'isAnonymous'       => 'required|boolean',
-            'type'              => 'required',
+            'type' => ['required', 'numeric', 'exists:type_complaints,id'],
 
             // validação dos envolvidos
             'involveColleagues'         => 'nullable|array',

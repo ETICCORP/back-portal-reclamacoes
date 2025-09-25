@@ -18,7 +18,7 @@ class AlertUserRepository extends AbstractRepository
         return $this->model
             ->where('user_id', $userId)
             ->whereHas('alert', function ($q) {
-                $q->where('is_active', 1);
+                $q->where('is_read', 1);
             })
             ->count();
     }
@@ -28,7 +28,7 @@ class AlertUserRepository extends AbstractRepository
         return $this->model
             ->where('user_id', $userId)
             ->whereHas('alert', function ($q) {
-                $q->where('is_active', 0);
+                $q->where('is_read', 0);
             })
             ->count();
     }
@@ -71,7 +71,7 @@ class AlertUserRepository extends AbstractRepository
     {
         $alerts = $this->model
             ->where('user_id', auth()->id())
-            ->whereHas('alert', fn ($q) => $q->where('is_active', 1))
+            ->whereHas('alert', fn ($q) => $q->where('is_read', 1))
             ->with('alert:id,name,is_active,level') 
             ->get(['id', 'alert_id', 'is_read']); 
     

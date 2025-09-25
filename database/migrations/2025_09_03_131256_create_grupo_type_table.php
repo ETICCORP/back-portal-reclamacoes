@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
            
             $table->unsignedBigInteger('grup_alert_id');
-            $table->unsignedBigInteger('complaint_id');
+            $table->unsignedBigInteger('type_complaints_id');
             $table->timestamps();
             $table->softDeletes();
         });

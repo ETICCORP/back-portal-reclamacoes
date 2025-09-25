@@ -7,6 +7,7 @@ use App\Models\Alert\Alert;
 use App\Models\Alert\AlertUser\AlertUser;
 use App\Models\Alert\GrupoType\GrupoType;
 use App\Models\Alert\UserGrupoAlert\UserGrupoAlert;
+use App\Models\Complaint\Complaint;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -39,7 +40,8 @@ class SendGrupoAlertEmailJob implements ShouldQueue
         Log::info("Processando Alert ID {$alert->id} | Tipo: {$alert->type}");
 
         // Buscar todos os grupos que correspondem ao tipo do alert
-        $grupoTypes = GrupoType::where('complaint_id', $alert->complit_id)->get();
+        $complaint =  Complaint::find($alert->complit_id);
+        $grupoTypes = GrupoType::where('type_complaints_id', $complaint->type)->get();
 
         if ($grupoTypes->isEmpty()) {
             Log::warning("Nenhum GrupoType encontrado para alert tipo '{$alert->type}'");
@@ -71,9 +73,6 @@ class SendGrupoAlertEmailJob implements ShouldQueue
                     $alreadyLinked = AlertUser::where('alert_id', $alert->id)
                         ->where('user_id', $user->id)
                         ->exists();
-
-
-
                     if ($alreadyLinked) {
                         Log::info("Usuário ID {$user->id} já vinculado ao alert ID {$alert->id}");
                         continue;
@@ -84,7 +83,7 @@ class SendGrupoAlertEmailJob implements ShouldQueue
                         'user_id'  => $user->id,
                     ]);
                     // Envia email
-                    Mail::to($user->email)->send(new GrupoAlertMail($user, $alert));
+                    Mail::to($user->email)->send(new GrupoAlertMail($user, $complaint));
 
                     Log::info("Usuário ID {$user->id} vinculado ao alert ID {$alert->id}");
                 } catch (\Throwable $e) {
