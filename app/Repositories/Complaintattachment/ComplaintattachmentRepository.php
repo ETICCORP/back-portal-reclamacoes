@@ -94,31 +94,29 @@ public function createComplaintAttachment(array $attachments, int $complaintId):
 
 
     public function showFile($id)
-    {
+{
+    try {
+        $file = $this->model::findOrFail($id);
+        $path = $file->file;
 
-        try { // Busca o arquivo pelo ID ou lança uma exceção se não for encontrado
-            $file = $this->model::findOrFail($id);
-
-            $path = $file->file; // Acesso ao caminho relativo do arquivo]
-
-            if (!Storage::disk('public')->exists($path)) {
-                return response()->json(['error' => 'Arquivo não encontrado'], 404);
-            }
-
-            $fileContents = Storage::disk('public')->get($path);
-            $mimeType = File::mimeType(storage_path("app/public/{$path}"));
-
-            if (!$mimeType) {
-                $mimeType = 'application/octet-stream';
-            }
-            return response($fileContents, 200)
-                ->header('Content-Type', $mimeType)
-                ->header('Content-Disposition', 'inline; filename="' . basename($path) . '"'); // 'inline' para abrir no navegador
-
-        } catch (\Throwable $th) {
-            return response()->json([
-                "message" => "Falha ao abrir o arquivo, não encontrado "
-            ], 400);
+        if (!Storage::disk('public')->exists($path)) {
+            return response()->json(['error' => 'Arquivo não encontrado'], 404);
         }
+
+        // Caminho absoluto
+        $absolutePath = storage_path("app/public/{$path}");
+        $mimeType = File::mimeType($absolutePath) ?? 'application/octet-stream';
+
+        return response()->file($absolutePath, [
+            'Content-Type'        => $mimeType,
+            'Content-Disposition' => 'inline; filename="'.basename($path).'"'
+        ]);
+
+    } catch (\Throwable $th) {
+        return response()->json([
+            "message" => "Falha ao abrir o arquivo, não encontrado"
+        ], 400);
     }
+}
+
 }
