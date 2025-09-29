@@ -92,8 +92,7 @@ public function createComplaintAttachment(array $attachments, int $complaintId):
 
 
 
-
-    public function showFile($id)
+public function showFile($id)
 {
     try {
         $file = $this->model::findOrFail($id);
@@ -103,20 +102,25 @@ public function createComplaintAttachment(array $attachments, int $complaintId):
             return response()->json(['error' => 'Arquivo não encontrado'], 404);
         }
 
-        // Caminho absoluto
+        // Conteúdo do arquivo
+        $fileContents = Storage::disk('public')->get($path);
+
+        // Caminho absoluto para detectar mime
         $absolutePath = storage_path("app/public/{$path}");
         $mimeType = File::mimeType($absolutePath) ?? 'application/octet-stream';
 
-        return response()->file($absolutePath, [
-            'Content-Type'        => $mimeType,
-            'Content-Disposition' => 'inline; filename="'.basename($path).'"'
-        ]);
+        // Retorna o arquivo binário (imagem, pdf, etc)
+        return response($fileContents, 200)
+            ->header('Content-Type', $mimeType)
+            ->header('Content-Disposition', 'inline; filename="' . basename($path) . '"');
 
     } catch (\Throwable $th) {
         return response()->json([
-            "message" => "Falha ao abrir o arquivo, não encontrado"
+            "message" => "Falha ao abrir o arquivo, não encontrado",
+            "error"   => $th->getMessage(),
         ], 400);
     }
 }
+
 
 }
