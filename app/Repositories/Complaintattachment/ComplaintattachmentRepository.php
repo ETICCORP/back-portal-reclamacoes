@@ -102,21 +102,19 @@ public function showFile($id)
             return response()->json(['error' => 'Arquivo não encontrado'], 404);
         }
 
-        // Conteúdo do arquivo
-        $fileContents = Storage::disk('public')->get($path);
-
-        // Caminho absoluto para detectar mime
         $absolutePath = storage_path("app/public/{$path}");
-        $mimeType = File::mimeType($absolutePath) ?? 'application/octet-stream';
+        $mimeType = \Illuminate\Support\Facades\File::mimeType($absolutePath) ?? 'application/octet-stream';
 
-        // Retorna o arquivo binário (imagem, pdf, etc)
-        return response($fileContents, 200)
-            ->header('Content-Type', $mimeType)
-            ->header('Content-Disposition', 'inline; filename="' . basename($path) . '"');
+        return response()->stream(function () use ($absolutePath) {
+            readfile($absolutePath);
+        }, 200, [
+            "Content-Type"        => $mimeType,
+            "Content-Disposition" => 'inline; filename="'.basename($absolutePath).'"'
+        ]);
 
     } catch (\Throwable $th) {
         return response()->json([
-            "message" => "Falha ao abrir o arquivo, não encontrado",
+            "message" => "Falha ao abrir o arquivo",
             "error"   => $th->getMessage(),
         ], 400);
     }
