@@ -32,9 +32,10 @@ class ComplaintRequest extends BaseFormRequest
             'type' => ['required', 'numeric', 'exists:type_complaints,id'],
 
             // validação dos envolvidos
-            'involveColleagues'         => 'nullable|array',
-            'involveColleagues.name'    => 'required_with:involveColleagues|string|max:255',
-            'involveColleagues.role'    => 'required_with:involveColleagues|string|max:255',
+            'involveColleagues'            => 'nullable|array',
+            'involveColleagues.*.name'     => 'required_with:involveColleagues|string|max:255',
+            'involveColleagues.*.role'     => 'required_with:involveColleagues|string|max:255',
+
 
             // validação do reporter
             'reporter'               => 'nullable|array',

@@ -56,7 +56,7 @@ class ComplaintRepository extends AbstractRepository
         }
 
       $complaint->load([
-        "involveds",
+       "involveds",
         "reports",
         "attachments",
         "soluctions",
