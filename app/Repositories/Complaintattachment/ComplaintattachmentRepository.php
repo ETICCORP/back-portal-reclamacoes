@@ -14,47 +14,46 @@ class ComplaintattachmentRepository extends AbstractRepository
         parent::__construct($model);
     }
 
-    public function createComplaintAttachment(array $attachments, int $complaintId): array
-    {
-        $attachmentsCreated = [];
+  public function createComplaintAttachment(array $attachments, int $complaintId): array
+{
+    $attachmentsCreated = [];
 
-        foreach ($attachments as $base64File) {
-            try {
-                // Extrai metadados do Base64 (ex.: data:image/png;base64,...)
-                if (preg_match('/^data:(.*?);base64,(.*)$/', $base64File, $matches)) {
-                    $mimeType = $matches[1];
-                    $fileData = base64_decode($matches[2]);
+    foreach ($attachments as $base64File) {
+        try {
+            if (preg_match('/^data:(.*?);base64,(.*)$/', $base64File, $matches)) {
+                $mimeType = $matches[1];
+                $fileData = base64_decode($matches[2]);
 
-                    if ($fileData === false) {
-                        throw new \Exception("Falha ao decodificar Base64");
-                    }
-
-                    // Define a extensão a partir do MIME
-                    $extension = explode('/', $mimeType)[1] ?? 'png';
-
-                    // Nome único
-                    $randomName = $this->model::generateCustomRandomCode(12) . '.' . $extension;
-
-                    // Caminho onde será salvo
-                    $path = "complaintattachments/{$complaintId}/{$randomName}";
-
-                    // Salvar no disco "public"
-                    Storage::disk('public')->put($path, $fileData);
-
-                    // Persistir no banco
-                    $attachmentsCreated[] = $this->model->create([
-                        'fk_complaint' => $complaintId,
-                        'file'         => $path,
-                        'name'         => "dn_{$randomName}",
-                    ]);
+                if ($fileData === false) {
+                    throw new \Exception("Falha ao decodificar Base64");
                 }
-            } catch (\Throwable $e) {
-                // \Log::alert::error("Erro ao salvar anexo da denúncia #{$complaintId}: " . $e->getMessage());
-            }
-        }
 
-        return $attachmentsCreated;
+                // extensão a partir do mime
+                $extension = explode('/', $mimeType)[1] ?? 'bin';
+
+                // gera nome único
+                $randomName = $this->model::generateCustomRandomCode(12) . '.' . $extension;
+
+                // define caminho
+                $path = "complaintattachments/{$complaintId}/{$randomName}";
+
+                // grava no disco
+                Storage::disk('public')->put($path, $fileData);
+
+                // persiste no banco
+                $attachmentsCreated[] = $this->model->create([
+                    'fk_complaint' => $complaintId,
+                    'file'         => $path,
+                    'name'         => "dn_{$randomName}",
+                ]);
+            }
+        } catch (\Throwable $e) {
+           // \Log::error("Erro ao salvar anexo da denúncia {$complaintId}: " . $e->getMessage());
+        }
     }
+
+    return $attachmentsCreated;
+}
 
 
 
