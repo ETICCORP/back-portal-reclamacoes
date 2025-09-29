@@ -22,9 +22,5 @@ Route::get('/count-by-date', [ComplaintController::class, 'countByDate'])->name(
 Route::post('/count-by-date', [ComplaintController::class, 'countByDate'])->name('countByDate.index');
 
 
-Route::get('/type', [TypeComplaintsController::class, 'index']);
-Route::post('/type', [TypeComplaintsController::class, 'store']);
-Route::get('/type/{id}', [TypeComplaintsController::class, 'show']);
-Route::put('/type/{id}', [TypeComplaintsController::class, 'update']);
-Route::delete('/type/{id}', [TypeComplaintsController::class, 'destroy']);
+
 
