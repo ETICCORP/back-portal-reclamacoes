@@ -99,22 +99,27 @@ public function showFile($id)
         $path = $file->file;
 
         if (!$path || !Storage::disk('public')->exists($path)) {
-            return response()->json(['error' => 'Arquivo não encontrado'], 404);
+            return response('Arquivo não encontrado', 404)
+                ->header('Content-Type', 'text/plain');
         }
 
         $absolutePath = Storage::disk('public')->path($path);
         $mimeType = \Illuminate\Support\Facades\File::mimeType($absolutePath) ?? 'application/octet-stream';
 
+        // envia o binário puro
         return response()->make(file_get_contents($absolutePath), 200, [
             'Content-Type'        => $mimeType,
             'Content-Disposition' => 'inline; filename="'.basename($absolutePath).'"',
             'Cache-Control'       => 'no-cache, must-revalidate',
         ]);
     } catch (\Throwable $th) {
-        return response()->json([
-            "message" => "Falha ao abrir o arquivo",
-            "error"   => $th->getMessage(),
-        ], 400);
+        \Log::error("Erro em showFile", [
+            'id'    => $id,
+            'error' => $th->getMessage(),
+        ]);
+
+        return response('Falha ao abrir o arquivo', 400)
+            ->header('Content-Type', 'text/plain');
     }
 }
 
