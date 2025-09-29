@@ -113,7 +113,7 @@ public function showFile($id)
             'Cache-Control'       => 'no-cache, must-revalidate',
         ]);
     } catch (\Throwable $th) {
-        \Log::error("Erro em showFile", [
+        Log::error("Erro em showFile", [
             'id'    => $id,
             'error' => $th->getMessage(),
         ]);
