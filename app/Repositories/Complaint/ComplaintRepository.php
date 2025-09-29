@@ -9,6 +9,7 @@ use App\Repositories\Description\DescriptionRepository;
 use App\Repositories\InvolveColleagues\InvolveColleaguesRepository;
 use App\Repositories\Reporter\ReporterRepository;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class ComplaintRepository extends AbstractRepository
 {
@@ -66,20 +67,24 @@ class ComplaintRepository extends AbstractRepository
                 $complaint->id
             );
         }
+if (!empty($data['attachments'])) {
+    Log::debug("Chamando createComplaintAttachment", [
+        'complaintId' => $complaint->id,
+        'count' => is_array($data['attachments']) ? count($data['attachments']) : 0
+    ]);
+    
+    if (is_string($data['attachments'])) {
+        $data['attachments'] = json_decode($data['attachments'], true);
+    }
 
-        // 📎 Anexos
-        if (!empty($data['attachments'])) {
-            if (is_string($data['attachments'])) {
-                $data['attachments'] = json_decode($data['attachments'], true);
-            }
+    if (is_array($data['attachments'])) {
+        $this->attachments->createComplaintAttachment(
+            $data['attachments'], 
+            $complaint->id
+        );
+    }
+}
 
-            if (is_array($data['attachments']) && count($data['attachments']) > 0) {
-                $this->attachments->createComplaintAttachment(
-                    $data['attachments'],
-                    $complaint->id
-                );
-            }
-        }
 
 
 
