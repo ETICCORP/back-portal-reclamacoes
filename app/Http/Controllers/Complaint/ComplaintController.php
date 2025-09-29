@@ -33,13 +33,16 @@ class ComplaintController extends AbstractController
             );
         }
 
-        $filters = $request['filters'] ?? $request['filtersV2'];
-        $service = $this->service->index(
-            $request['paginate'],
-            $filters,
-            $request['orderBy'],
-            $request['relationships']
-        );
+  $filters = $request['filters'] ?? $request['filtersV2'];
+
+$service = $this->service->index(
+    $request['paginate'],
+    $filters,
+    $request->input('orderBy', ['id' => 'desc']),
+    $request->input('relationships', []),
+    $filters // se realmente precisas passar $filters de novo
+);
+
 
         // 🔹 Se for um paginator (quando existe "paginate")
         if ($service instanceof \Illuminate\Pagination\AbstractPaginator) {
@@ -76,8 +79,8 @@ class ComplaintController extends AbstractController
     public function store(ComplaintRequest $request)
     {
         try {
-//return $request->all();
 
+            
             $this->logRequest();
             $complaint = $this->service->storeData($request->validated());
             AlertJob::dispatch($complaint->id);
