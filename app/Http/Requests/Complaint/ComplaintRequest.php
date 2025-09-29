@@ -27,7 +27,7 @@ class ComplaintRequest extends BaseFormRequest
             'location'          => 'required|string|max:255',
             'suggestionAttempt' => 'nullable|string|max:255',
             'relationship'      => 'nullable|string|max:255',
-            'status'            => 'required',
+            'status'            => 'required|string|max:255',
             'isAnonymous'       => 'required|boolean',
             'type' => ['required', 'numeric', 'exists:type_complaints,id'],
 
