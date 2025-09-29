@@ -21,5 +21,6 @@ Route::get('/count-by-date', [ComplaintController::class, 'countByDate'])->name(
 Route::post('/count-by-date', [ComplaintController::class, 'countByDate'])->name('countByDate.index');
 
 
+Route::put('/updateStatus/{id}', [ComplaintController::class, 'updateStatus']);
 
 

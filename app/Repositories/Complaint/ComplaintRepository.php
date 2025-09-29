@@ -4,31 +4,37 @@ namespace App\Repositories\Complaint;
 
 use App\Models\Complaint\Complaint;
 use App\Repositories\AbstractRepository;
+use App\Repositories\Comment\CommentRepository;
 use App\Repositories\Complaintattachment\ComplaintattachmentRepository;
 use App\Repositories\Description\DescriptionRepository;
 use App\Repositories\InvolveColleagues\InvolveColleaguesRepository;
 use App\Repositories\Reporter\ReporterRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class ComplaintRepository extends AbstractRepository
 {
     protected InvolveColleaguesRepository $involveColleagues;
     protected ReporterRepository $reporter;
     protected ComplaintattachmentRepository $attachments;
-
+    protected CommentRepository $commentRepository;
     protected DescriptionRepository $description;
+
     public function __construct(
         Complaint $model,
         InvolveColleaguesRepository $involveColleagues,
         ReporterRepository $reporter,
         DescriptionRepository $description,
-        ComplaintattachmentRepository $attachments
+        ComplaintattachmentRepository $attachments,
+        CommentRepository $commentRepository
     ) {
-        $this->involveColleagues = $involveColleagues;
-        $this->reporter = $reporter;
-        $this->description = $description;
-        $this->attachments = $attachments;
+        $this->involveColleagues  = $involveColleagues;
+        $this->reporter           = $reporter;
+        $this->description        = $description;
+        $this->attachments        = $attachments;
+        $this->commentRepository  = $commentRepository;
 
         parent::__construct($model);
     }
@@ -62,37 +68,11 @@ class ComplaintRepository extends AbstractRepository
 
         // 🧑‍💼 Denunciante
         if (!empty($data['reporter'])) {
-            $this->reporter->handleReporter(
-                $data['reporter'],
-                $complaint->id
-            );
-        }if (!empty($data['attachments'])) {
-    Log::debug("📌 Entrou no IF dos attachments", [
-        'type' => gettype($data['attachments']),
-        'is_array' => is_array($data['attachments']),
-        'preview' => is_string($data['attachments']) 
-            ? substr($data['attachments'], 0, 50) 
-            : $data['attachments']
-    ]);
+            $this->reporter->handleReporter($data['reporter'], $complaint->id);
+        }
 
-    if (is_string($data['attachments'])) {
-        $data['attachments'] = json_decode($data['attachments'], true);
-    }
-
-    if (is_array($data['attachments'])) {
-        Log::debug("🚀 Chamando createComplaintAttachment...");
-        $this->attachments->createComplaintAttachment(
-            $data['attachments'], 
-            $complaint->id
-        );
-    }
-} else {
-    Log::debug("❌ NÃO entrou no IF dos attachments", [
-        'attachments' => $data['attachments'] ?? null
-    ]);
-}
-
-
+        // 📎 Anexos
+        $this->handleAttachments($data['attachments'] ?? null, $complaint->id);
 
         $complaint->load([
             "involveds",
@@ -103,6 +83,44 @@ class ComplaintRepository extends AbstractRepository
         ]);
 
         return $complaint;
+    }
+
+    /**
+     * Atualiza status da denúncia e cria comentário
+     */
+    public function updateStatus(array $data, int $id): Complaint
+    {
+        $model = $this->model->findOrFail($id);
+
+        $model->update(['status' => $data['status']]);
+
+        $this->commentRepository->model::create([
+            "comment"   => $data['comment'],
+            "report_id" => $id,
+            "fk_user"=>Auth::user()->id
+        ]);
+
+        $this->handleAttachments($data['attachments'] ?? null, $id);
+
+        return $model;
+    }
+
+    /**
+     * Processa anexos de denúncia
+     */
+    private function handleAttachments($attachments, int $complaintId): void
+    {
+        if (empty($attachments)) {
+            return;
+        }
+
+        if (is_string($attachments)) {
+            $attachments = json_decode($attachments, true);
+        }
+
+        if (is_array($attachments)) {
+            $this->attachments->createComplaintAttachment($attachments, $complaintId);
+        }
     }
 
     /**
@@ -124,12 +142,14 @@ class ComplaintRepository extends AbstractRepository
     {
         return $this->model::count();
     }
-    public function getBycode($code)
+
+    /**
+     * Retorna denúncia pelo código
+     */
+    public function getByCode(string $code): ?Complaint
     {
         return $this->model::where('code', $code)->first();
     }
-
-
 
     /**
      * Total de denúncias na semana atual

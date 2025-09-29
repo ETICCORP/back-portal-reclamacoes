@@ -90,23 +90,15 @@ class ComplaintattachmentRepository extends AbstractRepository
     }
 
 
-
-
-public function showFile($id)
-{
-    // Busca o arquivo pelo ID (ou lança 404 se não existir)
-    $file = $this->model::findOrFail($id);
-
-    // Retorna apenas o caminho completo via IP da aplicação e ID
-    $url = url("/storage/{$file->file}");
-
-    return response()->json([
-        'id'  => $file->id,
-        'url' => $url
-    ]);
-}
-
-
-
-
+    public function showFile($id)
+    {
+        // Busca o arquivo pelo ID (ou lança 404 se não existir)
+        $file = $this->model::findOrFail($id);
+        // Retorna apenas o caminho completo via IP da aplicação e ID
+        $url = url("/storage/{$file->file}");
+        return response()->json([
+            'id'  => $file->id,
+            'url' => $url
+        ]);
+    }
 }
