@@ -4,6 +4,7 @@ namespace App\Repositories\Complaint;
 
 use App\Models\Complaint\Complaint;
 use App\Repositories\AbstractRepository;
+use App\Repositories\Complaintattachment\ComplaintattachmentRepository;
 use App\Repositories\Description\DescriptionRepository;
 use App\Repositories\InvolveColleagues\InvolveColleaguesRepository;
 use App\Repositories\Reporter\ReporterRepository;
@@ -13,17 +14,20 @@ class ComplaintRepository extends AbstractRepository
 {
     protected InvolveColleaguesRepository $involveColleagues;
     protected ReporterRepository $reporter;
-    protected DescriptionRepository $description;
+    protected ComplaintattachmentRepository $attachments;
 
+    protected DescriptionRepository $description;
     public function __construct(
         Complaint $model,
         InvolveColleaguesRepository $involveColleagues,
         ReporterRepository $reporter,
-        DescriptionRepository $description
+        DescriptionRepository $description,
+        ComplaintattachmentRepository $attachments
     ) {
         $this->involveColleagues = $involveColleagues;
         $this->reporter = $reporter;
         $this->description = $description;
+        $this->attachments = $attachments;
 
         parent::__construct($model);
     }
@@ -55,15 +59,19 @@ class ComplaintRepository extends AbstractRepository
             $this->reporter->handleReporter($data['reporter'], $complaint->id);
         }
 
-      $complaint->load([
-       "involveds",
-        "reports",
-        "attachments",
-        "soluctions",
-        "typeReport"
-    ]);
+        if (!empty($data['attachments'])) {
+            $this->attachments->createComplaintAttachment($data['attachments'], $complaint->id);
+        }
 
-    return $complaint;
+        $complaint->load([
+            "involveds",
+            "reports",
+            "attachments",
+            "soluctions",
+            "typeReport"
+        ]);
+
+        return $complaint;
     }
 
     /**
@@ -87,10 +95,10 @@ class ComplaintRepository extends AbstractRepository
     }
     public function getBycode($code)
     {
-        return $this->model::where('code',$code)->first();
+        return $this->model::where('code', $code)->first();
     }
 
-    
+
 
     /**
      * Total de denúncias na semana atual
