@@ -9,7 +9,6 @@ Route::get('/', [ComplaintController::class, 'index'])->name('reports.index');
 
 Route::put('/{id}', [ComplaintController::class, 'update'])->name('reports.update');
 
-Route::get('/show/{id}/file', [ComplaintController::class, 'showFile'])->name('reports.showFile');
 
 Route::delete('/{id}', [ComplaintController::class, 'destroy'])->name('reports.destroy');
 
