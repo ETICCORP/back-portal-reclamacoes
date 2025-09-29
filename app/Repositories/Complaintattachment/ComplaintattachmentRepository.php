@@ -98,20 +98,18 @@ public function showFile($id)
         $file = $this->model::findOrFail($id);
         $path = $file->file;
 
-        if (!Storage::disk('public')->exists($path)) {
+        if (!$path || !Storage::disk('public')->exists($path)) {
             return response()->json(['error' => 'Arquivo não encontrado'], 404);
         }
 
-        $absolutePath = storage_path("app/public/{$path}");
+        $absolutePath = Storage::disk('public')->path($path);
         $mimeType = \Illuminate\Support\Facades\File::mimeType($absolutePath) ?? 'application/octet-stream';
 
-        return response()->stream(function () use ($absolutePath) {
-            readfile($absolutePath);
-        }, 200, [
-            "Content-Type"        => $mimeType,
-            "Content-Disposition" => 'inline; filename="'.basename($absolutePath).'"'
+        return response()->make(file_get_contents($absolutePath), 200, [
+            'Content-Type'        => $mimeType,
+            'Content-Disposition' => 'inline; filename="'.basename($absolutePath).'"',
+            'Cache-Control'       => 'no-cache, must-revalidate',
         ]);
-
     } catch (\Throwable $th) {
         return response()->json([
             "message" => "Falha ao abrir o arquivo",
@@ -119,6 +117,7 @@ public function showFile($id)
         ], 400);
     }
 }
+
 
 
 }
