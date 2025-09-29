@@ -6,6 +6,7 @@ use App\Models\Complaintattachment\Complaintattachment;
 use App\Repositories\AbstractRepository;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 
 class ComplaintattachmentRepository extends AbstractRepository
 {
@@ -14,46 +15,69 @@ class ComplaintattachmentRepository extends AbstractRepository
         parent::__construct($model);
     }
 
-  public function createComplaintAttachment(array $attachments, int $complaintId): array
+ public function createComplaintAttachment(array $attachments, int $complaintId): array
 {
     $attachmentsCreated = [];
 
-    foreach ($attachments as $base64File) {
+    \Log::debug("📎 Iniciando upload de anexos para denúncia #{$complaintId}", [
+        'attachments' => $attachments
+    ]);
+
+    foreach ($attachments as $index => $base64File) {
         try {
+            \Log::debug("🔍 Processando anexo {$index}");
+
+            if (!is_string($base64File)) {
+                \Log::warning("⚠️ Anexo {$index} não é uma string base64", ['value' => $base64File]);
+                continue;
+            }
+
             if (preg_match('/^data:(.*?);base64,(.*)$/', $base64File, $matches)) {
                 $mimeType = $matches[1];
                 $fileData = base64_decode($matches[2]);
+
+                \Log::debug("✅ Base64 decodificado", [
+                    'mimeType' => $mimeType,
+                    'size'     => strlen($fileData)
+                ]);
 
                 if ($fileData === false) {
                     throw new \Exception("Falha ao decodificar Base64");
                 }
 
-                // extensão a partir do mime
                 $extension = explode('/', $mimeType)[1] ?? 'bin';
-
-                // gera nome único
                 $randomName = $this->model::generateCustomRandomCode(12) . '.' . $extension;
-
-                // define caminho
                 $path = "complaintattachments/{$complaintId}/{$randomName}";
 
-                // grava no disco
                 Storage::disk('public')->put($path, $fileData);
 
-                // persiste no banco
-                $attachmentsCreated[] = $this->model->create([
+                \Log::debug("📂 Arquivo salvo no storage", ['path' => $path]);
+
+                $created = $this->model->create([
                     'fk_complaint' => $complaintId,
                     'file'         => $path,
                     'name'         => "dn_{$randomName}",
                 ]);
+
+                Log::info("💾 Anexo cadastrado no banco", ['id' => $created->id]);
+
+                $attachmentsCreated[] = $created;
+            } else {
+                Log::warning("❌ String não corresponde ao padrão Base64 esperado", [
+                    'content_start' => substr($base64File, 0, 30)
+                ]);
             }
         } catch (\Throwable $e) {
-           // \Log::error("Erro ao salvar anexo da denúncia {$complaintId}: " . $e->getMessage());
+            Log::error("🔥 Erro ao salvar anexo da denúncia {$complaintId}", [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
         }
     }
 
     return $attachmentsCreated;
 }
+
 
 
 
