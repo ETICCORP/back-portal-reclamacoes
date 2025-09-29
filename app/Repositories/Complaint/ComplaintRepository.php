@@ -67,6 +67,13 @@ class ComplaintRepository extends AbstractRepository
                 $complaint->id
             );
         }
+   // 🧑‍💼 Denunciante
+        if (!empty($data['reporter'])) {
+            $this->reporter->handleReporter(
+                $data['reporter'],
+                $complaint->id
+            );
+        }
 if (!empty($data['attachments'])) {
     Log::debug("Chamando createComplaintAttachment", [
         'complaintId' => $complaint->id,
