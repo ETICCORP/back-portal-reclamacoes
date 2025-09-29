@@ -94,39 +94,23 @@ class ComplaintattachmentRepository extends AbstractRepository
 
 public function showFile($id)
 {
-    try {
-        $file = $this->model::findOrFail($id);
-        $path = $file->file;
+    $file = $this->model::findOrFail($id);
+    $path = $file->file;
 
-        // Verifica se o arquivo existe
-        if (!$path || !Storage::disk('public')->exists($path)) {
-            return response('Arquivo não encontrado', 404)
-                ->header('Content-Type', 'text/plain');
-        }
-
-        // Caminho absoluto no storage
-        $absolutePath = Storage::disk('public')->path($path);
-
-        // Detecta o MIME type corretamente
-        $mimeType = \Illuminate\Support\Facades\File::mimeType($absolutePath) ?? 'application/octet-stream';
-
-        // Retorna o conteúdo do arquivo diretamente
-        return response()->file($absolutePath, [
-            'Content-Type'        => $mimeType,
-            'Content-Disposition' => 'inline; filename="'.basename($absolutePath).'"',
-            'Cache-Control'       => 'no-cache, must-revalidate',
-        ]);
-
-    } catch (\Throwable $th) {
-        Log::error("Erro em showFile", [
-            'id'    => $id,
-            'error' => $th->getMessage(),
-        ]);
-
-        return response('Falha ao abrir o arquivo', 400)
-            ->header('Content-Type', 'text/plain');
+    if (!$path || !Storage::disk('public')->exists($path)) {
+        abort(404, 'Arquivo não encontrado');
     }
+
+    $absolutePath = Storage::disk('public')->path($path);
+    $mimeType = \Illuminate\Support\Facades\File::mimeType($absolutePath) ?? 'application/octet-stream';
+
+    return response()->file($absolutePath, [
+        'Content-Type' => $mimeType,
+        'Content-Disposition' => 'inline; filename="'.basename($absolutePath).'"',
+        'Cache-Control' => 'no-cache, must-revalidate',
+    ]);
 }
+
 
 
 }
