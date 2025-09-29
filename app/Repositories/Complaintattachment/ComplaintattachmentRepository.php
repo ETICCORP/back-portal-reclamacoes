@@ -94,22 +94,18 @@ class ComplaintattachmentRepository extends AbstractRepository
 
 public function showFile($id)
 {
+    // Busca o arquivo pelo ID (ou lança 404 se não existir)
     $file = $this->model::findOrFail($id);
-    $path = $file->file;
 
-    if (!$path || !Storage::disk('public')->exists($path)) {
-        abort(404, 'Arquivo não encontrado');
-    }
+    // Retorna apenas o caminho completo via IP da aplicação e ID
+    $url = url("/storage/{$file->file}");
 
-    $absolutePath = Storage::disk('public')->path($path);
-    $mimeType = \Illuminate\Support\Facades\File::mimeType($absolutePath) ?? 'application/octet-stream';
-
-    return response()->file($absolutePath, [
-        'Content-Type' => $mimeType,
-        'Content-Disposition' => 'inline; filename="'.basename($absolutePath).'"',
-        'Cache-Control' => 'no-cache, must-revalidate',
+    return response()->json([
+        'id'  => $file->id,
+        'url' => $url
     ]);
 }
+
 
 
 
