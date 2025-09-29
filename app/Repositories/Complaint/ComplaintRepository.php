@@ -55,7 +55,15 @@ class ComplaintRepository extends AbstractRepository
             $this->reporter->handleReporter($data['reporter'], $complaint->id);
         }
 
-        return $complaint;
+      $complaint->load([
+        "involveds",
+        "reports",
+        "attachments",
+        "soluctions",
+        "typeReport"
+    ]);
+
+    return $complaint;
     }
 
     /**
