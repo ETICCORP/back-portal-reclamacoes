@@ -14,24 +14,47 @@ class ComplaintattachmentRepository extends AbstractRepository
         parent::__construct($model);
     }
 
-   public function createComplaintAttachment(array $files, int $complaintId): array
-{
-    $attachmentsCreated = [];
+    public function createComplaintAttachment(array $attachments, int $complaintId): array
+    {
+        $attachmentsCreated = [];
 
-    foreach ($files as $file) {
-        $extension = $file->getClientOriginalExtension();
-        $randomName = $this->model::generateCustomRandomCode(12) . '.' . $extension;
+        foreach ($attachments as $base64File) {
+            try {
+                // Extrai metadados do Base64 (ex.: data:image/png;base64,...)
+                if (preg_match('/^data:(.*?);base64,(.*)$/', $base64File, $matches)) {
+                    $mimeType = $matches[1];
+                    $fileData = base64_decode($matches[2]);
 
-        $path = $file->storeAs("complaintattachments/{$complaintId}", $randomName, 'public');
-        $attachmentsCreated[] = $this->model->create([
-            'fk_complaint' => $complaintId,
-            'file'         => $path,
-            'name'         => "dn_{$randomName}",
-        ]);
+                    if ($fileData === false) {
+                        throw new \Exception("Falha ao decodificar Base64");
+                    }
+
+                    // Define a extensão a partir do MIME
+                    $extension = explode('/', $mimeType)[1] ?? 'png';
+
+                    // Nome único
+                    $randomName = $this->model::generateCustomRandomCode(12) . '.' . $extension;
+
+                    // Caminho onde será salvo
+                    $path = "complaintattachments/{$complaintId}/{$randomName}";
+
+                    // Salvar no disco "public"
+                    Storage::disk('public')->put($path, $fileData);
+
+                    // Persistir no banco
+                    $attachmentsCreated[] = $this->model->create([
+                        'fk_complaint' => $complaintId,
+                        'file'         => $path,
+                        'name'         => "dn_{$randomName}",
+                    ]);
+                }
+            } catch (\Throwable $e) {
+                // \Log::alert::error("Erro ao salvar anexo da denúncia #{$complaintId}: " . $e->getMessage());
+            }
+        }
+
+        return $attachmentsCreated;
     }
-
-    return $attachmentsCreated;
-}
 
 
 
