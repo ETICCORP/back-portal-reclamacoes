@@ -76,7 +76,7 @@ class ComplaintController extends AbstractController
     public function store(ComplaintRequest $request)
     {
         try {
-return $request->all();
+//return $request->all();
 
             $this->logRequest();
             $complaint = $this->service->storeData($request->validated());
