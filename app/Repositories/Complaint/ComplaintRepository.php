@@ -37,31 +37,52 @@ class ComplaintRepository extends AbstractRepository
      */
     public function storeData(array $data): Complaint
     {
-        $randomCode = $this->generateUniqueCode(6);
+          $randomCode = $this->generateUniqueCode(6);
 
-        $complaint = $this->model->create([
-            'type'             => $data['type'],
-            'code'             => $randomCode,
-            'description'      => $data['description'] ?? null,
-            'incidentDateTime' => $data['incidentDateTime'],
-            'location'         => $data['location'],
-            'suggestionAttempt' => $data['suggestionAttempt'],
-            'relationship'     => $data['relationship'],
-            'status'           => "Pendente",
-            'isAnonymous'      => $data['isAnonymous'],
-        ]);
+    $complaint = $this->model->create([
+        'type'              => $data['type'],
+        'code'              => $randomCode,
+        'description'       => $data['description'] ?? null,
+        'incidentDateTime'  => $data['incidentDateTime'],
+        'location'          => $data['location'],
+        'suggestionAttempt' => $data['suggestionAttempt'],
+        'relationship'      => $data['relationship'],
+        'status'            => "Pendente",
+        'isAnonymous'       => $data['isAnonymous'],
+    ]);
 
-        if (!empty($data['involveColleagues'])) {
-            $this->involveColleagues->handleInvolvedColleagues($complaint->id, $data['involveColleagues']);
+    // 👥 Colaboradores envolvidos
+    if (!empty($data['involveColleagues'])) {
+        $this->involveColleagues->handleInvolvedColleagues(
+            $complaint->id, 
+            $data['involveColleagues']
+        );
+    }
+
+    // 🧑‍💼 Denunciante
+    if (!empty($data['reporter'])) {
+        $this->reporter->handleReporter(
+            $data['reporter'], 
+            $complaint->id
+        );
+    }
+
+    // 📎 Anexos
+    if (!empty($data['attachments'])) {
+        // Se vier como JSON string → transforma em array
+        if (is_string($data['attachments'])) {
+            $data['attachments'] = json_decode($data['attachments'], true);
         }
 
-        if (!empty($data['reporter'])) {
-            $this->reporter->handleReporter($data['reporter'], $complaint->id);
+        if (is_array($data['attachments'])) {
+            $this->attachments->createComplaintAttachment(
+                $data['attachments'], 
+                $complaint->id
+            );
         }
+    }
 
-        if (!empty($data['attachments'])) {
-            $this->attachments->createComplaintAttachment($data['attachments'], $complaint->id);
-        }
+     
 
         $complaint->load([
             "involveds",
