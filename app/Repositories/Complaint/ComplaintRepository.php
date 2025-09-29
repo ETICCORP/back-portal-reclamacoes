@@ -66,21 +66,32 @@ class ComplaintRepository extends AbstractRepository
                 $data['reporter'],
                 $complaint->id
             );
-        }
-if (!empty($data['attachments'])) {
-    
-    
+        }if (!empty($data['attachments'])) {
+    Log::debug("📌 Entrou no IF dos attachments", [
+        'type' => gettype($data['attachments']),
+        'is_array' => is_array($data['attachments']),
+        'preview' => is_string($data['attachments']) 
+            ? substr($data['attachments'], 0, 50) 
+            : $data['attachments']
+    ]);
+
     if (is_string($data['attachments'])) {
         $data['attachments'] = json_decode($data['attachments'], true);
     }
 
     if (is_array($data['attachments'])) {
+        Log::debug("🚀 Chamando createComplaintAttachment...");
         $this->attachments->createComplaintAttachment(
             $data['attachments'], 
             $complaint->id
         );
     }
+} else {
+    Log::debug("❌ NÃO entrou no IF dos attachments", [
+        'attachments' => $data['attachments'] ?? null
+    ]);
 }
+
 
 
         $complaint->load([
