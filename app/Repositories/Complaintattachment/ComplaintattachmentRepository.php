@@ -92,35 +92,34 @@ class ComplaintattachmentRepository extends AbstractRepository
 
 
 
-   public function showFile($id)
+public function showFile($id)
 {
     try {
         $file = $this->model::findOrFail($id);
         $path = $file->file;
 
+        // Verifica se o arquivo existe
         if (!$path || !Storage::disk('public')->exists($path)) {
             return response('Arquivo não encontrado', 404)
                 ->header('Content-Type', 'text/plain');
         }
 
-        // Caminho absoluto
+        // Caminho absoluto no storage
         $absolutePath = Storage::disk('public')->path($path);
 
-        // MIME type
+        // Detecta o MIME type corretamente
         $mimeType = \Illuminate\Support\Facades\File::mimeType($absolutePath) ?? 'application/octet-stream';
 
-        // Lê o conteúdo puro do arquivo
-        $content = file_get_contents($absolutePath);
-
-        // Retorna resposta com binário da imagem
-        return response($content, 200)
-            ->header('Content-Type', $mimeType)
-            ->header('Content-Disposition', 'inline; filename="'.basename($absolutePath).'"')
-            ->header('Cache-Control', 'no-cache, must-revalidate');
+        // Retorna o conteúdo do arquivo diretamente
+        return response()->file($absolutePath, [
+            'Content-Type'        => $mimeType,
+            'Content-Disposition' => 'inline; filename="'.basename($absolutePath).'"',
+            'Cache-Control'       => 'no-cache, must-revalidate',
+        ]);
 
     } catch (\Throwable $th) {
         Log::error("Erro em showFile", [
-            'id' => $id,
+            'id'    => $id,
             'error' => $th->getMessage(),
         ]);
 
@@ -128,5 +127,6 @@ class ComplaintattachmentRepository extends AbstractRepository
             ->header('Content-Type', 'text/plain');
     }
 }
+
 
 }
