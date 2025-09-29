@@ -8,4 +8,3 @@ Route::get('/', function () {
 });
 
 
-Route::get('/reports/show/{id}/file', [ComplaintController::class, 'showFile'])->name('reports.showFile');
