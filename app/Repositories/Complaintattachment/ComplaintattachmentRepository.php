@@ -92,34 +92,41 @@ class ComplaintattachmentRepository extends AbstractRepository
 
 
 
-    public function showFile($id)
-    {
-        try {
-            $file = $this->model::findOrFail($id);
-            $path = $file->file;
+   public function showFile($id)
+{
+    try {
+        $file = $this->model::findOrFail($id);
+        $path = $file->file;
 
-            if (!$path || !Storage::disk('public')->exists($path)) {
-                return response('Arquivo não encontrado', 404)
-                    ->header('Content-Type', 'text/plain');
-            }
-
-            $absolutePath = Storage::disk('public')->path($path);
-            $mimeType = \Illuminate\Support\Facades\File::mimeType($absolutePath) ?? 'application/octet-stream';
-
-            // envia o binário puro
-            return response()->file($absolutePath, [
-                'Content-Type'        => $mimeType,
-                'Content-Disposition' => 'inline; filename="' . basename($absolutePath) . '"',
-                'Cache-Control'       => 'no-cache, must-revalidate',
-            ]);
-        } catch (\Throwable $th) {
-            Log::error("Erro em showFile", [
-                'id'    => $id,
-                'error' => $th->getMessage(),
-            ]);
-
-            return response('Falha ao abrir o arquivo', 400)
+        if (!$path || !Storage::disk('public')->exists($path)) {
+            return response('Arquivo não encontrado', 404)
                 ->header('Content-Type', 'text/plain');
         }
+
+        // Caminho absoluto
+        $absolutePath = Storage::disk('public')->path($path);
+
+        // MIME type
+        $mimeType = \Illuminate\Support\Facades\File::mimeType($absolutePath) ?? 'application/octet-stream';
+
+        // Lê o conteúdo puro do arquivo
+        $content = file_get_contents($absolutePath);
+
+        // Retorna resposta com binário da imagem
+        return response($content, 200)
+            ->header('Content-Type', $mimeType)
+            ->header('Content-Disposition', 'inline; filename="'.basename($absolutePath).'"')
+            ->header('Cache-Control', 'no-cache, must-revalidate');
+
+    } catch (\Throwable $th) {
+        Log::error("Erro em showFile", [
+            'id' => $id,
+            'error' => $th->getMessage(),
+        ]);
+
+        return response('Falha ao abrir o arquivo', 400)
+            ->header('Content-Type', 'text/plain');
     }
+}
+
 }
