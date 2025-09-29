@@ -67,18 +67,8 @@ class ComplaintRepository extends AbstractRepository
                 $complaint->id
             );
         }
-   // 🧑‍💼 Denunciante
-        if (!empty($data['reporter'])) {
-            $this->reporter->handleReporter(
-                $data['reporter'],
-                $complaint->id
-            );
-        }
 if (!empty($data['attachments'])) {
-    Log::debug("Chamando createComplaintAttachment", [
-        'complaintId' => $complaint->id,
-        'count' => is_array($data['attachments']) ? count($data['attachments']) : 0
-    ]);
+    
     
     if (is_string($data['attachments'])) {
         $data['attachments'] = json_decode($data['attachments'], true);
@@ -91,8 +81,6 @@ if (!empty($data['attachments'])) {
         );
     }
 }
-
-
 
 
         $complaint->load([

@@ -15,7 +15,7 @@ class ComplaintattachmentRepository extends AbstractRepository
         parent::__construct($model);
     }
 
- public function createComplaintAttachment(array $attachments, int $complaintId): array
+ public function createComplaintAttachment(array $attachments, int $complaintId)
 {
     $attachmentsCreated = [];
 
