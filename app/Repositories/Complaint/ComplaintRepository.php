@@ -13,7 +13,6 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
 
 class ComplaintRepository extends AbstractRepository
 {
@@ -89,112 +88,43 @@ class ComplaintRepository extends AbstractRepository
     /**
      * Atualiza status da denúncia e cria comentário
      */
-  public function updateStatus(array $data, int $id)
-{
-    Log::info("updateStatus chamado", [
-        'id' => $id,
-        'data' => $data
-    ]);
-
-    try {
+    public function updateStatus(array $data, int $id)
+    {
+      
+  
         $model = $this->model->findOrFail($id);
-        Log::info("Modelo encontrado", ['model' => $model->toArray()]);
 
         $model->update(['status' => $data['status']]);
-        Log::info("Status atualizado", ['status' => $data['status']]);
-
-        $userId = Auth::id();
-        Log::info("Usuário autenticado", ['user_id' => $userId]);
 
         $this->commentRepository->model::create([
-            "comment"   => $data['comment'] ?? null,
+            "comment"   => $data['comment'],
             "report_id" => $id,
-            "fk_user"   => $userId
+            "fk_user"=>Auth::user()->id
         ]);
-        Log::info("Comentário criado com sucesso");
 
-        // 📎 Anexos
+    // 📎 Anexos
         $this->handleAttachments($data['attachments'] ?? null, $id);
-        Log::info("Anexos processados", ['attachments' => $data['attachments'] ?? null]);
 
         return $model;
-    } catch (\Exception $e) {
-        Log::error("Erro em updateStatus", [
-            'message' => $e->getMessage(),
-            'trace'   => $e->getTraceAsString()
-        ]);
-        throw $e; // mantém exceção estourando
     }
-}
-
 
     /**
      * Processa anexos de denúncia
      */
-private function handleAttachments($attachments, int $complaintId): void
-{
-    Log::info("Iniciando handleAttachments", [
-        'complaintId' => $complaintId,
-        'attachments' => $attachments
-    ]);
-
-    if (empty($attachments)) {
-        Log::info("Nenhum anexo enviado");
-        return;
-    }
-
-    if (is_string($attachments)) {
-        $attachments = json_decode($attachments, true);
-        Log::info("Attachments convertido de JSON", ['attachments' => $attachments]);
-    }
-
-    if (is_array($attachments)) {
-        foreach ($attachments as $item) {
-            Log::info("Processando item", ['item' => $item]);
-
-            if (is_string($item) && str_starts_with($item, 'data:image')) {
-                $this->saveBase64Attachment($item, $complaintId);
-                Log::info("Anexo base64 salvo", ['complaintId' => $complaintId]);
-            } elseif (is_array($item) && isset($item['file'])) {
-                $this->saveBase64Attachment($item['file'], $complaintId);
-                Log::info("Anexo array salvo", ['complaintId' => $complaintId]);
-            } else {
-                Log::warning("Item de anexo não reconhecido", ['item' => $item]);
-            }
+    private function handleAttachments($attachments, int $complaintId): void
+    {
+        if (empty($attachments)) {
+            return;
         }
-    } elseif (is_string($attachments) && str_starts_with($attachments, 'data:image')) {
-        $this->saveBase64Attachment($attachments, $complaintId);
-        Log::info("Anexo único base64 salvo", ['complaintId' => $complaintId]);
+
+        if (is_string($attachments)) {
+            $attachments = json_decode($attachments, true);
+        }
+
+        if (is_array($attachments)) {
+            $this->attachments->createComplaintAttachment($attachments, $complaintId);
+        }
     }
-}
-
-
-private function saveBase64Attachment(string $base64, int $complaintId): void
-{
-    // extrair tipo
-    preg_match('/^data:image\/(\w+);base64,/', $base64, $matches);
-    $extension = $matches[1] ?? 'png';
-
-    $base64 = preg_replace('/^data:image\/\w+;base64,/', '', $base64);
-    $fileData = base64_decode($base64);
-
-    $fileName = uniqid('complaint_') . '.' . $extension;
-    $filePath = "complaints/{$fileName}";
-
-    // salva no storage/app/public/complaints
-    Storage::disk('public')->put($filePath, $fileData);
-
-    // registra no banco
-    $this->attachments->createComplaintAttachment([
-        [
-            'file' => $filePath,
-            'complaint_id' => $complaintId
-        ]
-    ], $complaintId);
-}
-
-
-
 
     /**
      * Gera código único de denúncia
