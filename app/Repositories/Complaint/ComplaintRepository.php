@@ -138,6 +138,12 @@ class ComplaintRepository extends AbstractRepository
             $this->attachments->createComplaintAttachment($normalized, $complaintId);
         }
     }
+
+    if (is_string($attachments) && str_starts_with($attachments, 'data:image')) {
+    $this->attachments->createComplaintAttachment([['file' => $attachments]], $complaintId);
+    return;
+}
+
 }
 
 
