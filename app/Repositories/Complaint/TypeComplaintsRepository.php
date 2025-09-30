@@ -12,7 +12,7 @@ class TypeComplaintsRepository extends AbstractRepository
         parent::__construct($model);
     }
 
-    // ✅ Adicione este método
+ 
     public function getAll()
     {
         return $this->model->all();

@@ -102,6 +102,7 @@ class ComplaintRepository extends AbstractRepository
             "fk_user"=>Auth::user()->id
         ]);
 
+    // 📎 Anexos
         $this->handleAttachments($data['attachments'] ?? null, $id);
 
         return $model;
@@ -110,20 +111,34 @@ class ComplaintRepository extends AbstractRepository
     /**
      * Processa anexos de denúncia
      */
-    private function handleAttachments($attachments, int $complaintId): void
-    {
-        if (empty($attachments)) {
-            return;
+   private function handleAttachments($attachments, int $complaintId): void
+{
+    if (empty($attachments)) {
+        return;
+    }
+
+    if (is_string($attachments)) {
+        $attachments = json_decode($attachments, true);
+    }
+
+    if (is_array($attachments)) {
+        // Se o array for só de strings base64, normaliza para array de objetos
+        $normalized = [];
+
+        foreach ($attachments as $item) {
+            if (is_string($item) && str_starts_with($item, 'data:image')) {
+                $normalized[] = ['file' => $item];
+            } elseif (is_array($item)) {
+                $normalized[] = $item;
+            }
         }
 
-        if (is_string($attachments)) {
-            $attachments = json_decode($attachments, true);
-        }
-
-        if (is_array($attachments)) {
-            $this->attachments->createComplaintAttachment($attachments, $complaintId);
+        if (!empty($normalized)) {
+            $this->attachments->createComplaintAttachment($normalized, $complaintId);
         }
     }
+}
+
 
     /**
      * Gera código único de denúncia
