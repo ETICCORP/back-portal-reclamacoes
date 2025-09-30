@@ -89,51 +89,85 @@ class ComplaintRepository extends AbstractRepository
     /**
      * Atualiza status da denúncia e cria comentário
      */
-    public function updateStatus(array $data, int $id)
-    {
-      
-  
+  public function updateStatus(array $data, int $id)
+{
+    Log::info("updateStatus chamado", [
+        'id' => $id,
+        'data' => $data
+    ]);
+
+    try {
         $model = $this->model->findOrFail($id);
+        Log::info("Modelo encontrado", ['model' => $model->toArray()]);
 
         $model->update(['status' => $data['status']]);
+        Log::info("Status atualizado", ['status' => $data['status']]);
+
+        $userId = Auth::id();
+        Log::info("Usuário autenticado", ['user_id' => $userId]);
 
         $this->commentRepository->model::create([
-            "comment"   => $data['comment'],
+            "comment"   => $data['comment'] ?? null,
             "report_id" => $id,
-            "fk_user"=>Auth::user()->id
+            "fk_user"   => $userId
         ]);
+        Log::info("Comentário criado com sucesso");
 
-    // 📎 Anexos
+        // 📎 Anexos
         $this->handleAttachments($data['attachments'] ?? null, $id);
+        Log::info("Anexos processados", ['attachments' => $data['attachments'] ?? null]);
 
         return $model;
+    } catch (\Exception $e) {
+        Log::error("Erro em updateStatus", [
+            'message' => $e->getMessage(),
+            'trace'   => $e->getTraceAsString()
+        ]);
+        throw $e; // mantém exceção estourando
     }
+}
+
 
     /**
      * Processa anexos de denúncia
      */
- private function handleAttachments($attachments, int $complaintId): void
+private function handleAttachments($attachments, int $complaintId): void
 {
+    Log::info("Iniciando handleAttachments", [
+        'complaintId' => $complaintId,
+        'attachments' => $attachments
+    ]);
+
     if (empty($attachments)) {
+        Log::info("Nenhum anexo enviado");
         return;
     }
 
     if (is_string($attachments)) {
         $attachments = json_decode($attachments, true);
+        Log::info("Attachments convertido de JSON", ['attachments' => $attachments]);
     }
 
     if (is_array($attachments)) {
         foreach ($attachments as $item) {
+            Log::info("Processando item", ['item' => $item]);
+
             if (is_string($item) && str_starts_with($item, 'data:image')) {
                 $this->saveBase64Attachment($item, $complaintId);
+                Log::info("Anexo base64 salvo", ['complaintId' => $complaintId]);
             } elseif (is_array($item) && isset($item['file'])) {
                 $this->saveBase64Attachment($item['file'], $complaintId);
+                Log::info("Anexo array salvo", ['complaintId' => $complaintId]);
+            } else {
+                Log::warning("Item de anexo não reconhecido", ['item' => $item]);
             }
         }
     } elseif (is_string($attachments) && str_starts_with($attachments, 'data:image')) {
         $this->saveBase64Attachment($attachments, $complaintId);
+        Log::info("Anexo único base64 salvo", ['complaintId' => $complaintId]);
     }
 }
+
 
 private function saveBase64Attachment(string $base64, int $complaintId): void
 {
