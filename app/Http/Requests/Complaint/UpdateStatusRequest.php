@@ -24,20 +24,22 @@ class UpdateStatusRequest extends BaseFormRequest
         return [
             'comment'      => 'required|string|max:255',
             'status'            => 'required|string|max:255',
-    
-          
+
+
         ];
     }
 
     public function messages(): array
     {
         return [
-           
+
             'comment.required' => ' commentário é obrigatório.',
             'status.required' => 'O status é obrigatório.',
-   
+            // 📎 Validação dos anexos
+            'attachments'            => 'nullable|array',
+            'attachments.*'          => 'nullable|string', 
 
-         
+
         ];
     }
 }
