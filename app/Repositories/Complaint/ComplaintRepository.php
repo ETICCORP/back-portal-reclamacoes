@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class ComplaintRepository extends AbstractRepository
 {
@@ -111,40 +112,54 @@ class ComplaintRepository extends AbstractRepository
     /**
      * Processa anexos de denúncia
      */
-  private function handleAttachments($attachments, int $complaintId): void
+ private function handleAttachments($attachments, int $complaintId): void
 {
     if (empty($attachments)) {
         return;
     }
 
-    // Se for JSON string vindo do frontend
     if (is_string($attachments)) {
         $attachments = json_decode($attachments, true);
     }
 
     if (is_array($attachments)) {
-        $normalized = [];
-
         foreach ($attachments as $item) {
             if (is_string($item) && str_starts_with($item, 'data:image')) {
-                // transforma string base64 em estrutura esperada
-                $normalized[] = ['file' => $item];
-            } elseif (is_array($item)) {
-                $normalized[] = $item;
+                $this->saveBase64Attachment($item, $complaintId);
+            } elseif (is_array($item) && isset($item['file'])) {
+                $this->saveBase64Attachment($item['file'], $complaintId);
             }
         }
-
-        if (!empty($normalized)) {
-            $this->attachments->createComplaintAttachment($normalized, $complaintId);
-        }
+    } elseif (is_string($attachments) && str_starts_with($attachments, 'data:image')) {
+        $this->saveBase64Attachment($attachments, $complaintId);
     }
-
-    if (is_string($attachments) && str_starts_with($attachments, 'data:image')) {
-    $this->attachments->createComplaintAttachment([['file' => $attachments]], $complaintId);
-    return;
 }
 
+private function saveBase64Attachment(string $base64, int $complaintId): void
+{
+    // extrair tipo
+    preg_match('/^data:image\/(\w+);base64,/', $base64, $matches);
+    $extension = $matches[1] ?? 'png';
+
+    $base64 = preg_replace('/^data:image\/\w+;base64,/', '', $base64);
+    $fileData = base64_decode($base64);
+
+    $fileName = uniqid('complaint_') . '.' . $extension;
+    $filePath = "complaints/{$fileName}";
+
+    // salva no storage/app/public/complaints
+    Storage::disk('public')->put($filePath, $fileData);
+
+    // registra no banco
+    $this->attachments->createComplaintAttachment([
+        [
+            'file' => $filePath,
+            'complaint_id' => $complaintId
+        ]
+    ], $complaintId);
 }
+
+
 
 
     /**
