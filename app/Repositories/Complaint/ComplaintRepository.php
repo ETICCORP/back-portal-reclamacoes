@@ -111,22 +111,23 @@ class ComplaintRepository extends AbstractRepository
     /**
      * Processa anexos de denúncia
      */
-   private function handleAttachments($attachments, int $complaintId): void
+  private function handleAttachments($attachments, int $complaintId): void
 {
     if (empty($attachments)) {
         return;
     }
 
+    // Se for JSON string vindo do frontend
     if (is_string($attachments)) {
         $attachments = json_decode($attachments, true);
     }
 
     if (is_array($attachments)) {
-        // Se o array for só de strings base64, normaliza para array de objetos
         $normalized = [];
 
         foreach ($attachments as $item) {
             if (is_string($item) && str_starts_with($item, 'data:image')) {
+                // transforma string base64 em estrutura esperada
                 $normalized[] = ['file' => $item];
             } elseif (is_array($item)) {
                 $normalized[] = $item;
