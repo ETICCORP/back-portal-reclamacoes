@@ -20,26 +20,21 @@ class UpdateStatusRequest extends BaseFormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
-        return [
-            'comment'      => 'required|string|max:255',
-            'status'            => 'required|string|max:255',
+{
+    return [
+        'comment'      => 'required|string|max:255',
+        'status'       => 'required|string|max:255',
+        'attachments'  => 'nullable|array',
+        'attachments.*'=> 'nullable|string',
+    ];
+}
 
+public function messages(): array
+{
+    return [
+        'comment.required' => 'O comentário é obrigatório.',
+        'status.required'  => 'O status é obrigatório.',
+    ];
+}
 
-        ];
-    }
-
-    public function messages(): array
-    {
-        return [
-
-            'comment.required' => ' commentário é obrigatório.',
-            'status.required' => 'O status é obrigatório.',
-            // 📎 Validação dos anexos
-            'attachments'            => 'nullable|array',
-            'attachments.*'          => 'nullable|string', 
-
-
-        ];
-    }
 }
