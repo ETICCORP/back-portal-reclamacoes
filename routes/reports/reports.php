@@ -24,11 +24,4 @@ Route::post('/count-by-date', [ComplaintController::class, 'countByDate'])->name
 Route::put('/updateStatus/{id}', [ComplaintController::class, 'updateStatus']);
 
 
-Route::post('/type', [TypeComplaintsController::class, 'store']);
-Route::get('/type/{id}', [TypeComplaintsController::class, 'show']);
-Route::put('/type/{id}', [TypeComplaintsController::class, 'update']);
-Route::delete('/type/{id}', [TypeComplaintsController::class, 'destroy']);
-
-Route::post('/', [ComplaintController::class, 'store'])->name('reportsFre.php.store');
-
 
