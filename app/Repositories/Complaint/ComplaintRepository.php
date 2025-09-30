@@ -88,8 +88,10 @@ class ComplaintRepository extends AbstractRepository
     /**
      * Atualiza status da denúncia e cria comentário
      */
-    public function updateStatus(array $data, int $id): Complaint
+    public function updateStatus(array $data, int $id)
     {
+      
+  
         $model = $this->model->findOrFail($id);
 
         $model->update(['status' => $data['status']]);

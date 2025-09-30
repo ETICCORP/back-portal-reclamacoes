@@ -203,11 +203,11 @@ class ComplaintController extends AbstractController
 
     public function updateStatus(UpdateStatusRequest $request, $id)
     {
-        try {
-            $this->logRequest();
 
+            $this->logRequest();
             $complaint = $this->service->updateStatus($request->validated(), $id);
             return response()->json($complaint, Response::HTTP_OK);
+               try {
         } catch (Exception $e) {
             $this->logRequest($e);
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
