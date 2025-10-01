@@ -5,7 +5,6 @@ use App\Http\Controllers\Complaint\TypeComplaintsController;
 use App\Http\Controllers\Permission\PermissionController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [ComplaintController::class, 'index'])->name('reports.index');
 
 Route::put('/{id}', [ComplaintController::class, 'update'])->name('reports.update');
 
