@@ -28,8 +28,6 @@ class GrupoAlertEmailsRepository extends AbstractRepository
             );
         }
 
-
-
         return $grup->load('grupoTypes');
     }
 }

@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('suggestionAttempt');
             $table->string('relationship');
             $table->string('status');
-            $table->string('description')->nullable();
-            
+            $table->longText('description')->nullable();
             $table->string('isAnonymous');
             $table->softDeletes();
             $table->timestamps();

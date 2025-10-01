@@ -24,8 +24,6 @@ class UserGrupoAlertRepository extends AbstractRepository
                 ]);
             })->toArray()
         );
-
-    
         return $inserted;
     }
 }

@@ -90,8 +90,8 @@ class ComplaintRepository extends AbstractRepository
      */
     public function updateStatus(array $data, int $id)
     {
-      
-  
+
+
         $model = $this->model->findOrFail($id);
 
         $model->update(['status' => $data['status']]);
@@ -99,10 +99,10 @@ class ComplaintRepository extends AbstractRepository
         $this->commentRepository->model::create([
             "comment"   => $data['comment'],
             "report_id" => $id,
-            "fk_user"=>Auth::user()->id
+            "fk_user" => Auth::user()->id
         ]);
 
-    // 📎 Anexos
+        // 📎 Anexos
         $this->handleAttachments($data['attachments'] ?? null, $id);
 
         return $model;

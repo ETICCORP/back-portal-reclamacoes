@@ -33,7 +33,8 @@ class PermissionSeed extends Seeder
             ['name' => 'Estatística', 'description' => 'Permite gerenciar estatísticas'],
             ['name' => 'Regra', 'description' => 'Permite gerenciar regras'],
             ['name' => 'Denúcias', 'description' => 'Permite gerenciar entidades'],
-            ['name' => "Perfil", "description" => 'Permite gerenciar perfil']
+            ['name' => "Perfil", "description" => 'Permite gerenciar perfil'],
+            ['name' => "Alertas", "description" => 'Permite gerenciar Alertas']
         ];
 
         // Operações básicas
@@ -76,7 +77,7 @@ class PermissionSeed extends Seeder
             'first_name' => 'Administrador',
             'last_name' => 'Sistema',
             'phone' => '11999999999',
-            'email' => 'admin@gmail.com',
+            'email' => 'vicentemanueleduardo@gmail.com',
             'password' => bcrypt('12345678'),
             'role_id' => $role->id,
             'is_active' => true
