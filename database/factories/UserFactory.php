@@ -28,7 +28,7 @@ class UserFactory extends Factory
             'last_name' => fake()->lastName(),
             'phone' => fake()->phoneNumber(),
             'email' => "vicentemanueleduardo@gmail.com",
-            'is_active' => fake()->boolean(),
+            'is_active' => true,
             'role_id' => fake()->numberBetween(1),
             'email_verified_at' => now(),
             'password' => bcrypt("12345678"),

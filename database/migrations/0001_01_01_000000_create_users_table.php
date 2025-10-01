@@ -25,6 +25,7 @@ return new class extends Migration
             $table->string('two_factor_expires_at')->nullable();
              $table->string('two_factor_secret')->nullable();
                 $table->string('two_factor_recovery_codes')->nullable();
+                   $table->string('two_factor_confirmed_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

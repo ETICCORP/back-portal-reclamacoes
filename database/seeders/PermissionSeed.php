@@ -77,7 +77,7 @@ class PermissionSeed extends Seeder
             'first_name' => 'Administrador',
             'last_name' => 'Sistema',
             'phone' => '11999999999',
-            'email' => 'vicentemanueleduardo@gmail.com',
+            'email' => 'marcia.buienga@etic.co.ao',
             'password' => bcrypt('12345678'),
             'role_id' => $role->id,
             'is_active' => true
