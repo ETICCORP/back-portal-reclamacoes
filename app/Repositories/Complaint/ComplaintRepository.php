@@ -151,15 +151,18 @@ class ComplaintRepository extends AbstractRepository
      */
     public function getByCode(string $code)
     {
-        $complaint = $this->model::with([
+        $complaint = $this->model::where('code', $code)->firstOrFail();
+
+        $complaint->load([
             "involveds",
             "reports",
             "attachments",
             "soluctions",
             "typeReport"
-        ])->where('code', $code)->firstOrFail();
+        ]);
         
         return $complaint;
+        
         
     }
 
