@@ -22,4 +22,8 @@ Route::post('auth/2fa', [UserController::class, 'verify2fa']);
 Route::prefix(prefix: 'reports')->group(base_path('routes/reports/reportsFre.php'));
 
 Route::middleware('web')->get('/reports/show/{id}/file', [ComplaintController::class, 'showFile'])
-    ->name('reports.showFile');
+    ->name('reports.showFile');Route::prefix('reports')->group(function () {
+      
+        Route::get('/getBycode/{id}', [ComplaintController::class, 'getBycode']);
+    });
+    
