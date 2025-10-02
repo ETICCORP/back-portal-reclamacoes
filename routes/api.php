@@ -4,6 +4,7 @@ use App\Http\Controllers\Complaint\ComplaintController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 
+Route::prefix(prefix: 'reports')->group(base_path('routes/reports/reportsFre.php'));
 Route::middleware('auth:sanctum')->group(function () {
 
     Route::prefix('permission')->group(base_path('routes/user/permission/permission.php'));
@@ -19,7 +20,7 @@ Route::middleware('auth:sanctum')->group(function () {
 Route::post('/auth/login', [UserController::class, 'login']);
 Route::prefix('auth')->middleware('guest')->group(base_path('routes/user/auth.php'));
 Route::post('auth/2fa', [UserController::class, 'verify2fa']);
-Route::prefix(prefix: 'reports')->group(base_path('routes/reports/reportsFre.php'));
+
 
 Route::middleware('web')->get('/reports/show/{id}/file', [ComplaintController::class, 'showFile'])
     ->name('reports.showFile');Route::prefix('reports')->group(function () {
