@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Complaint\ComplaintController;
+use App\Http\Controllers\Complaint\TypeComplaintsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 Route::prefix(prefix: 'reports')->group(base_path('routes/reports/reportsFre.php'));
@@ -24,5 +25,6 @@ Route::middleware('web')->get('/reports/show/{id}/file', [ComplaintController::c
     ->name('reports.showFile');Route::prefix('reports')->group(function () {
       
         Route::get('/getBycode/{id}', [ComplaintController::class, 'getBycode']);
+        Route::get( '/type', [TypeComplaintsController::class, 'index']);
     });
     
