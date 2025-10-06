@@ -22,13 +22,15 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SERVER_KNOWN_HOST }}" >> ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
 
       - name: Test SSH connection
-        run: ssh -o StrictHostKeyChecking=yes -p 2822 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo Connected successfully"
+        run: ssh -p 2822 -o StrictHostKeyChecking=yes ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo ✅ Conectado com sucesso"
 
       - name: Deploy to server
         run: |
-          ssh -p 2822 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          ssh -T -p 2822 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+            set -e
             cd /opt/back-Portal-denucias || exit 1
             git pull origin main
             docker compose pull
