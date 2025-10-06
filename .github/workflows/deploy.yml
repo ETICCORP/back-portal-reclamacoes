@@ -3,28 +3,23 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - main   # branch de produção
+      - main
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted   # usar o runner que criaste
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Add server to known_hosts
+      - name: Add server to known_hosts (opcional)
         run: |
-          ssh-keyscan -p 2822 -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p 2822 -H 172.17.100.11 >> ~/.ssh/known_hosts || true
 
       - name: Deploy to server
         run: |
-          ssh -p 2822 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          ssh -p 2822 user@172.17.100.11 << 'EOF'
             cd /opt/back-Portal-denucias || exit 1
             git pull origin main
             docker compose pull
