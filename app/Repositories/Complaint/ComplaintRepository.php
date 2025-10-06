@@ -214,15 +214,17 @@ class ComplaintRepository extends AbstractRepository
     /**
      * Top N tipos de denúncia
      */
-    public function getTopTypes(int $limit = 4)
-    {
-        return $this->model::select('type')
-            ->selectRaw('COUNT(*) as count')
-            ->groupBy('type')
-            ->orderByDesc('count')
-            ->limit($limit)
-            ->get();
-    }
+public function getTopTypes(int $limit = 4)
+{
+    return $this->model::select('type_complaints.name as type', \DB::raw('COUNT(*) as count'))
+        ->join('type_complaints', 'type_complaints.id', '=', 'complaint.type')
+        ->groupBy('type_complaints.name')
+        ->orderByDesc('count')
+        ->limit($limit)
+        ->get();
+}
+
+
 
     /**
      * Contagem de denúncias por data
