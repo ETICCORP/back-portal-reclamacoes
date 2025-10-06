@@ -26,12 +26,12 @@ Route::middleware('web')->get('/reports/show/{id}/file', [ComplaintController::c
     ->name('reports.showFile');
     //routes publics
 Route::prefix('reports')->group(function () {
-
+  Route::post('/', [ComplaintController::class, 'store'])->name('reportsFre.php.store');
     Route::get('/getBycode/{id}', [ComplaintController::class, 'getBycode']);
     Route::get('/type', [TypeComplaintsController::class, 'index']);
     Route::post('/type', [TypeComplaintsController::class, 'store']);
     Route::get('/type/{id}', [TypeComplaintsController::class, 'show']);
     Route::put('/type/{id}', [TypeComplaintsController::class, 'update']);
     Route::delete('/type/{id}', [TypeComplaintsController::class, 'destroy']);
-    Route::post('/', [ComplaintController::class, 'store'])->name('reportsFre.php.store');
+  
 });
