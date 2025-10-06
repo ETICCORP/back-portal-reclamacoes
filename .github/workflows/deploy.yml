@@ -7,7 +7,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted   # já que você configurou o self-hosted runner
+    runs-on: self-hosted
 
     steps:
       - name: Checkout repository
@@ -22,6 +22,9 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SERVER_KNOWN_HOST }}" >> ~/.ssh/known_hosts
+
+      - name: Test SSH connection
+        run: ssh -o StrictHostKeyChecking=yes -p 2822 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo Connected successfully"
 
       - name: Deploy to server
         run: |
