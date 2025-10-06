@@ -6,7 +6,7 @@ on:
       - main
 jobs:
   deploy:
-    runs-on: self-hosted   # usar o runner que criaste
+    runs-on: self-hosted 
 
     steps:
       - name: Checkout repository
