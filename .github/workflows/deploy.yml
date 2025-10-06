@@ -18,11 +18,12 @@ jobs:
           ssh-keyscan -p 2822 -H 172.17.100.11 >> ~/.ssh/known_hosts || true
 
       - name: Deploy to server
-        run: |
-          ssh -p 2822 user@172.17.100.11 << 'EOF'
-            cd /opt/back-Portal-denucias || exit 1
-            git pull origin main
-            docker compose pull
-            docker compose up -d --build
-            docker system prune -f
-          EOF
+  run: |
+    ssh -p 2822 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+      cd /opt/back-Portal-denucias || exit 1
+      git pull origin main
+      docker compose pull
+      docker compose up -d --build
+      docker system prune -f
+    EOF
+
