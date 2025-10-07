@@ -91,14 +91,27 @@ class ComplaintattachmentRepository extends AbstractRepository
 
 
     public function showFile($id)
-    {
-        // Busca o arquivo pelo ID (ou lança 404 se não existir)
-        $file = $this->model::findOrFail($id);
-        // Retorna apenas o caminho completo via IP da aplicação e ID
-        $url = url("/storage/{$file->file}");
-        return response()->json([
-            'id'  => $file->id,
-            'url' => $url
-        ]);
+{
+    // Busca o arquivo pelo ID (ou lança 404 se não existir)
+    $file = $this->model::findOrFail($id);
+
+    // Obtém o domínio atual
+    $currentDomain = request()->getSchemeAndHttpHost();
+
+    // Define o IP base dependendo do domínio
+    if ($currentDomain === 'https://nossa-denuncias.keepcomply.co.ao') {
+        $baseUrl = 'http://102.219.127.39:1129';
+    } else {
+        $baseUrl = 'http://172.17.100.11:1129';
     }
+
+    // Monta a URL completa do arquivo
+    $url = "{$baseUrl}/storage/{$file->file}";
+
+    return response()->json([
+        'id'  => $file->id,
+        'url' => $url
+    ]);
+}
+
 }
