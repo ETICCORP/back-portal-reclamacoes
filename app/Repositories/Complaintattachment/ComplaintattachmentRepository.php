@@ -101,7 +101,6 @@ public function showFile($id)
     } else {
         $baseUrl = 'http://172.17.100.11:1129';
     }
-
     $url = "{$baseUrl}/storage/{$file->file}";
 
     return response()->json([
