@@ -163,7 +163,6 @@ class UserController extends AbstractController
                     "message" => "A senha antiga está incorreta."
                 ], 400);
             }
-
             $userPassword = $this->service->changePassword($request->validated());
             return response()->json($userPassword, Response::HTTP_CREATED);
         } catch (Exception $e) {
@@ -172,6 +171,24 @@ class UserController extends AbstractController
         }
     }
  
+
+     public function changePasswordForUser(ChangePasswordRequest $request)
+    {
+        try {
+            $this->logRequest();
+
+            if (!Hash::check($request->current_password, Auth::user()->password)) {
+                return response()->json([
+                    "message" => "A senha antiga está incorreta."
+                ], 400);
+            }
+            $userPassword = $this->service->changePassword($request->validated());
+            return response()->json($userPassword, Response::HTTP_CREATED);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
     
     public function me()
     {

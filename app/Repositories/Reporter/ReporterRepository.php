@@ -17,7 +17,7 @@ class ReporterRepository extends AbstractRepository
     $this->model->create([
         'fullName'     => $data['fullName'] ?? null,
         'email'        => $data['email'] ?? null,
-        'departament'   => $data['departament'] ?? null,
+        'departament'   => $data['department'] ?? null,
         'phone'        => $data['phone'] ?? null,
         'fk_complaint' => $complaintId,
     ]);
