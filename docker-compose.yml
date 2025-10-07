@@ -24,11 +24,12 @@ services:
     restart: always
     tty: true
     ports:
-      - '1129:443'
-      - '1135:80'
+      - '1129:80'
+      - '1130:443'
     volumes:
       - ./:/var/www
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - /etc/certificate-ssl:/etc/certificate-ssl:ro   # 🔑 monta os certificados do host
     networks:
       - portalDenucias-network
     depends_on:
