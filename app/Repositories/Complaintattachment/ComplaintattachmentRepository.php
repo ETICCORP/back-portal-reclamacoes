@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Throwable;
-
+use Illuminate\Support\Str;
 class ComplaintattachmentRepository extends AbstractRepository
 {
     public function __construct(Complaintattachment $model)
@@ -90,27 +90,24 @@ class ComplaintattachmentRepository extends AbstractRepository
     }
 
 
-    public function showFile($id)
+public function showFile($id)
 {
-    // Busca o arquivo pelo ID (ou lança 404 se não existir)
     $file = $this->model::findOrFail($id);
 
-    // Obtém o domínio atual
     $currentDomain = request()->getSchemeAndHttpHost();
 
-    // Define o IP base dependendo do domínio
-    if ($currentDomain === 'https://nossa-denuncias.keepcomply.co.ao') {
+    if (Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao')) {
         $baseUrl = 'http://102.219.127.39:1129';
     } else {
         $baseUrl = 'http://172.17.100.11:1129';
     }
 
-    // Monta a URL completa do arquivo
     $url = "{$baseUrl}/storage/{$file->file}";
 
     return response()->json([
         'id'  => $file->id,
-        'url' => $url
+        'url' => $url,
+        'domain_detected' => $currentDomain, // opcional, para debug
     ]);
 }
 
