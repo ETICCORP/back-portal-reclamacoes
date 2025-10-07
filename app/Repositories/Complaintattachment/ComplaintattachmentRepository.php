@@ -97,7 +97,7 @@ public function showFile($id)
     $currentDomain = request()->getSchemeAndHttpHost();
 
     if (Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao')) {
-        $baseUrl = 'http://102.219.127.39:1129';
+        $baseUrl = 'http://nossa-denuncias.keepcomply.co.ao:1129/';
     } else {
         $baseUrl = 'http://172.17.100.11:1129';
     }
