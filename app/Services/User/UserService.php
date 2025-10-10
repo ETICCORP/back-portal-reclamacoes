@@ -28,7 +28,7 @@ class UserService extends AbstractService
     }
     public function changePassword(array $data)
     {
-        return $this->repository->changePassword( $data);
+        return $this->repository->changePassword($data);
     }
 
 
@@ -44,6 +44,9 @@ class UserService extends AbstractService
 
         if (!$user || !Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Email ou senha incorretos'], 401);
+        }
+        if ($user->is_active == 0) {
+            return response()->json(['message' => 'Conta bloqueada. Por favor, entre em contato com os administradores do sistema para obter assistência.'], 401);
         }
 
         // Gera código 2FA
@@ -130,9 +133,8 @@ class UserService extends AbstractService
     }
 
 
-     public function changePasswordUser(array $data,$id)
+    public function changePasswordUser(array $data, $id)
     {
-        return $this->repository->changePasswordUser( $data,$id);
+        return $this->repository->changePasswordUser($data, $id);
     }
-    
 }
