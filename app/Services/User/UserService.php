@@ -46,7 +46,7 @@ class UserService extends AbstractService
             return response()->json(['message' => 'Email ou senha incorretos'], 401);
         }
         if ($user->is_active == 0) {
-            return response()->json(['message' => 'Conta bloqueada. Por favor, entre em contato com os administradores do sistema para obter assistência.'], 401);
+            return response()->json(['message' => 'Conta bloqueada. Por favor, entre em contato com os administradores do sistema para obter assistência.'], 400);
         }
 
         // Gera código 2FA

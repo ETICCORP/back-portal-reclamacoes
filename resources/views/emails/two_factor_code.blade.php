@@ -72,9 +72,26 @@
     <div class="container">
         
         <!-- LOGO DA NOSSA SEGUROS -->
-        <div class="logo">
-            <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
-        </div>
+
+@php
+    use Illuminate\Support\Str;
+    $currentDomain = request()->getSchemeAndHttpHost();
+@endphp
+
+@if(Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao'))
+    <div class="logo">
+        <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
+    </div>
+@endif
+
+@if(Str::contains($currentDomain, '172.17.100.11' || '172.17.100.12'))
+    <div class="logo">
+        <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
+    </div>
+@endif
+
+
+      
 
         <p>Olá,{{ $user->first_name}}</p>
         <p>Seu código de autenticação é:</p>
