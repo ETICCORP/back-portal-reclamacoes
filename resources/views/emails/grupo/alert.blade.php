@@ -90,10 +90,23 @@
 <body>
     <div class="container">
 
-        <!-- LOGO -->
-        <div class="logo">
-            <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
-        </div>
+      <!-- =======================
+             LOGO CONDICIONAL
+        ======================= -->
+        @php
+            use Illuminate\Support\Str;
+            $currentHost = request()->getHost();
+        @endphp
+
+        @if(in_array($currentHost, ['localhost', '127.0.0.1', '172.17.100.11', '172.17.100.12']))
+            <div class="logo">
+                <img src="https://nossa-denuncias.keepcomply.co.ao:1130/Keepcompay.png" alt="Keepcompay">
+            </div>
+        @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
+            <div class="logo">
+                <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
+            </div>
+        @endif
 
         <p>Olá, <span class="highlight">{{ $user->first_name }}</span></p>
         <p>Identificámos uma nova denúcia associado ao sistema:</p>

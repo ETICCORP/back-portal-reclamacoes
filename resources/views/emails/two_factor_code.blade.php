@@ -6,7 +6,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f0f4f9, #d9e4f5); /* degrade suave */
+            background: linear-gradient(135deg, #f0f4f9, #d9e4f5);
             margin: 0;
             padding: 20px;
         }
@@ -17,7 +17,7 @@
             border-radius: 16px;
             padding: 35px;
             box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-            border: 2px solid #0072CE; /* borda azul */
+            border: 2px solid #0072CE;
             position: relative;
         }
         .container::before {
@@ -39,12 +39,12 @@
             max-width: 180px;
         }
         h2 {
-            color: #003366; /* Azul institucional escuro */
+            color: #003366;
             font-size: 36px;
             margin: 25px 0;
             letter-spacing: 4px;
             text-align: center;
-            border: 2px dashed #0072CE; 
+            border: 2px dashed #0072CE;
             padding: 15px;
             border-radius: 10px;
             background: #f0f8ff;
@@ -70,39 +70,50 @@
 </head>
 <body>
     <div class="container">
-        
-        <!-- LOGO DA NOSSA SEGUROS -->
 
-@php
-    use Illuminate\Support\Str;
-    $currentDomain = request()->getSchemeAndHttpHost();
-@endphp
+        <!-- =======================
+             LOGO CONDICIONAL
+        ======================= -->
+        @php
+            use Illuminate\Support\Str;
+            $currentHost = request()->getHost();
+        @endphp
 
-@if(Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao'))
-    <div class="logo">
-        <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
-    </div>
-@endif
+        @if(in_array($currentHost, ['localhost', '127.0.0.1', '172.17.100.11', '172.17.100.12']))
+            <div class="logo">
+                <img src="https://nossa-denuncias.keepcomply.co.ao:1130/Keepcompay.png" alt="Keepcompay">
+            </div>
+        @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
+            <div class="logo">
+                <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
+            </div>
+        @endif
 
-@if(Str::contains($currentDomain, '172.17.100.11' || '172.17.100.12'))
-    <div class="logo">
-        <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
-    </div>
-@endif
-
-
-      
-
-        <p>Olá,{{ $user->first_name}}</p>
+        <!-- =======================
+             CONTEÚDO DO E-MAIL
+        ======================= -->
+        <p>Olá, {{ $user->first_name }}</p>
         <p>Seu código de autenticação é:</p>
-        
+
         <h2>{{ $user->two_factor_code }}</h2>
 
         <p>Este código expira em <span class="highlight">10 minutos</span>.</p>
         <p>Se você não solicitou este código, ignore esta mensagem.</p>
 
+        <!-- =======================
+             RODAPÉ
+        ======================= -->
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Nossa Seguros — Todos os direitos reservados.</p>
+
+            <p>&copy; {{ date('Y') }}
+                
+                 @if(in_array($currentHost, ['localhost', '127.0.0.1', '172.17.100.11', '172.17.100.12']))
+              Keepcompay — Todos os direitos reservados.
+        @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
+            Nossa Seguros — Todos os direitos reservados.
+        @endif
+            
+              </p>
         </div>
     </div>
 </body>
