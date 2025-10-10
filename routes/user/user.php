@@ -8,6 +8,8 @@ Route::get('/me', [UserController::class, 'me'])
     Route::put('/changePassword', [UserController::class, 'changePassword'])
     ->name('user.changePassword');
 
+Route::put('/changePassword/{id}', [UserController::class, 'changePasswordUser']);
+
 Route::get('', [UserController::class, 'index'])
     ->name('user.index')
     ->middleware(['can:usuario-show']);

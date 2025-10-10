@@ -128,4 +128,11 @@ class UserService extends AbstractService
             // 'user'  => $user
         ];
     }
+
+
+     public function changePasswordUser(array $data)
+    {
+        return $this->repository->changePasswordUser( $data);
+    }
+    
 }

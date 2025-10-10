@@ -10,6 +10,7 @@ use App\Http\Requests\User\AuthRequest;
 use App\Http\Requests\User\UserRequest;
 use App\Http\Controllers\AbstractController;
 use App\Http\Requests\User\ChangePasswordRequest;
+use App\Http\Requests\User\changePasswordUser;
 use App\Http\Requests\User\EnabledRequest;
 use App\Http\Requests\User\Verify2faRequest;
 use App\Traits\DatabaseLogger;
@@ -192,6 +193,37 @@ class UserController extends AbstractController
             return response()->json($user, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+
+     public function changePasswordUser(changePasswordUser $request,$id)
+    {
+        try {
+            $this->logRequest();
+            $user = $this->service->changePasswordUser($request->validated(),$id);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: "Usuário {$user?->first_name} editou sua senha com sucesso.",
+            );
+            return response()->json($user, Response::HTTP_OK);
+        } catch (ModelNotFoundException $e) {
+            $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: 'Usuário não encontrado.',
+            );
+            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'error',
+                customMessage: 'Erro ao atualizar usuário.',
+            );
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
