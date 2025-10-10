@@ -130,9 +130,9 @@ class UserService extends AbstractService
     }
 
 
-     public function changePasswordUser(array $data)
+     public function changePasswordUser(array $data,$id)
     {
-        return $this->repository->changePasswordUser( $data);
+        return $this->repository->changePasswordUser( $data,$id);
     }
     
 }

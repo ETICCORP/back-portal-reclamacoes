@@ -36,7 +36,6 @@ class UserRepository extends AbstractRepository
 
         $user->password = Hash::make($data['new_password']);
         $user->save(); // Salva no banco
-
         return $user; // Retorna o objeto usuário atualizado
     }
 }
