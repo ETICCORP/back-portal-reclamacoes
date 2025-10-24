@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('reporter', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('fk_complaint');
-        
+            $table->string('quality');
             $table->string('fullName');
             $table->string('email')->nullable();
             $table->string('departament')->nullable();
