@@ -59,7 +59,7 @@ services:
     image: phpmyadmin:5.2
     restart: always
     ports:
-      - '8822:80'
+      - '8823:80'
     networks:
       - portalReclamacoes-network
     environment:
