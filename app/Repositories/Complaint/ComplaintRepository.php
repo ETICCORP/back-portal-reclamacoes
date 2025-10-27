@@ -44,15 +44,17 @@ class ComplaintRepository extends AbstractRepository
      */
     public function storeData(array $data): Complaint
     {
+
         $randomCode = $this->generateUniqueCode(6);
 
         $complaint = $this->model->create([
-            'due_date' => $date['due_date']?? null,
-            'responsible_area' => $date['responsible_area']?? null,
-            'justification' => $date['justification']?? null,
-            'urgency' => $date['urgency']?? null,
-            'gravity' => $date['gravity']?? null,
-            'responsible_analyst' => $date['responsible_analyst']?? null,
+            'due_date' => $data['due_data']?? null,
+            'responsible_area' => $data['responsible_area'] ?? null,
+            'justification' => $data['justification'] ?? null,
+            'urgency' => $data['urgency'] ?? null,
+            'gravity' => $data['gravity'] ?? null,
+            'responsible_analyst' => $data['responsible_analyst']?? null,
+            'entity' => $data['entity'],
             
             'type' => $data['type'],
             'code' => $randomCode,
@@ -91,6 +93,24 @@ class ComplaintRepository extends AbstractRepository
         ]);
 
         return $complaint;
+    }
+
+    public function updateComplaint(array $data, int $id): ?Complaint
+    {
+        $complaint = $this->model->find($id);
+
+        if ($complaint) {
+            $complaint->update(Arr::only($data, [
+                'due_date',
+                'responsible_area',
+                'justification',
+                'urgency',
+                'gravity',
+                'responsible_analyst',
+            ]));
+
+            return $complaint;
+        }
     }
 
     /**
@@ -153,6 +173,93 @@ class ComplaintRepository extends AbstractRepository
     {
         return $this->model::count();
     }
+
+    //========================================
+
+    // ⏱️ 2. Tempo médio de resposta
+    public function timeResponse(Request $request)
+    {
+        $start = $request->get('start_date', Carbon::now()->subMonth());
+        $end = $request->get('end_date', Carbon::now());
+
+        $avgHours = Complaint::whereBetween('created_at', [$start, $end])
+            ->whereNotNull('response_date')
+            ->select(DB::raw('AVG(TIMESTAMPDIFF(HOUR, created_at, response_date)) as avg_hours'))
+            ->value('avg_hours');
+
+        return response()->json([
+            'avg_response_time_hours' => round($avgHours, 2)
+        ]);
+    }
+
+    // 📅 3. Percentagem dentro do prazo legal
+    public function percentagemPrazoLegal(Request $request)
+    {
+        $start = $request->get('start_date', Carbon::now()->subMonth());
+        $end = $request->get('end_date', Carbon::now());
+        $prazoLegal = 15; // dias
+
+        $complaints = Complaint::whereBetween('created_at', [$start, $end])
+            ->whereNotNull('response_date')
+            ->get();
+
+        $total = $complaints->count();
+        $withinDeadline = $complaints->filter(fn($c) =>
+            $c->response_date->diffInDays($c->created_at) <= $prazoLegal
+        )->count();
+
+        $percent = $total > 0 ? round(($withinDeadline / $total) * 100, 2) : 0;
+
+        return response()->json([
+            'percent_within_legal_deadline' => $percent
+        ]);
+    }
+
+    // 📊 4. Reclamações por tipologia
+    public function reclamacoesPorTipologia(Request $request)
+    {
+        $start = $request->get('start_date', Carbon::now()->subMonth());
+        $end = $request->get('end_date', Carbon::now());
+
+        $byType = Complaint::whereBetween('created_at', [$start, $end])
+            ->select('type', DB::raw('count(*) as total'))
+            ->groupBy('type')
+            ->get();
+
+        return response()->json([
+            'complaints_by_type' => $byType
+        ]);
+    }
+
+    // 📨 5. Reclamações reencaminhadas ao Provedor
+    public function reclamacoesProvedor(Request $request)
+    {
+        $start = $request->get('start_date', Carbon::now()->subMonth());
+        $end = $request->get('end_date', Carbon::now());
+
+        $count = Complaint::whereBetween('created_at', [$start, $end])
+            ->where('forwarded_to_provider', true)
+            ->count();
+
+        return response()->json([
+            'forwarded_to_provider' => $count
+        ]);
+    }
+
+    // 🔁 6. Reclamações reincidentes por cliente
+    public function reclamacoesReincidentes(Request $request)
+    {
+        $reincidents = Complaint::select('customer_id', DB::raw('count(*) as total'))
+            ->groupBy('customer_id')
+            ->having('total', '>', 1)
+            ->get()->count();
+
+        return response()->json([
+            'reincidents_by_customer' => $reincidents
+        ]);
+    }
+
+    //========================================
 
     /**
      * Retorna denúncia pelo código

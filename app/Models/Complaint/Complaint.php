@@ -26,6 +26,7 @@ class Complaint extends Model
         'suggestionAttempt',
         'relationship',
         'status',
+        'entity',
         'isAnonymous',
         'type',
         'code',

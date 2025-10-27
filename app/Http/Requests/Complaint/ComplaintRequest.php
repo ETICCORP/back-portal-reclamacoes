@@ -31,11 +31,13 @@ class ComplaintRequest extends BaseFormRequest
             'isAnonymous'       => 'required|boolean',
             'type' => ['required', 'numeric', 'exists:type_complaints,id'],
 
+
             'due_date' => 'nullable|string|max:255',
             'responsible_area' => 'nullable|string|max:255',
             'justification' => 'nullable|string|max:255',
             'urgency' => 'nullable|string|max:255',
             'gravity' => 'nullable|string|max:255',
+            'entity' => 'required|string|max:255',
             'responsible_analyst' => 'nullable|string|max:255',
 
             // validação dos envolvidos

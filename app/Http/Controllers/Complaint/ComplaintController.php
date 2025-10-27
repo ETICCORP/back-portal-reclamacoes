@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Complaint;
 
 use App\Http\Controllers\AbstractController;
+use App\Http\Requests\Complaint\UpdateRequest;
 use App\Services\Complaint\ComplaintService;
 use App\Http\Requests\Complaint\ComplaintRequest;
 use Exception;
@@ -79,8 +80,8 @@ class ComplaintController extends AbstractController
     public function store(ComplaintRequest $request)
     {
         try {
-
-
+            //return response()->json($request);
+            
             $this->logRequest();
             $complaint = $this->service->storeData($request->validated());
             AlertJob::dispatch($complaint->id);
@@ -107,7 +108,7 @@ class ComplaintController extends AbstractController
     /**
      * Update the specified resource in storage.
      */
-    public function update(ComplaintRequest $request, $id)
+    public function update(UpdateRequest $request, $id)
     {
         try {
             $this->logRequest();

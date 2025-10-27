@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('justification')->nullable();
             $table->string('urgency')->nullable();
             $table->string('status');
+            $table->string('entity');
             $table->string('gravity')->nullable();
             $table->string('responsible_analyst')->nullable();
             $table->longText('description')->nullable();
