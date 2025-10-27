@@ -10,5 +10,5 @@ class Reporter extends Model
     use HasFactory;
     protected $table = 'reporter';
     protected $primaryKey = 'id';
-    protected $fillable = ['fk_complaint','fullName','email','departament','phone'];
+    protected $fillable = ['fk_complaint','fullName','email','departament','phone','quality'];
 }  

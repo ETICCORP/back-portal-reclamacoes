@@ -47,15 +47,23 @@ class ComplaintRepository extends AbstractRepository
         $randomCode = $this->generateUniqueCode(6);
 
         $complaint = $this->model->create([
-            'type'              => $data['type'],
-            'code'              => $randomCode,
-            'description'       => $data['description'] ?? null,
+            'due_date' => $date['due_date']?? null,
+            'responsible_area' => $date['responsible_area']?? null,
+            'justification' => $date['justification']?? null,
+            'urgency' => $date['urgency']?? null,
+            'gravity' => $date['gravity']?? null,
+            'responsible_analyst' => $date['responsible_analyst']?? null,
+            
+            'type' => $data['type'],
+            'code' => $randomCode,
+            'description' => $data['description'] ?? null,
             'incidentDateTime'  => $data['incidentDateTime'],
-            'location'          => $data['location'],
+            'location' => $data['location'],
             'suggestionAttempt' => $data['suggestionAttempt'],
-            'relationship'      => $data['relationship'],
-            'status'            => "Pendente",
-            'isAnonymous'       => $data['isAnonymous'],
+
+            'relationship' => $data['relationship'],
+            'status' => "Pendente",
+            'isAnonymous' => $data['isAnonymous'],
         ]);
 
         // 👥 Colaboradores envolvidos
@@ -214,15 +222,15 @@ class ComplaintRepository extends AbstractRepository
     /**
      * Top N tipos de denúncia
      */
-public function getTopTypes(int $limit = 4)
-{
-    return $this->model::select('type_complaints.name as type', \DB::raw('COUNT(*) as count'))
-        ->join('type_complaints', 'type_complaints.id', '=', 'complaint.type')
-        ->groupBy('type_complaints.name')
-        ->orderByDesc('count')
-        ->limit($limit)
-        ->get();
-}
+    public function getTopTypes(int $limit = 4)
+    {
+        return $this->model::select('type_complaints.name as type', \DB::raw('COUNT(*) as count'))
+            ->join('type_complaints', 'type_complaints.id', '=', 'complaint.type')
+            ->groupBy('type_complaints.name')
+            ->orderByDesc('count')
+            ->limit($limit)
+            ->get();
+    }
 
 
 

@@ -29,6 +29,12 @@ class Complaint extends Model
         'isAnonymous',
         'type',
         'code',
+        'due_date',
+        'responsible_area',
+        'justification',
+        'urgency',
+        'gravity',
+        'responsible_analyst'
     ];
 
     public static function generateCustomRandomCode($length = 10)

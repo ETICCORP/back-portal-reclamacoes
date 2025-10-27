@@ -19,6 +19,7 @@ class ReporterRepository extends AbstractRepository
         'email'        => $data['email'] ?? null,
         'departament'   => $data['department'] ?? null,
         'phone'        => $data['phone'] ?? null,
+        'quality'=> $data['quality'],
         'fk_complaint' => $complaintId,
     ]);
 }

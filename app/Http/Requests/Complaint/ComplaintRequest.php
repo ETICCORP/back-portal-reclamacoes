@@ -31,6 +31,13 @@ class ComplaintRequest extends BaseFormRequest
             'isAnonymous'       => 'required|boolean',
             'type' => ['required', 'numeric', 'exists:type_complaints,id'],
 
+            'due_date' => 'nullable|string|max:255',
+            'responsible_area' => 'nullable|string|max:255',
+            'justification' => 'nullable|string|max:255',
+            'urgency' => 'nullable|string|max:255',
+            'gravity' => 'nullable|string|max:255',
+            'responsible_analyst' => 'nullable|string|max:255',
+
             // validação dos envolvidos
             'involveColleagues'            => 'nullable|array',
             'involveColleagues.*.name'     => 'required_with:involveColleagues|string|max:255',
@@ -43,6 +50,7 @@ class ComplaintRequest extends BaseFormRequest
             'reporter.email'         => 'required_with:reporter|email',
             'reporter.department'    => 'nullable|string|max:255',
             'reporter.phone'         => 'nullable|string|max:20',
+            'reporter.quality'       => 'required_with:reporter|string|max:255',
             // 📎 Validação dos anexos
             'attachments'            => 'nullable|array',
             'attachments.*'          => 'nullable|string', // cada item deve ser uma string base64
@@ -59,6 +67,8 @@ class ComplaintRequest extends BaseFormRequest
             'location.required' => 'A localização é obrigatória.',
             'status.required' => 'O status é obrigatório.',
             'type.required' => 'O tipo de ocorrência é obrigatório.',
+
+            'due_date.date' => 'A data de vencimento deve ser uma data válida.',            
 
             'involveColleagues.name.required_with' => 'O nome do colega envolvido é obrigatório.',
             'involveColleagues.role.required_with' => 'O papel/função do colega envolvido é obrigatório.',
