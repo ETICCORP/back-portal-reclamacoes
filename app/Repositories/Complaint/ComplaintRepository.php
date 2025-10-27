@@ -55,6 +55,7 @@ class ComplaintRepository extends AbstractRepository
             'gravity' => $data['gravity'] ?? null,
             'responsible_analyst' => $data['responsible_analyst']?? null,
             'entity' => $data['entity'],
+            'contract_number' => $data['contract_number'] ?? null,
             
             'type' => $data['type'],
             'code' => $randomCode,

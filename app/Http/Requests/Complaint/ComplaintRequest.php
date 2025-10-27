@@ -30,6 +30,7 @@ class ComplaintRequest extends BaseFormRequest
             'status'            => 'required|string|max:255',
             'isAnonymous'       => 'required|boolean',
             'type' => ['required', 'numeric', 'exists:type_complaints,id'],
+            'contract_number' => 'nullable|string|max:255',
 
 
             'due_date' => 'nullable|string|max:255',

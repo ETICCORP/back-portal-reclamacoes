@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('responsible_area')->nullable();
             $table->string('justification')->nullable();
             $table->string('urgency')->nullable();
+            $table->string('contract_number')->nullable();
             $table->string('status');
             $table->string('entity');
             $table->string('gravity')->nullable();

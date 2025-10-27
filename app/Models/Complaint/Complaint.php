@@ -23,6 +23,7 @@ class Complaint extends Model
         'description',
         'incidentDateTime',
         'location',
+        'contract_number',
         'suggestionAttempt',
         'relationship',
         'status',
