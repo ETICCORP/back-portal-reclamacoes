@@ -18,4 +18,4 @@ Route::post('/count-by-date', [ComplaintController::class, 'countByDate'])->name
 Route::put('/updateStatus/{id}', [ComplaintController::class, 'updateStatus']);
 
 
-
+Route::get('/time-of-response', [ComplaintController::class, 'timeResponse']);

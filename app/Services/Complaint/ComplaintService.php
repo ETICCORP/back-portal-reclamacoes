@@ -31,6 +31,11 @@ class ComplaintService extends AbstractService
     {
         return $this->repository->total();
     }
+
+    public function timeResponse()
+    {
+        return $this->repository->timeResponse();
+    }
     public function totalForCurrentWeek()
     {
         return $this->repository->totalForCurrentWeek();

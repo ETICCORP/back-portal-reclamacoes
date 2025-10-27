@@ -136,6 +136,20 @@ class ComplaintController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+//========================================
+    public function timeResponse()
+    {
+        try {
+            $this->logRequest();
+            $complaint = $this->service->timeResponse();
+            return response()->json($complaint, Response::HTTP_OK);
+        } catch (Exception $e) {
+            $this->logRequest($e);
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+//========================================
 
     public function totalForCurrentWeek()
     {
