@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Complaint;
 
 use App\Http\Controllers\AbstractController;
 use App\Http\Requests\Complaint\UpdateRequest;
+use App\Jobs\SendReportCopy;
+use App\Mail\ReportAlertMail;
 use App\Services\Complaint\ComplaintService;
 use App\Http\Requests\Complaint\ComplaintRequest;
 use Exception;
@@ -15,6 +17,7 @@ use App\Actions\StatusAction;
 use App\Http\Requests\Complaint\UpdateStatusRequest;
 use App\Jobs\AlertJob;
 use App\Jobs\GenerateAlertsJob;
+use Illuminate\Support\Facades\Mail;
 
 class ComplaintController extends AbstractController
 {
@@ -84,7 +87,12 @@ class ComplaintController extends AbstractController
             
             $this->logRequest();
             $complaint = $this->service->storeData($request->validated());
-            AlertJob::dispatch($complaint->id);
+            
+            AlertJob::dispatch($complaint->id); 
+            
+            Mail::to($request->reporter['email'])->send(new ReportAlertMail($request));
+
+            //SendReportCopy::dispatch($complaint->id);
 
             return response()->json($complaint, Response::HTTP_CREATED);
         } catch (Exception $e) {

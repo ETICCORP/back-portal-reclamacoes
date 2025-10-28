@@ -188,8 +188,6 @@ class ComplaintRepository extends AbstractRepository
             'avg_response_time_hours' => round($avgHours, 2)
         ]);
     }
-
-
     
 
     /**
