@@ -90,13 +90,13 @@ class ComplaintController extends AbstractController
             
             AlertJob::dispatch($complaint->id); 
             
-            if($request->reporter['email']) {
+            if(!empty($request->reporter) || $request->reporter != null) {
                 Mail::to($request->reporter['email'])->send(new ReportAlertMail($request));
             }
 
             //SendReportCopy::dispatch($complaint->id);
             return response()->json($complaint, Response::HTTP_CREATED);
-            
+
         } catch (Exception $e) {
             $this->logRequest($e);
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
