@@ -80,7 +80,7 @@ class ComplaintRepository extends AbstractRepository
 
         // 🧑‍💼 Denunciante
         if (!empty($data['reporter'])) {
-            $this->reporter->handleReporter($data['reporter'], $complaint->id);
+            $this->reporter->handleReporter($data, $complaint->id);
         }
 
         // 📎 Anexos

@@ -15,11 +15,11 @@ class ReporterRepository extends AbstractRepository
     public function handleReporter(array $data, int $complaintId)
 {
     $this->model->create([
-        'fullName'     => $data['fullName'] ?? null,
-        'email'        => $data['email'] ?? null,
-        'departament'   => $data['department'] ?? null,
-        'phone'        => $data['phone'] ?? null,
-        'quality'=> $data['quality'],
+        'fullName'     => $data['reporter']['fullName'] ?? null,
+        'email'        => $data['reporter']['email'] ?? null,
+        'departament'   => $data['reporter']['department'] ?? null,
+        'phone'        => $data['reporter']['phone'] ?? null,
+        'quality'=> $data['relationship'],
         'fk_complaint' => $complaintId,
     ]);
 }
