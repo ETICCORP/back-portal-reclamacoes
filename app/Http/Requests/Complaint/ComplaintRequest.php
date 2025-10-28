@@ -50,7 +50,7 @@ class ComplaintRequest extends BaseFormRequest
             // validação do reporter
             'reporter'               => 'nullable|array',
             'reporter.fullName'      => 'required_with:reporter|string|max:255',
-            'reporter.email'         => 'required_with:reporter|email',
+            'reporter.email'         => 'nullable:reporter|email',
             'reporter.department'    => 'nullable|string|max:255',
             'reporter.phone'         => 'nullable|string|max:20',
             'reporter.quality'       => 'required_with:reporter|string|max:255',

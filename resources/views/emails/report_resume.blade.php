@@ -44,7 +44,7 @@
                     <p style="margin:6px 0; font-size:14px;"><strong>Contacto:</strong> {{ optional($complaint->reporter)->phone ?? ($complaint['reporter']['phone'] ?? 'N/D') }}</p>
                     <p style="margin:6px 0; font-size:14px;"><strong>Tipologia:</strong> {{ $complaint->type ?? 'N/D' }}</p>
                     <p style="margin:6px 0; font-size:14px;"><strong>Entidade:</strong> {{ $complaint->entity ?? 'N/D' }}</p>
-                    <p style="margin:6px 0 0; font-size:14px;"><strong>Qualidade:</strong> {{ optional($complaint->reporter)->quality ?? 'N/D' }}</p>
+                    <p style="margin:6px 0 0; font-size:14px;"><strong>Qualidade:</strong> {{ optional($complaint->reporter)->quality ?? ($complaint['reporter']['quality'] ?? 'N/D') }}</p>
                   </td>
                 </tr>
               </table>
