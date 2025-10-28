@@ -53,7 +53,7 @@ class ComplaintRequest extends BaseFormRequest
             'reporter.email'         => 'required_with:reporter|email',
             'reporter.department'    => 'nullable|string|max:255',
             'reporter.phone'         => 'nullable|string|max:20',
-            'reporter.quality'       => 'required_with:reporter|string|max:255',
+            'reporter.quality'       => 'nullable:reporter|string|max:255',
             // 📎 Validação dos anexos
             'attachments'            => 'nullable|array',
             'attachments.*'          => 'nullable|string', // cada item deve ser uma string base64
