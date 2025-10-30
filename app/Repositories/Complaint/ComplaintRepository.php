@@ -7,17 +7,21 @@ use App\Repositories\AbstractRepository;
 use App\Repositories\Comment\CommentRepository;
 use App\Repositories\Complaintattachment\ComplaintattachmentRepository;
 use App\Repositories\Description\DescriptionRepository;
-use App\Repositories\InvolveColleagues\InvolveColleaguesRepository;
+
 use App\Repositories\Reporter\ReporterRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
+use App\Jobs\AlertJob;
+use App\Jobs\GenerateAlertsJob;
+use App\Mail\ReportAlertMail;
+use Illuminate\Support\Facades\Mail;
 
 class ComplaintRepository extends AbstractRepository
 {
-    protected InvolveColleaguesRepository $involveColleagues;
+
     protected ReporterRepository $reporter;
     protected ComplaintattachmentRepository $attachments;
     protected CommentRepository $commentRepository;
@@ -25,14 +29,12 @@ class ComplaintRepository extends AbstractRepository
 
     public function __construct(
         Complaint $model,
-        InvolveColleaguesRepository $involveColleagues,
+
         ReporterRepository $reporter,
         DescriptionRepository $description,
         ComplaintattachmentRepository $attachments,
         CommentRepository $commentRepository
     ) {
-        $this->involveColleagues  = $involveColleagues;
-        $this->reporter           = $reporter;
         $this->description        = $description;
         $this->attachments        = $attachments;
         $this->commentRepository  = $commentRepository;
@@ -49,55 +51,37 @@ class ComplaintRepository extends AbstractRepository
         $randomCode = $this->generateUniqueCode(6);
 
         $complaint = $this->model->create([
-            'due_date' => $data['due_data']?? null,
-            'responsible_area' => $data['responsible_area'] ?? null,
-            'justification' => $data['justification'] ?? null,
-            'urgency' => $data['urgency'] ?? null,
-            'gravity' => $data['gravity'] ?? null,
-            'responsible_analyst' => $data['responsible_analyst']?? null,
-            'entity' => $data['entity'],
-            'contract_number' => $data['contract_number'] ?? null,
 
-            'type' => $data['type'],
-            'code' => $randomCode,
+            'code' => "" . $randomCode,
             'description' => $data['description'] ?? null,
-            'incidentDateTime'  => $data['incidentDateTime'],
-            'location' => $data['location'],
-            'suggestionAttempt' => $data['suggestionAttempt'],
+            'full_name' => $data['full_name'] ?? null,
+            'complainant_role' => $data['complainant_role'] ?? null,
+            'contact' => $data['contact'] ?? null,
+            'email' => $data['email'] ?? null,
+            'policy_number' => $data['policy_number'] ?? null,
+            'entity' => $data['description'] ?? null,
+            'description' => $data['entity'] ?? null,
+            'incidentDateTime' => $data['incidentDateTime'] ?? null,
+            'location' => $data['location'] ?? null,
+            'type' => $data['type'] ?? null,
+            "status" => "Pendente"
 
-            'relationship' => $data['relationship'],
-            'status' => "Pendente",
-            'isAnonymous' => $data['isAnonymous'],
         ]);
-
-        // 👥 Colaboradores envolvidos
-        if (!empty($data['involveColleagues'])) {
-            $this->involveColleagues->handleInvolvedColleagues(
-                $complaint->id,
-                $data['involveColleagues']
-            );
-        }
-
-        // 🧑‍💼 Denunciante
-        if (!empty($data['reporter'])) {
-            $this->reporter->handleReporter($data, $complaint->id);
-        }
-
         // 📎 Anexos
         $this->handleAttachments($data['attachments'] ?? null, $complaint->id);
 
         $complaint->load([
-            "involveds",
-            "reports",
             "attachments",
-            "soluctions",
             "typeReport"
         ]);
+
+        AlertJob::dispatch($complaint->id);
+        Mail::to($data['email'])->send(new ReportAlertMail($complaint));
 
         return $complaint;
     }
 
-    public function updateComplaint(array $data, int $id): ?Complaint
+    public function updateComplaint(array $data, int $id)
     {
         $complaint = $this->model->find($id);
 
@@ -188,7 +172,7 @@ class ComplaintRepository extends AbstractRepository
             'avg_response_time_hours' => round($avgHours, 2)
         ]);
     }
-    
+
 
     /**
      * Retorna denúncia pelo código
@@ -202,7 +186,7 @@ class ComplaintRepository extends AbstractRepository
             "soluctions",
             "typeReport"
         ])->where('code', $code)->firstOrFail();
-        
+
         return $complaint;
     }
 

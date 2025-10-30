@@ -4,8 +4,7 @@ namespace App\Models\Complaint;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\InvolveColleagues\InvolveColleagues;
-use App\Models\Reporter\Reporter;
+
 use App\Models\Soluction\Soluction;
 use App\Models\ComplaintAttachment\ComplaintAttachment; // cuidado: Service não é Model!
 
@@ -20,24 +19,21 @@ class Complaint extends Model
         'enabled' => 'boolean',
     ];
     protected $fillable = [
+        'full_name',
+        'complainant_role',
+        'contact',
+        'email',
+        'policy_number',
+        'entity',
         'description',
+        'code',
         'incidentDateTime',
         'location',
-        'contract_number',
-        'suggestionAttempt',
-        'relationship',
         'status',
-        'entity',
-        'isAnonymous',
-        'type',
-        'code',
-        'due_date',
-        'responsible_area',
-        'justification',
-        'urgency',
-        'gravity',
-        'responsible_analyst'
+        "type"
     ];
+
+
 
     public static function generateCustomRandomCode($length = 10)
     {
@@ -54,19 +50,13 @@ class Complaint extends Model
     /**
      * Relacionamentos
      */
-    public function involveds()
-    {
-        return $this->hasMany(InvolveColleagues::class, 'fk_complaint');
-    }
-      public function typeReport()
+
+    public function typeReport()
     {
         return $this->belongsTo(TypeComplaints::class, 'type');
     }
 
-    public function reports()
-    {
-        return $this->hasMany(Reporter::class, 'fk_complaint');
-    }
+
 
     public function attachments()
     {

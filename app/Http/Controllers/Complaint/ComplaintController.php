@@ -15,8 +15,7 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Actions\StatusAction;
 use App\Http\Requests\Complaint\UpdateStatusRequest;
-use App\Jobs\AlertJob;
-use App\Jobs\GenerateAlertsJob;
+
 use Illuminate\Support\Facades\Mail;
 
 class ComplaintController extends AbstractController
@@ -88,12 +87,6 @@ class ComplaintController extends AbstractController
             $this->logRequest();
             $complaint = $this->service->storeData($request->validated());
             
-            AlertJob::dispatch($complaint->id); 
-            
-            if(!empty($request->reporter) || $request->reporter != null) {
-                Mail::to($request->reporter['email'])->send(new ReportAlertMail($request));
-            }
-
             //SendReportCopy::dispatch($complaint->id);
             return response()->json($complaint, Response::HTTP_CREATED);
 
@@ -234,7 +227,7 @@ class ComplaintController extends AbstractController
             return response()->json($complaint, Response::HTTP_OK);
                try {
         } catch (Exception $e) {
-            $this->logRequest($e);
+      
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }

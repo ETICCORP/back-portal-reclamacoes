@@ -58,13 +58,11 @@ class ComplaintService extends AbstractService
     {
         $startDate = $startDate ?? now()->subDays(7)->toDateString();
         $endDate   = $endDate ?? now()->toDateString();
-
         return $this->repository->countByDate($startDate, $endDate);
     }
 
     public function updateStatus(array $data, $id)
     {
-
         return $this->repository->updateStatus($data, $id);
     }
 }

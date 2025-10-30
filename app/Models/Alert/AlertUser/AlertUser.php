@@ -36,4 +36,5 @@ class AlertUser extends Model
             ->withTimestamps()
             ->withPivot('is_read', 'created_at');
     }
+
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\InvolveColleagues;
+namespace App\Http\Requests\ComplaintTriages;
 
 use App\Http\Requests\BaseFormRequest;
 
-class InvolveColleaguesRequest extends BaseFormRequest
+class ComplaintTriagesRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,14 @@ class InvolveColleaguesRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            
+            'complaint_id' => 'required',
+            'classification_type' => 'required',
+            'severity' => 'required',
+            'urgency' => 'required',
+            'responsible_area' => 'required',
+            'is_refused' => 'required',
+            'refusal_reason' => 'required',
+            'assigned_user_id' => 'required'
         ];
     }
 }

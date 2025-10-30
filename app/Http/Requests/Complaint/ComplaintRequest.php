@@ -22,38 +22,19 @@ class ComplaintRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'description'       => 'required|string|max:2000',
-            'incidentDateTime'  => 'required|date|before_or_equal:today',
-            'location'          => 'required|string|max:255',
-            'suggestionAttempt' => 'nullable|string|max:255',
-            'relationship'      => 'nullable|string|max:255',
-            'status'            => 'required|string|max:255',
-            'isAnonymous'       => 'required|boolean',
-            'type' => ['required', 'numeric', 'exists:type_complaints,id'],
-            'contract_number' => 'nullable|string|max:255',
 
+            'full_name'         => ['required', 'string', 'max:255'],
+            'complainant_role'  => ['required', 'string', 'max:100'],
+            'contact'           => ['nullable',  'max:50'],
+            'incidentDateTime'           => ['nullable',  'max:50'],
+            'location'           => ['nullable',  'max:50'],
+            'status'           => ['nullable',  'max:50'],
+            'type'           => ['nullable'],
+            'email'             => ['nullable', 'email', 'max:255'],
+            'policy_number'     => ['nullable',  'max:100'],
+            'entity'            => ['required', 'string', 'max:255'],
+            'description'       => ['required', 'string', 'min:10'],
 
-            'due_date' => 'nullable|string|max:255',
-            'responsible_area' => 'nullable|string|max:255',
-            'justification' => 'nullable|string|max:255',
-            'urgency' => 'nullable|string|max:255',
-            'gravity' => 'nullable|string|max:255',
-            'entity' => 'required|string|max:255',
-            'responsible_analyst' => 'nullable|string|max:255',
-
-            // validação dos envolvidos
-            'involveColleagues'            => 'nullable|array',
-            'involveColleagues.*.name'     => 'required_with:involveColleagues|string|max:255',
-            'involveColleagues.*.role'     => 'required_with:involveColleagues|string|max:255',
-
-
-            // validação do reporter
-            'reporter'               => 'nullable|array',
-            'reporter.fullName'      => 'required_with:reporter|string|max:255',
-            'reporter.email'         => 'required_with:reporter|email',
-            'reporter.department'    => 'nullable|string|max:255',
-            'reporter.phone'         => 'nullable|string|max:20',
-            'reporter.quality'       => 'nullable:reporter|string|max:255',
             // 📎 Validação dos anexos
             'attachments'            => 'nullable|array',
             'attachments.*'          => 'nullable|string', // cada item deve ser uma string base64
@@ -63,21 +44,14 @@ class ComplaintRequest extends BaseFormRequest
     public function messages(): array
     {
         return [
-            'description.required' => 'A descrição é obrigatória.',
-            'incidentDateTime.required' => 'A data/hora do incidente é obrigatória.',
-            'incidentDateTime.date' => 'A data/hora deve ser uma data válida.',
-            'incidentDateTime.before_or_equal' => 'A data do incidente não pode estar no futuro.',
-            'location.required' => 'A localização é obrigatória.',
-            'status.required' => 'O status é obrigatório.',
-            'type.required' => 'O tipo de ocorrência é obrigatório.',
-
-            'due_date.date' => 'A data de vencimento deve ser uma data válida.',            
-
-            'involveColleagues.name.required_with' => 'O nome do colega envolvido é obrigatório.',
-            'involveColleagues.role.required_with' => 'O papel/função do colega envolvido é obrigatório.',
-
-            'reporter.fullName.required_with' => 'O nome do repórter é obrigatório.',
-            'reporter.email.required_with' => 'O email do repórter é obrigatório e deve ser válido.',
+            'full_name.required'        => 'O campo Nome completo é obrigatório.',
+            'complainant_role.required' => 'O campo Qualidade do reclamante é obrigatório.',
+            'contact.string'            => 'O contacto deve ser um texto válido.',
+            'email.email'               => 'Insira um endereço de e-mail válido.',
+            'policy_number.string'      => 'O número da apólice deve ser um texto válido.',
+            'entity.required'           => 'O campo Entidade reclamada é obrigatório.',
+            'description.required'      => 'A descrição da reclamação é obrigatória.',
+            'description.min'           => 'A descrição deve ter pelo menos 10 caracteres.',
         ];
     }
 }

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Throwable;
 use Illuminate\Support\Str;
+
 class ComplaintattachmentRepository extends AbstractRepository
 {
     public function __construct(Complaintattachment $model)
@@ -90,24 +91,23 @@ class ComplaintattachmentRepository extends AbstractRepository
     }
 
 
-public function showFile($id)
-{
-    $file = $this->model::findOrFail($id);
+    public function showFile($id)
+    {
+        $file = $this->model::findOrFail($id);
 
-    $currentDomain = request()->getSchemeAndHttpHost();
+        $currentDomain = request()->getSchemeAndHttpHost();
 
-    if (Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao')) {
-        $baseUrl = 'https://nossa-denuncias.keepcomply.co.ao:1130/';
-    } else {
-        $baseUrl = 'http://172.17.100.11:1129';
+        if (Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao')) {
+            $baseUrl = 'https://nossa-denuncias.keepcomply.co.ao:1130/';
+        } else {
+            $baseUrl = 'http://172.17.100.11:1129';
+        }
+        $url = "{$baseUrl}/storage/{$file->file}";
+
+        return response()->json([
+            'id'  => $file->id,
+            'url' => $url,
+            'domain_detected' => $currentDomain, // opcional, para debug
+        ]);
     }
-    $url = "{$baseUrl}/storage/{$file->file}";
-
-    return response()->json([
-        'id'  => $file->id,
-        'url' => $url,
-        'domain_detected' => $currentDomain, // opcional, para debug
-    ]);
-}
-
 }
