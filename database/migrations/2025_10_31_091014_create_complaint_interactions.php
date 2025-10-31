@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('complaint_interactions', function (Blueprint $table) {
             $table->id();
             $table->string('complaint_id')->nullable();
+             $table->string('user_id')->nullable();
             $table->string('type_contact')->nullable();
             $table->string('contact')->nullable();
             $table->longText('notes')->nullable();
