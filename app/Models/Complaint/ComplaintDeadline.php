@@ -11,11 +11,11 @@ class ComplaintDeadline extends Model
     use HasFactory;
     protected $table = 'complaint_deadlines';
     protected $primaryKey = 'id';
-protected $casts = [
-    'start_date' => 'datetime',
-    'end_date' => 'datetime',
-    'notified_at' => 'datetime',
-];
+    protected $casts = [
+        'start_date' => 'datetime',
+        'end_date' => 'datetime',
+        'notified_at' => 'datetime',
+    ];
 
     protected $fillable = [
         'complaint_id',
@@ -40,11 +40,6 @@ protected $casts = [
 
     public function remainingDays(): int
     {
-          return now()->diffInDays($this->end_date, false);
+        return now()->diffInDays($this->end_date, false);
     }
-
-
- 
-
-
 }
