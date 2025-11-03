@@ -100,7 +100,7 @@ class ComplaintattachmentRepository extends AbstractRepository
         if (Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao')) {
             $baseUrl = 'https://nossa-denuncias.keepcomply.co.ao:1130/';
         } else {
-            $baseUrl = 'http://172.17.100.11:1129';
+            $baseUrl = 'http://172.17.100.11:1121';
         }
         $url = "{$baseUrl}/storage/{$file->file}";
 
