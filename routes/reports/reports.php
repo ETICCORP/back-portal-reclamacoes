@@ -45,7 +45,7 @@ use App\Http\Controllers\Permission\PermissionController;
         Route::get('/time-of-response', [ComplaintController::class, 'timeResponse'])->name('complaints.timeResponse');
 
         // Atualização de status
-        Route::put('/update-status/{id}', [ComplaintController::class, 'updateStatus'])
+        Route::put('/updateStatus/{id}', [ComplaintController::class, 'updateStatus'])
             ->whereNumber('id')
             ->name('complaints.updateStatus');
     

@@ -23,7 +23,10 @@
         {
             try {
                 $this->logRequest();
-                $complaintOpinions = $this->service->store($request->validated());
+                 $data = $request->validated();
+            // Atribui automaticamente o ID do utilizador autenticado
+            $data['user_id'] = auth()->id();
+                $complaintOpinions = $this->service->store(   $data);
                 return response()->json($complaintOpinions, Response::HTTP_CREATED);
             } catch (Exception $e) {
                 $this->logRequest($e);

@@ -2,11 +2,13 @@
 
 namespace App\Models\Complaint;
 
+use App\Models\Complaint\ComplaintInteraction\ComplaintInteraction;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Soluction\Soluction;
 use App\Models\ComplaintAttachment\ComplaintAttachment; // cuidado: Service não é Model!
+use App\Models\ComplaintTriages\ComplaintTriages;
 
 class Complaint extends Model
 {
@@ -67,4 +69,21 @@ class Complaint extends Model
     {
         return $this->hasMany(Soluction::class, 'fk_complaint');
     }
+
+     public function triages()
+    {
+        return $this->hasMany(ComplaintTriages::class, 'complaint_id');
+    }
+
+      public function opinions()
+    {
+        return $this->hasMany(ComplaintOpinions::class, 'complaint_id');
+    }
+       public function interaction()
+    {
+        return $this->hasMany(ComplaintInteraction::class, 'complaint_id');
+    }
+
+
+    
 }
