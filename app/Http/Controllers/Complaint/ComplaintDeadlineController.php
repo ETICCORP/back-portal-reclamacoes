@@ -8,7 +8,8 @@
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\Response;
-    
+use Illuminate\Support\Facades\Auth;
+
     class ComplaintDeadlineController extends AbstractController
     {
         public function __construct(ComplaintDeadlineService $service)
@@ -24,6 +25,17 @@
             try {
                 $this->logRequest();
                 $complaintDeadline = $this->service->store($request->validated());
+             $data = $request->validated();
+             if ($this->logRequest) {
+                $this->logRequest();
+                $this->logToDatabase(
+                    type: $this->logType,
+                    level: 'info',
+                    complaint_id: $data['complaint_id'],
+                    customMessage: "O usuário " . Auth::user()->first_name . "Foi registado um novo prazo para a reclamação.",
+                );
+            }
+            
                 return response()->json($complaintDeadline, Response::HTTP_CREATED);
             } catch (Exception $e) {
                 $this->logRequest($e);

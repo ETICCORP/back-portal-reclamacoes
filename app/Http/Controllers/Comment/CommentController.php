@@ -26,11 +26,16 @@ class CommentController extends AbstractController
             $this->logRequest();
             $data = $request->validated();
             $data['fk_user'] = Auth::id();
-            $this->logToDatabase(
-                type: 'user',
-                level: 'info',
-                customMessage: "Usuário ". Auth::user()->first_name ." Cadastrou um comentário.",
-            );
+            if ($this->logRequest) {
+                $this->logRequest();
+                $this->logToDatabase(
+                    type: $this->logType,
+                    level: 'info',
+                    complaint_id: $data['report_id'],
+                    customMessage: "O usuário " . Auth::user()->first_name . "Registou um comentário.",
+                );
+            }
+
             $comment = $this->service->store($data);
             return response()->json($comment, Response::HTTP_CREATED);
         } catch (Exception $e) {

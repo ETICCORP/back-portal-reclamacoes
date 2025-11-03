@@ -33,7 +33,7 @@ class ComplaintController extends AbstractController
                 $this->logToDatabase(
                     type: $this->logType,
                     level: 'info',
-                    customMessage: "O usuário " . Auth::user()->first_name . " visualizou todos os registros no módulo {$this->nameEntity}",
+                    customMessage: "O usuário " . Auth::user()->first_name . "Visualizou todos os registros os registros de  reclamacões",
                 );
             }
 

@@ -8,7 +8,8 @@
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
     use Illuminate\Http\Response;
-    
+use Illuminate\Support\Facades\Auth;
+
     class ComplaintTriagesController extends AbstractController
     {
         public function __construct(ComplaintTriagesService $service)
@@ -23,6 +24,16 @@
         {
             try {
                 $this->logRequest();
+  $data = $request->validated();
+                 if ($this->logRequest) {
+                $this->logRequest();
+                $this->logToDatabase(
+                    type: $this->logType,
+                    level: 'info',
+                    complaint_id: $data['complaint_id'],
+                    customMessage: "O usuário " . Auth::user()->first_name . "Foi registada uma nova triagem de reclamação",
+                );
+            }
                 $complaintTriages = $this->service->store($request->validated());
                 return response()->json($complaintTriages, Response::HTTP_CREATED);
             } catch (Exception $e) {

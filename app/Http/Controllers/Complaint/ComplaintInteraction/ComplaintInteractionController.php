@@ -8,6 +8,7 @@ use App\Http\Requests\Complaint\ComplaintInteraction\ComplaintInteractionRequest
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Auth;
 
 class ComplaintInteractionController extends AbstractController
 {
@@ -27,7 +28,18 @@ class ComplaintInteractionController extends AbstractController
             $data = $request->validated();
             // Atribui automaticamente o ID do utilizador autenticado
             $data['user_id'] = auth()->id();
-   
+
+            if ($this->logRequest) {
+                $this->logRequest();
+                $this->logToDatabase(
+                    type: $this->logType,
+                    level: 'info',
+                    complaint_id: $data['complaint_id'],
+                    customMessage: "O usuário " . Auth::user()->first_name . "Registrou uma nova interação na reclamação",
+                );
+            }
+
+
             $complaintInteraction = $this->service->store($data);
             return response()->json($complaintInteraction, Response::HTTP_CREATED);
         } catch (Exception $e) {
