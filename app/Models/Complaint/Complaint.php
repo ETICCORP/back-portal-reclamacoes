@@ -83,7 +83,10 @@ class Complaint extends Model
     {
         return $this->hasMany(ComplaintInteraction::class, 'complaint_id');
     }
-
+    public function deadlines()
+    {
+        return $this->hasMany(ComplaintDeadline::class, 'complaint_id');
+    }
 
     
 }
