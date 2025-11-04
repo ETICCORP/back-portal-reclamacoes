@@ -5,9 +5,12 @@ use App\Http\Controllers\Complaint\ComplaintController;
 use App\Http\Controllers\Complaint\ComplaintDeadlineController;
 use App\Http\Controllers\Complaint\ComplaintInteraction\ComplaintInteractionController;
 use App\Http\Controllers\Complaint\ComplaintOpinionsController;
+use App\Http\Controllers\Complaint\ComplaintResponsesController;
+use App\Http\Controllers\Complaint\ModelEmail\ModelEmailController;
 use App\Http\Controllers\Complaint\TypeComplaintsController;
 use App\Http\Controllers\ComplaintTriages\ComplaintTriagesController;
 use App\Http\Controllers\Permission\PermissionController;
+use App\Services\Complaint\ComplaintResponsesService;
 
 /*
 |--------------------------------------------------------------------------
@@ -122,13 +125,43 @@ use App\Http\Controllers\Permission\PermissionController;
     |--------------------------------------------------------------------------
     */
     Route::prefix('opinions')->group(function () {
-        Route::get('/', [ComplaintOpinionsController::class, 'index'])->name('opinions.index');
-        Route::post('/', [ComplaintOpinionsController::class, 'store'])->name('opinions.store');
-        Route::get('/{id}', [ComplaintOpinionsController::class, 'show'])
+        Route::get('/', [ComplaintResponsesService::class, 'index'])->name('opinions.index');
+        Route::post('/', [ComplaintResponsesService::class, 'store'])->name('opinions.store');
+        Route::get('/{id}', [ComplaintResponsesService::class, 'show'])
             ->whereNumber('id')
             ->name('opinions.show');
-        Route::put('/{id}', [ComplaintOpinionsController::class, 'update'])->whereNumber('id')->name('opinions.update');
-        Route::delete('/{id}', [ComplaintOpinionsController::class, 'destroy'])->whereNumber('id')->name('opinions.destroy');
+        Route::put('/{id}', [ComplaintResponsesService::class, 'update'])->whereNumber('id')->name('opinions.update');
+        Route::delete('/{id}', [ComplaintResponsesService::class, 'destroy'])->whereNumber('id')->name('opinions.destroy');
+    });
+    /*
+
+    |--------------------------------------------------------------------------
+    |Possibilidade de Registo do envio e cópia do conteúdo na base de dados;s. (opinions)
+    |--------------------------------------------------------------------------
+  */
+    Route::prefix('responses')->group(function () {
+        Route::get('/', [ComplaintResponsesController::class, 'index'])->name('opinions.index');
+        Route::post('/', [ComplaintResponsesController::class, 'complaintResponse'])->name('opinions.complaintResponse');
+        Route::get('/{id}', [ComplaintResponsesController::class, 'show'])
+            ->whereNumber('id')
+            ->name('opinions.show');
+        Route::post('/{id}/sendEmailResponse', [ComplaintResponsesController::class, 'sendEmailResponse']);
+             Route::post('/', [ComplaintResponsesController::class, 'complaintResponse'])->name('opinions.complaintResponse');
+     
+        Route::delete('/{id}', [ComplaintResponsesController::class, 'destroy'])->whereNumber('id')->name('opinions.destroy');
+    });
+
+
+        Route::prefix('modelEmail')->group(function () {
+        Route::get('/', [ModelEmailController::class, 'index']);
+        Route::post('/', [ModelEmailController::class, 'complaintResponse']);
+        Route::get('/{id}', [ModelEmailController::class, 'show'])
+            ->whereNumber('id')
+            ->name('opinions.show');
+        Route::post('/{id}/sendEmailResponse', [ModelEmailController::class, 'sendEmailResponse']);
+             Route::post('/', [ModelEmailController::class, 'complaintResponse']);
+     
+        Route::delete('/{id}', [ModelEmailController::class, 'destroy'])->whereNumber('id');
     });
 
     

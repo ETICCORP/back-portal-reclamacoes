@@ -58,8 +58,6 @@ class Complaint extends Model
         return $this->belongsTo(TypeComplaints::class, 'type');
     }
 
-
-
     public function attachments()
     {
         return $this->hasMany(ComplaintAttachment::class, 'fk_complaint');
