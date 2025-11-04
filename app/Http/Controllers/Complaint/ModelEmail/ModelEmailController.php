@@ -37,7 +37,7 @@
             $this->logRequest();
             $data = $request->validated();
             // Atribui automaticamente o ID do utilizador autenticado
-            $data['user_id'] = auth()->id();
+       return     $data['user_id'] = auth()->id();
             $complaintResponses = $this->service->complaintResponse(   $data );
             return response()->json($complaintResponses, Response::HTTP_CREATED);
         } catch (Exception $e) {
