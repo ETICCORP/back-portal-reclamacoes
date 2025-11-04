@@ -3,6 +3,8 @@
 namespace App\Models\Complaint;
 
 use App\Models\Complaint\ComplaintInteraction\ComplaintInteraction;
+use App\Models\Complaint\Proviver\ComplaintProvider;
+use App\Models\Complaint\Proviver\ComplaintProviderResponse;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -87,4 +89,14 @@ class Complaint extends Model
     }
 
     
+
+     public function proverResponse()
+    {
+        return $this->hasMany(ComplaintProviderResponse::class, 'complaint_id');
+    }
+
+    public function forwardProvider()
+    {
+        return $this->hasMany(ComplaintProvider::class, 'complaint_id');
+    }
 }

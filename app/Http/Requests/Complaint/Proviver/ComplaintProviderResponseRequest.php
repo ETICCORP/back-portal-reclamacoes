@@ -22,10 +22,13 @@ class ComplaintProviderResponseRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'complaint_id' => 'required',
-            'provider_id' => 'required',
-            'status' => 'required',
-            'response' => 'required'
+            'complaint_id' => ['required', 'exists:complaint,id'],
+            'provider_id' => ['required', 'exists:provider,id'],
+            'response' => 'required',
+            // 📎 Validação dos anexos
+            'attachments'            => 'nullable|array',
+            'attachments.*'          => 'nullable|string', // cada item deve ser uma string base64
+
         ];
     }
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\Complaint\ComplaintOpinionsController;
 use App\Http\Controllers\Complaint\ComplaintResponsesController;
 use App\Http\Controllers\Complaint\ModelEmail\ModelEmailController;
 use App\Http\Controllers\Complaint\Proviver\ComplaintProviderController;
+use App\Http\Controllers\Complaint\Proviver\ComplaintProviderResponseController;
 use App\Http\Controllers\Complaint\TypeComplaintsController;
 use App\Http\Controllers\ComplaintTriages\ComplaintTriagesController;
 use App\Http\Controllers\Permission\PermissionController;
@@ -167,15 +168,10 @@ Route::prefix('modelEmail')->group(function () {
 
 
 Route::prefix('providers')->group(function () {
-   // Encaminhar reclamação
+    // Encaminhar reclamação
     Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
-    
-    // Inserir resposta do Provedor
-    Route::post('{id}/response', [ComplaintProviderController::class, 'insertResponse']);
-    
-    // Upload de anexos
-    Route::post('{id}/attachments', [ComplaintProviderController::class, 'uploadAttachment']);
-    
-    // Listar respostas
-    Route::get('{id}/responses', [ComplaintProviderController::class, 'listResponses']);
+    Route::get('forward', [ComplaintProviderController::class, 'index']);
+
+    Route::get('response', [ComplaintProviderResponseController::class, 'index']);
+    Route::post('response', [ComplaintProviderResponseController::class, 'store']);
 });

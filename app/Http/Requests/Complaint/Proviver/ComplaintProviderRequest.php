@@ -23,11 +23,13 @@ class ComplaintProviderRequest extends BaseFormRequest
     {
         return [
             'complaint_id' => 'required|integer|exists:complaint,id',
-        'provider_id' => 'required|integer|exists:provider,id',
-        'summary' => 'required|string',
-        'notes' => 'nullable|string',
-        'attachments.*' => 'nullable|file|mimes:pdf,jpg,png',
-        'deadline' => 'nullable|date'
+            'provider_id' => 'required|integer|exists:provider,id',
+            'summary' => 'required|string',
+            'notes' => 'nullable|string',
+            // 📎 Validação dos anexos
+            'attachments'            => 'nullable|array',
+            'attachments.*'          => 'nullable|string', // cada item deve ser uma string base64
+            'deadline' => 'nullable|date'
         ];
     }
 }
