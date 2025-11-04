@@ -15,6 +15,7 @@ Route::middleware('auth:sanctum')->group(function () {
     //Route::prefix('statistics')->group(base_path('routes/statistics/statistics.php'));
     Route::prefix('reports')->group(base_path('routes/reports/reports.php'));
     Route::prefix('comment')->group(base_path('routes/comment/comment.php'));
+     Route::prefix('provider')->group(base_path('routes/provider/provider.php'));
 });
  
 Route::post('/auth/login', [UserController::class, 'login']);

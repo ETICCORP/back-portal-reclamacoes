@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('complaintattachment', function (Blueprint $table) {
+        Schema::create('provider', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('fk_complaint');
-            $table->string('name');
-            $table->string('file');
-            $table->string('provider_id')->nullable();
-            $table->softDeletes();
+            $table->string('nif')->nullable();
+            $table->string('name')->nullable();
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable(); 
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('complaintattachment');
+        Schema::dropIfExists('provider');
     }
 };
