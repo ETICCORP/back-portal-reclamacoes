@@ -11,7 +11,7 @@ class ModelEmail extends Model
     use HasFactory;
     protected $table = 'model_email';
     protected $primaryKey = 'id';
-    protected $fillable = ['name', 'subject', 'body', 'signature_path'];
+    protected $fillable = ['name', 'subject', 'body', 'signature_path','user_id'];
 
        public function user()
     {
