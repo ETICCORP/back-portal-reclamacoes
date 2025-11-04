@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('subject')->nullable();
             $table->longText('body');
               $table->string('user_id');
-            $table->string('signature_path')->nullable();
+            $table->longText('signature_path')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
