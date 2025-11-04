@@ -160,6 +160,8 @@ Route::prefix('modelEmail')->group(function () {
     Route::get('/{id}', [ModelEmailController::class, 'show'])
         ->whereNumber('id')
         ->name('opinions.show');
+
+         Route::put('/{id}', [ModelEmailController::class, 'update']);
     Route::post('/{id}/sendEmailResponse', [ModelEmailController::class, 'sendEmailResponse']);
     Route::post('/', [ModelEmailController::class, 'complaintResponse']);
     Route::delete('/{id}', [ModelEmailController::class, 'destroy'])->whereNumber('id');

@@ -99,4 +99,12 @@ class Complaint extends Model
     {
         return $this->hasMany(ComplaintProvider::class, 'complaint_id');
     }
+
+
+
+     public function entitiyResponse()
+    {
+        return $this->hasMany(ComplaintResponses::class, 'complaint_id');
+    }
+    
 }
