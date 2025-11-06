@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\Storage;
 
 class ComplaintResponsesRepository extends AbstractRepository
 {
+    public $complaintRepository;
     protected ComplaintAttachmentRepository $attachments;
 
-    public function __construct(ComplaintResponses $model, ComplaintAttachmentRepository $attachments)
+    public function __construct(ComplaintResponses $model, ComplaintAttachmentRepository $attachments, ComplaintRepository $complaintRepository)
     {
         parent::__construct($model);
         $this->attachments = $attachments;
+        $this->complaintRepository = $complaintRepository;
     }
 
 
@@ -40,6 +42,10 @@ class ComplaintResponsesRepository extends AbstractRepository
             "complaint",
             "user"
         ]);
+        $data['status'] = "Respondida ao Reclamante";
+        $data['comment'] = $data['body'];
+
+        $this->complaintRepository->updateStatus($data, $data['complaint_id']);
 
         Mail::to($complaint->complaint->email)->send(new ComplaintResponseMail($complaint));
         return $complaint;

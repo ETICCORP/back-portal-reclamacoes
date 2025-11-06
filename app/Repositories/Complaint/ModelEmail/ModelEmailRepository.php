@@ -4,15 +4,18 @@ namespace App\Repositories\Complaint\ModelEmail;
 
 use App\Models\Complaint\ModelEmail\ModelEmail;
 use App\Repositories\AbstractRepository;
+use App\Repositories\Complaint\ComplaintRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 use Illuminate\Support\Str;
+
 class ModelEmailRepository extends AbstractRepository
 {
     public function __construct(ModelEmail $model)
     {
         parent::__construct($model);
+       
     }
     public function complaintResponse(array $data)
     {
@@ -22,12 +25,13 @@ class ModelEmailRepository extends AbstractRepository
             'name' => $data['name'],
             'body' => $data['body'],
             'signature_path' => $data['signature_path'],
-          'user_id' => $data['user_id'],
+            'user_id' => $data['user_id'],
 
         ]);
         // 📎 Anexos
         $this->uploadSignature($data['signature_path'] ?? null, $complaint->id);
 
+      
         $complaint->load([
             "user"
         ]);
