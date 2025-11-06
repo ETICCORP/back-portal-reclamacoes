@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Complaint\ComplaintController;
+use App\Http\Controllers\Complaint\ModelEmail\ModelEmailController;
 use App\Http\Controllers\Complaint\TypeComplaintsController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
@@ -25,7 +26,11 @@ Route::post('auth/2fa', [UserController::class, 'verify2fa']);
 
 Route::middleware('web')->get('/reports/show/{id}/file', [ComplaintController::class, 'showFile'])
     ->name('reports.showFile');
+
+    Route::middleware('web')->get('/reports/show/{id}/minuta', [ModelEmailController::class, 'showFile'])
+    ->name('reports.showFile');
     //routes publics
+
 Route::prefix('reports')->group(function () {
   Route::post('/', [ComplaintController::class, 'store'])->name('reportsFre.php.store');
     Route::get('/getBycode/{id}', [ComplaintController::class, 'getBycode']);

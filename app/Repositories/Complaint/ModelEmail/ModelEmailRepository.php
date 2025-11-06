@@ -7,6 +7,7 @@ use App\Repositories\AbstractRepository;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
+use Illuminate\Support\Str;
 class ModelEmailRepository extends AbstractRepository
 {
     public function __construct(ModelEmail $model)
@@ -91,5 +92,25 @@ class ModelEmailRepository extends AbstractRepository
             ]);
             return null;
         }
+    }
+
+    public function showFile($id)
+    {
+        $file = $this->model::findOrFail($id);
+
+        $currentDomain = request()->getSchemeAndHttpHost();
+
+        if (Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao')) {
+            $baseUrl = 'https://nossa-denuncias.keepcomply.co.ao:1130/';
+        } else {
+            $baseUrl = 'http://172.17.100.11:1121';
+        }
+        $url = "{$baseUrl}/storage/{$file->signature_path}";
+
+        return response()->json([
+            'id'  => $file->id,
+            'url' => $url,
+            'domain_detected' => $currentDomain, // opcional, para debug
+        ]);
     }
 }

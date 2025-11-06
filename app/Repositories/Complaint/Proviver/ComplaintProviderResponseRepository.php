@@ -22,7 +22,7 @@ class ComplaintProviderResponseRepository extends AbstractRepository
         $complaint = $this->model->create([
             'complaint_id' => $data['complaint_id'] ?? null,
             'provider_id' => $data['provider_id'] ?? null,
-            'status' => $data['status'] ?? null,
+            'status' =>"Pentende",
 
 
         ]);

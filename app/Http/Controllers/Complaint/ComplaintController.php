@@ -85,6 +85,7 @@ class ComplaintController extends AbstractController
             //return response()->json($request);
             
             $this->logRequest();
+       
             $complaint = $this->service->storeData($request->validated());
             
             //SendReportCopy::dispatch($complaint->id);

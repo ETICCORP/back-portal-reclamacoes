@@ -63,4 +63,18 @@
                 return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
+
+
+        public function showFile($id)
+        {
+    
+            try {
+                $this->logRequest();
+                $complaint = $this->service->showFile($id);
+                return response()->json($complaint, Response::HTTP_CREATED);
+            } catch (Exception $e) {
+                $this->logRequest($e);
+                return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
     }

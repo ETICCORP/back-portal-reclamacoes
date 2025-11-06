@@ -1,10 +1,12 @@
 <?php
+
 namespace App\Repositories\Complaint;
 
 use App\Models\Complaint\ComplaintDeadline;
 use App\Repositories\AbstractRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+
 class ComplaintDeadlineRepository extends AbstractRepository
 {
     public function __construct(ComplaintDeadline $model)
@@ -12,13 +14,14 @@ class ComplaintDeadlineRepository extends AbstractRepository
         parent::__construct($model);
     }
 
-    public function percentageServicedWithinDeadline(){
+    public function percentageServicedWithinDeadline()
+    {
 
-     
-            $dados = DB::table('complaint_deadlines')
+
+        $dados = DB::table('complaint_deadlines')
             ->select(
                 DB::raw("YEAR(start_date) as ano"),
-             
+
 
                 DB::raw("SUM(CASE WHEN status = 'concluido' AND updated_at <= end_date THEN 1 ELSE 0 END) as percentage"),
                 DB::raw("COUNT(*) as total"),
@@ -38,8 +41,5 @@ class ComplaintDeadlineRepository extends AbstractRepository
         }
 
         return $dados;
-        }
-        
-    
-    
+    }
 }
