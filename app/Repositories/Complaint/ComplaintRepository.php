@@ -257,8 +257,7 @@ class ComplaintRepository extends AbstractRepository
     {
         return $this->model::selectRaw('DATE(created_at) as date')
             ->selectRaw('COUNT(*) as total')
-            ->selectRaw('SUM(CASE WHEN isAnonymous = true THEN 1 ELSE 0 END) as anonymous')
-            ->selectRaw('SUM(CASE WHEN isAnonymous = false THEN 1 ELSE 0 END) as identified')
+         
             ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('date')
             ->orderBy('date', 'DESC')
@@ -266,8 +265,33 @@ class ComplaintRepository extends AbstractRepository
             ->map(fn($item) => [
                 'date'        => $item->date,
                 'total'       => (int) $item->total,
-                'anonymous'   => (int) $item->anonymous,
-                'identified'  => (int) $item->identified,
+             
             ]);
     }
+
+
+    public function byManth(){
+        $complaintsByMonth = $this->model::select(
+            DB::raw("DATE_FORMAT(created_at, '%M') as month"), // nome do mês
+            DB::raw('COUNT(*) as total')
+        )
+        
+        ->groupBy('month')
+        ->orderBy('month')
+        ->get();
+
+    return response()->json($complaintsByMonth);
+
+    }
+
+    public function repeatOffenders()
+    {
+        return $this->model::select('entity', DB::raw(value: 'COUNT(*) as total_complaints'))
+        ->groupBy('entity')
+        ->having('total_complaints', '>', 1) // clientes com mais de 1 reclamação
+        ->get();
+
+   
+    }
+    
 }

@@ -60,4 +60,19 @@ use Illuminate\Support\Facades\Auth;
                 return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
+
+        public function percentageServicedWithinDeadline()
+        {
+    
+                $this->logRequest();
+                $complaint = $this->service->percentageServicedWithinDeadline();
+                return response()->json($complaint, Response::HTTP_OK);
+                   try {
+            } catch (Exception $e) {
+          
+                return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        
     }

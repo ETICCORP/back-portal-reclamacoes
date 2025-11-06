@@ -65,4 +65,17 @@ class ComplaintService extends AbstractService
     {
         return $this->repository->updateStatus($data, $id);
     }
+
+    public function byManth()
+    {
+        return $this->repository->byManth();
+    }
+
+    public function repeatOffenders()
+    {
+        return $this->repository->repeatOffenders();
+    }
+   
+
+    
 }

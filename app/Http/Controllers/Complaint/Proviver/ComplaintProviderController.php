@@ -59,4 +59,34 @@
                 return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
             }
         }
+
+        public function forward(){
+
+            try {
+                $this->logRequest();
+                $complaintProviderResponse = $this->service->forward();
+                return response()->json($complaintProviderResponse, Response::HTTP_OK);
+            } catch (ModelNotFoundException $e) {
+                $this->logRequest($e);
+                return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+            } catch (Exception $e) {
+                $this->logRequest($e);
+                return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        public function providersManth(){
+
+            try {
+                $this->logRequest();
+                $complaintProviderResponse = $this->service->providersManth();
+                return response()->json($complaintProviderResponse, Response::HTTP_OK);
+            } catch (ModelNotFoundException $e) {
+                $this->logRequest($e);
+                return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+            } catch (Exception $e) {
+                $this->logRequest($e);
+                return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            }
+        }
     }

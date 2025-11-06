@@ -231,4 +231,35 @@ class ComplaintController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+
+    public function byManth()
+    {
+
+            $this->logRequest();
+            $complaint = $this->service->byManth();
+            return response()->json($complaint, Response::HTTP_OK);
+               try {
+        } catch (Exception $e) {
+      
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    
+    public function repeatOffenders()
+    {
+
+            $this->logRequest();
+            $complaint = $this->service->repeatOffenders();
+            return response()->json($complaint, Response::HTTP_OK);
+               try {
+        } catch (Exception $e) {
+      
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+  
+
+    
 }

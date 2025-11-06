@@ -15,4 +15,13 @@ class ComplaintProviderService extends AbstractService
         return $this->repository->forwardComplaint($data);
     }
     
+    public function forward()
+    {
+        return $this->repository->forward();
+    }
+
+    public function providersManth()
+    {
+        return $this->repository->providersManth();
+    }
 }

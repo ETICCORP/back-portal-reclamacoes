@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('policy_number')->nullable();
             $table->string('entity');
+            $table->string('entity');
+            
             $table->string('code');
             $table->longText('description');
             $table->string('incidentDateTime');

@@ -14,4 +14,6 @@ class ComplaintProviderResponseService extends AbstractService
     {
         return $this->repository->storeData($data);
     }
+
+  
 }

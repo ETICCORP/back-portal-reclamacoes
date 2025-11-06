@@ -6,7 +6,7 @@ use App\Mail\ComplaintForwardedMail;
 use App\Models\Complaint\Proviver\ComplaintProvider;
 use App\Repositories\AbstractRepository;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\DB;
 class ComplaintProviderRepository extends AbstractRepository
 {
     public function __construct(ComplaintProvider $model)
@@ -40,4 +40,24 @@ class ComplaintProviderRepository extends AbstractRepository
             ->send(new ComplaintForwardedMail($complaintProvider));
         return $complaintProvider;
     }
+
+    public function forward(){
+
+        
+        return   $complaint = $this->model::count();
+            }
+        
+            public function providersManth(){
+                $complaintsByMonth = $this->model::select(
+                    DB::raw("DATE_FORMAT(created_at, '%M') as month"), // nome do mês
+                    DB::raw('COUNT(*) as total')
+                )
+                
+                ->groupBy('month')
+                ->orderBy('month')
+                ->get();
+        
+            return response()->json($complaintsByMonth);
+        
+            }
 }

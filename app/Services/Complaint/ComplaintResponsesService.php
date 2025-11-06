@@ -18,5 +18,11 @@ class ComplaintResponsesService extends AbstractService
     {
         return $this->repository->sendEmailResponse($id);
     }
+    public function byManth()
+    {
+        return $this->repository->byManth();
+    }
+
+    
     
 }

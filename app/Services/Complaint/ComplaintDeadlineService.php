@@ -10,4 +10,11 @@ class ComplaintDeadlineService extends AbstractService
     {
         parent::__construct($repository);
     }
+
+    
+
+    public function percentageServicedWithinDeadline()
+    {
+        return $this->repository->percentageServicedWithinDeadline();
+    }
 }

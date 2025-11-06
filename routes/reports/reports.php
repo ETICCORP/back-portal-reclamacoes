@@ -49,6 +49,14 @@ Route::get('/types', [ComplaintController::class, 'getTopTypes'])->name('complai
 Route::match(['get', 'post'], '/count-by-date', [ComplaintController::class, 'countByDate'])->name('complaints.countByDate');
 Route::get('/time-of-response', [ComplaintController::class, 'timeResponse'])->name('complaints.timeResponse');
 
+Route::get('/byManth', [ComplaintController::class, 'byManth'])->name('complaints.byManth');
+
+Route::get('/repeatOffenders', [ComplaintController::class, 'repeatOffenders'])->name('complaints.repeatOffenders');
+
+
+Route::get('/percentageServicedWithinDeadline', action: [ComplaintDeadlineController::class, 'percentageServicedWithinDeadline'])->name('complaints.percentageServicedWithinDeadline');
+
+
 // Atualização de status
 Route::put('/updateStatus/{id}', [ComplaintController::class, 'updateStatus'])
     ->whereNumber('id')
@@ -142,15 +150,15 @@ Route::prefix('opinions')->group(function () {
     |--------------------------------------------------------------------------
   */
 Route::prefix('responses')->group(function () {
-    Route::get('/', [ComplaintResponsesController::class, 'index'])->name('opinions.index');
-    Route::post('/', [ComplaintResponsesController::class, 'complaintResponse'])->name('opinions.complaintResponse');
+    Route::get('/', [ComplaintResponsesController::class, 'index'])->name('responses.index');
+    Route::post('/', [ComplaintResponsesController::class, 'complaintResponse'])->name('responses.complaintResponse');
     Route::get('/{id}', [ComplaintResponsesController::class, 'show'])
         ->whereNumber('id')
-        ->name('opinions.show');
+        ->name( 'response.show');
     Route::post('/{id}/sendEmailResponse', [ComplaintResponsesController::class, 'sendEmailResponse']);
-    Route::post('/', [ComplaintResponsesController::class, 'complaintResponse'])->name('opinions.complaintResponse');
+    Route::post('/', [ComplaintResponsesController::class, 'complaintResponse'])->name('responses.complaintResponse');
 
-    Route::delete('/{id}', [ComplaintResponsesController::class, 'destroy'])->whereNumber('id')->name('opinions.destroy');
+    Route::delete('/{id}', [ComplaintResponsesController::class, 'destroy'])->whereNumber('id')->name('responses.destroy');
 });
 
 
@@ -159,7 +167,7 @@ Route::prefix('modelEmail')->group(function () {
     Route::post('/', [ModelEmailController::class, 'complaintResponse']);
     Route::get('/{id}', [ModelEmailController::class, 'show'])
         ->whereNumber('id')
-        ->name('opinions.show');
+        ->name('modelEmail.show');
 
          Route::put('/{id}', [ModelEmailController::class, 'update']);
     Route::post('/{id}/sendEmailResponse', [ModelEmailController::class, 'sendEmailResponse']);
@@ -177,3 +185,11 @@ Route::prefix('providers')->group(function () {
     Route::get('response', [ComplaintProviderResponseController::class, 'index']);
     Route::post('response', [ComplaintProviderResponseController::class, 'store']);
 });
+
+
+// Corrigido aqui
+Route::get('/count-by-forward-providers', [ComplaintProviderController::class, 'forward'])
+    ->name('complaints.forward');
+
+Route::get('/count-by-forward-providers-manth', [ComplaintProviderController::class, 'providersManth'])
+    ->name('complaints.providersManth');
