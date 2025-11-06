@@ -135,13 +135,13 @@ Route::prefix('interaction')->group(function () {
     |--------------------------------------------------------------------------
     */
 Route::prefix('opinions')->group(function () {
-    Route::get('/', [ComplaintResponsesService::class, 'index'])->name('opinions.index');
-    Route::post('/', [ComplaintResponsesService::class, 'store'])->name('opinions.store');
-    Route::get('/{id}', [ComplaintResponsesService::class, 'show'])
+    Route::get('/', [ComplaintOpinionsController::class, 'index'])->name('opinions.index');
+    Route::post('/', [ComplaintOpinionsController::class, 'store'])->name('opinions.store');
+    Route::get('/{id}', [ComplaintOpinionsController::class, 'show'])
         ->whereNumber('id')
         ->name('opinions.show');
-    Route::put('/{id}', [ComplaintResponsesService::class, 'update'])->whereNumber('id')->name('opinions.update');
-    Route::delete('/{id}', [ComplaintResponsesService::class, 'destroy'])->whereNumber('id')->name('opinions.destroy');
+    Route::put('/{id}', [ComplaintOpinionsController::class, 'update'])->whereNumber('id')->name('opinions.update');
+    Route::delete('/{id}', [ComplaintOpinionsController::class, 'destroy'])->whereNumber('id')->name('opinions.destroy');
 });
 /*
 

@@ -28,7 +28,7 @@ Route::middleware('web')->get('/reports/show/{id}/file', [ComplaintController::c
     ->name('reports.showFile');
 
     Route::middleware('web')->get('/reports/show/{id}/minuta', [ModelEmailController::class, 'showFile'])
-    ->name('reports.showFile');
+   ;
     //routes publics
 
 Route::prefix('reports')->group(function () {
