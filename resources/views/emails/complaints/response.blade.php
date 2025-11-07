@@ -87,12 +87,9 @@
       </div>
 
       <div class="signature">
-        <p>Atenciosamente,<br>
-        <strong>{{ $response->user->name }}</strong><br>
-        {{ config('app.name') }}</p>
-
+      
         @if($response->signature_path)
-          <img src="http://172.17.100.11:1121/storage/{{ $response->signature_path }}" alt="Assinatura">
+          <img src="http://172.17.100.11:1121/storage/{{ $response->signature_path }}" alt="Assinatura" width="200">
         @endif
       </div>
     </div>
