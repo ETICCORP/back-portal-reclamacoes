@@ -24,7 +24,7 @@
         .email-header {
             background-color: #004aad;
             color: #fff;
-            padding: 20px 40px;
+            padding: 25px 40px;
             text-align: center;
         }
 
@@ -40,18 +40,19 @@
 
         p {
             font-size: 15px;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            line-height: 1.7;
+            margin-bottom: 16px;
         }
 
         ul {
             list-style-type: none;
             padding: 0;
+            margin: 20px 0;
         }
 
         li {
             background-color: #f0f4ff;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             padding: 10px 15px;
             border-radius: 8px;
             font-size: 14.5px;
@@ -61,16 +62,33 @@
             color: #004aad;
         }
 
+        .cta {
+            display: inline-block;
+            margin-top: 20px;
+            background-color: #004aad;
+            color: #fff !important;
+            text-decoration: none;
+            padding: 10px 22px;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 15px;
+        }
+
+        .cta:hover {
+            background-color: #003b8a;
+        }
+
         .footer {
             border-top: 1px solid #e5e5e5;
-            margin-top: 25px;
-            padding-top: 15px;
+            margin-top: 30px;
+            padding-top: 18px;
             font-size: 13px;
             color: #777;
+            text-align: center;
         }
 
         .footer p {
-            margin: 0;
+            margin: 5px 0;
         }
     </style>
 </head>
@@ -81,9 +99,10 @@
         </div>
 
         <div class="email-body">
-            <p>Olá <strong>{{ $complaintProvider->provider->name }}</strong>,</p>
+            <p>Prezado(a) <strong>{{ $complaintProvider->provider->name }}</strong>,</p>
 
-            <p>Uma nova reclamação foi encaminhada para o seu acompanhamento. Seguem os detalhes abaixo:</p>
+            <p>Informamos que uma nova reclamação foi encaminhada para o seu acompanhamento.  
+            Seguem abaixo os principais detalhes:</p>
 
             <ul>
                 <li><strong>ID da Reclamação:</strong> {{ $complaintProvider->complaint_id }}</li>
@@ -98,11 +117,16 @@
                 @endif
             </ul>
 
-            <p>Por favor, aceda ao sistema para mais informações ou para responder a esta reclamação.</p>
+            <p>Para consultar mais informações ou responder à reclamação, aceda ao sistema através do link abaixo:</p>
+
+            <p style="text-align:center;">
+                <a href="{{ config('app.url') }}" class="cta">Aceder ao Sistema</a>
+            </p>
 
             <div class="footer">
                 <p>Atenciosamente,<br><strong>Equipe de Reclamações</strong></p>
-                <p>Este é um e-mail automático enviado por {{ config('app.name') }}.<br>Por favor, não responda diretamente a esta mensagem.</p>
+                <p>Este é um e-mail automático enviado por <strong>{{ config('app.name') }}</strong>.<br>
+                Por favor, não responda diretamente a esta mensagem.</p>
             </div>
         </div>
     </div>
