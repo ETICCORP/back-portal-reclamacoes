@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('days')->default(15); // prazo configurável
             $table->date('start_date'); // quando começa a contar
             $table->date('end_date');   // data limite calculada
-            $table->enum('status', ['em_andamento', 'expirado', 'cumprido'])->default('em_andamento');
+            $table->string('status');
             $table->timestamp('notified_at')->nullable(); // quando foi enviado alerta
             $table->timestamps();
             $table->softDeletes();

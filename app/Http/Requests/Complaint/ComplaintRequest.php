@@ -34,6 +34,7 @@ class ComplaintRequest extends BaseFormRequest
             'policy_number'     => ['nullable',  'max:100'],
             'entity'            => ['required', 'string', 'max:255'],
             'description'       => ['required', 'string', 'min:10'],
+            "representative"   => ['nullable'],
 
             // 📎 Validação dos anexos
             'attachments'            => 'nullable|array',

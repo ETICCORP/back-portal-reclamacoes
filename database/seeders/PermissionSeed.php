@@ -23,6 +23,11 @@ class PermissionSeed extends Seeder
                 'name' => 'Administrador',
                 'description' => 'Administrador do sistema',
                 'is_active' => true,
+            ],
+            [
+                'name' => 'Provedor',
+                'description' => 'Provedor do sistema',
+                'is_active' => true,
             ]
         );
 
@@ -34,7 +39,8 @@ class PermissionSeed extends Seeder
             ['name' => 'Regra', 'description' => 'Permite gerenciar regras'],
             ['name' => 'Denúcias', 'description' => 'Permite gerenciar entidades'],
             ['name' => "Perfil", "description" => 'Permite gerenciar perfil'],
-            ['name' => "Alertas", "description" => 'Permite gerenciar Alertas']
+            ['name' => "Alertas", "description" => 'Permite gerenciar Alertas'],
+             ['name' => "Provedor", "description" => 'Permite gerenciar Provedores']
         ];
 
         // Operações básicas

@@ -34,7 +34,8 @@ class Complaint extends Model
         'incidentDateTime',
         'location',
         'status',
-        "type"
+        "type",
+        'representative'
     ];
 
 

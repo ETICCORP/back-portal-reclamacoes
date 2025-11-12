@@ -26,11 +26,13 @@ class ComplaintRepository extends AbstractRepository
     protected ComplaintattachmentRepository $attachments;
     protected CommentRepository $commentRepository;
     protected DescriptionRepository $description;
+    protected ComplaintDeadlineRepository $complaintDeadlineRepository;
 
     public function __construct(
         Complaint $model,
 
         ReporterRepository $reporter,
+        ComplaintDeadlineRepository $complaintDeadlineRepository,
         DescriptionRepository $description,
         ComplaintattachmentRepository $attachments,
         CommentRepository $commentRepository
@@ -38,7 +40,7 @@ class ComplaintRepository extends AbstractRepository
         $this->description        = $description;
         $this->attachments        = $attachments;
         $this->commentRepository  = $commentRepository;
-
+        $this->complaintDeadlineRepository  = $complaintDeadlineRepository;
         parent::__construct($model);
     }
 
@@ -63,7 +65,8 @@ class ComplaintRepository extends AbstractRepository
             'incidentDateTime' => $data['incidentDateTime'] ?? null,
             'location' => $data['location'] ?? null,
             'type' => $data['type'] ?? null,
-            "status" => "Pendente"
+            "status" => "Pendente",
+            "representative" => $data['representative'] ?? null,
 
         ]);
         // 📎 Anexos
@@ -76,6 +79,26 @@ class ComplaintRepository extends AbstractRepository
 
         AlertJob::dispatch($complaint->id);
         Mail::to($data['email'])->send(new ReportAlertMail($complaint));
+        $startDate = Carbon::now();
+
+        // Função para adicionar 15 dias úteis
+        $endDate = $startDate->copy();
+        $daysToAdd = 15;
+        while ($daysToAdd > 0) {
+            $endDate->addDay();
+            if (!$endDate->isWeekend()) {
+                $daysToAdd--;
+            }
+        }
+
+        $complaintDeadline = $this->complaintDeadlineRepository->model->create([
+            "complaint_id" => $complaint->id,
+            "days"         => 15,
+            "start_date"   => $startDate,
+            "end_date"     => $endDate,
+            "status"       => "Pendente",
+            "notified_at"  => null,
+        ]);
 
         return $complaint;
     }
@@ -257,7 +280,7 @@ class ComplaintRepository extends AbstractRepository
     {
         return $this->model::selectRaw('DATE(created_at) as date')
             ->selectRaw('COUNT(*) as total')
-         
+
             ->whereBetween('created_at', [$startDate, $endDate])
             ->groupBy('date')
             ->orderBy('date', 'DESC')
@@ -265,33 +288,30 @@ class ComplaintRepository extends AbstractRepository
             ->map(fn($item) => [
                 'date'        => $item->date,
                 'total'       => (int) $item->total,
-             
+
             ]);
     }
 
 
-    public function byManth(){
+    public function byManth()
+    {
         $complaintsByMonth = $this->model::select(
             DB::raw("DATE_FORMAT(created_at, '%M') as month"), // nome do mês
             DB::raw('COUNT(*) as total')
         )
-        
-        ->groupBy('month')
-        ->orderBy('month')
-        ->get();
 
-    return response()->json($complaintsByMonth);
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
+        return response()->json($complaintsByMonth);
     }
 
     public function repeatOffenders()
     {
         return $this->model::select('entity', DB::raw(value: 'COUNT(*) as total_complaints'))
-        ->groupBy('entity')
-        ->having('total_complaints', '>', 1) // clientes com mais de 1 reclamação
-        ->get();
-
-   
+            ->groupBy('entity')
+            ->having('total_complaints', '>', 1) // clientes com mais de 1 reclamação
+            ->get();
     }
-    
 }

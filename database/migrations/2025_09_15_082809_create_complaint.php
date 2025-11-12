@@ -19,14 +19,14 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('policy_number')->nullable();
             $table->string('entity');
-            $table->string('entity');
-            
             $table->string('code');
             $table->longText('description');
             $table->string('incidentDateTime');
             $table->string('location');
             $table->string('status')->nullable();
-                   $table->string('type');
+            $table->string('type');
+             $table->string('representative')->nullable();
+            
             $table->softDeletes();
             $table->timestamps();
         });

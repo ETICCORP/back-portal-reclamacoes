@@ -1,12 +1,13 @@
 # ⚙️ Arquivos e pastas de ambiente
-.env
-.env.backup
-.env.local
+# .env
+# .env.backup
+# .env.local
 
 # 📦 Dependências (composer)
 /vendor/
 
 # 💾 Arquivos gerados em runtime
-/storage/
+ /storage/
 bootstrap/cache/*.php
-/public/storage
+# /public/storage
+ /vendor/
