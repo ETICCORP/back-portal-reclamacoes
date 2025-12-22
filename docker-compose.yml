@@ -77,10 +77,13 @@ services:
     networks:
       - portalReclamacoes-network
 
+
 networks:
   portalReclamacoes-network:
     driver: bridge
-
+    ipam:
+      config:
+        - subnet: 10.201.1.0/24
 volumes:
   portalReclamacoes-data:
     driver: local
