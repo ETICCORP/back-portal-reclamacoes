@@ -1,19 +1,19 @@
+version: '3.9'
 
 services:
   php:
     container_name: portalReclamacoes-php
     build:
-      context: ./docker/php
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: docker/php/Dockerfile
     restart: always
     tty: true
     volumes:
       - ./:/var/www
-      - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - portalReclamacoes-network
     ports:
-      - '8011:8080' # expõe a porta do reverb/websocket
+      - '8011:9000'  # PHP-FPM
 
   nginx:
     container_name: portalReclamacoes-nginx
@@ -28,7 +28,6 @@ services:
     volumes:
       - ./:/var/www
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - /etc/certificate-ssl:/etc/certificate-ssl:ro   # 🔑 monta os certificados do host
     networks:
       - portalReclamacoes-network
     depends_on:
@@ -76,11 +75,15 @@ services:
       - '6185:6379'
     networks:
       - portalReclamacoes-network
+    volumes:
+      - redis-data:/data
 
 networks:
   portalReclamacoes-network:
     driver: bridge
-
+  
 volumes:
   portalReclamacoes-data:
+    driver: local
+  redis-data:
     driver: local
