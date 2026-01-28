@@ -165,4 +165,35 @@ class ModelEmailRepository extends AbstractRepository
     return Storage::disk('public')->path($file->signature_path);
 }
 
+
+
+public function update(array $data, $id)
+{
+    $model = ModelEmail::findOrFail($id);
+
+    // atualiza texto
+    $model->update([
+        'subject' => $data['subject'],
+        'name'    => $data['name'],
+        'body'    => $data['body'],
+    ]);
+
+    // troca imagem se vier nova
+    if (isset($data['signature_path']) && $data['signature_path'] instanceof \Illuminate\Http\UploadedFile) {
+
+        if ($model->signature_path &&
+            Storage::disk('public')->exists($model->signature_path)) {
+            Storage::disk('public')->delete($model->signature_path);
+        }
+
+        $path = $data['signature_path']->store('signatures', 'public');
+
+        $model->update([
+            'signature_path' => $path
+        ]);
+    }
+
+    return $model;
+}
+
 }

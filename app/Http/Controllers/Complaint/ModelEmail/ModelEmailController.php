@@ -62,6 +62,8 @@ class ModelEmailController extends AbstractController
     public function update(ModelEmailRequest $request, $id)
     {
         try {
+
+        
             $this->logRequest();
             $modelEmail = $this->service->update($request->validated(), $id);
             return response()->json($modelEmail, Response::HTTP_OK);
