@@ -10,6 +10,7 @@ use App\Http\Controllers\Complaint\ModelEmail\ModelEmailController;
 use App\Http\Controllers\Complaint\Proviver\ComplaintProviderController;
 use App\Http\Controllers\Complaint\Proviver\ComplaintProviderResponseController;
 use App\Http\Controllers\Complaint\TypeComplaintsController;
+use App\Http\Controllers\Complaintattachment\ComplaintattachmentController;
 use App\Http\Controllers\ComplaintTriages\ComplaintTriagesController;
 use App\Http\Controllers\Permission\PermissionController;
 use App\Services\Complaint\ComplaintResponsesService;
@@ -193,3 +194,12 @@ Route::get('/count-by-forward-providers', [ComplaintProviderController::class, '
 
 Route::get('/count-by-forward-providers-manth', [ComplaintProviderController::class, 'providersManth'])
     ->name('complaints.providersManth');
+
+
+
+    Route::get('/files/{alertID}', [ComplaintattachmentController::class, 'files'])
+    ->name('alertAttachment.index');
+Route::post('/files/{idAlert}', [ComplaintattachmentController::class, 'store'])
+    ->name('alertAttachment.store');;
+    Route::get('/files/showFile/{id}', [ComplaintattachmentController::class, 'showFile'])
+    ->name('alertAttachment.showFile');;

@@ -17,6 +17,8 @@ class ComplaintattachmentRepository extends AbstractRepository
         parent::__construct($model);
     }
 
+
+
     public function createComplaintAttachment(array $attachments, int $complaintId): array
     {
         $attachmentsCreated = [];
@@ -25,64 +27,83 @@ class ComplaintattachmentRepository extends AbstractRepository
             'total' => count($attachments)
         ]);
 
-        foreach ($attachments as $index => $base64File) {
+        foreach ($attachments as $index => $attachment) {
             try {
-                Log::debug("🔍 Processando anexo {$index}");
+                /**
+                 * =========================================
+                 * CASO 1 — Upload via form-data (UploadedFile)
+                 * =========================================
+                 */
 
-                // valida se é string
-                if (!is_string($base64File)) {
-                    Log::warning("⚠️ Anexo {$index} não é uma string base64", [
-                        'value' => $base64File
+
+                if ($attachment instanceof \Illuminate\Http\UploadedFile) {
+
+                    $path = $attachment->store("complaintattachments/{$complaintId}", 'public');
+
+                    $created = $this->model->create([
+                        'fk_complaint' => $complaintId,
+                        'file'         => $path,
+                        'name'         => $attachment->getClientOriginalName(),
+                    ]);
+
+                    $attachmentsCreated[] = $created;
+
+                    Log::info("💾 Anexo (form-data) salvo", [
+                        'id' => $created->id,
+                        'path' => $path
+                    ]);
+
+                    continue;
+                }
+
+                /**
+                 * =========================================
+                 * CASO 2 — Upload via Base64
+                 * =========================================
+                 */
+                if (!is_string($attachment)) {
+                    Log::warning("⚠️ Anexo {$index} inválido", [
+                        'type' => gettype($attachment)
                     ]);
                     continue;
                 }
 
-                // garantir que está no formato "data:xxx;base64,yyyy"
-                if (!preg_match('/^data:(.*?);base64,(.*)$/', $base64File, $matches)) {
-                    Log::warning("❌ String não corresponde ao padrão Base64 esperado", [
-                        'index' => $index,
-                        'preview' => substr($base64File, 0, 50)
+                if (!preg_match('/^data:(.*?);base64,(.*)$/', $attachment, $matches)) {
+                    Log::warning("❌ Base64 fora do padrão", [
+                        'index' => $index
                     ]);
                     continue;
                 }
 
-                $mimeType = $matches[1] ?? 'application/octet-stream';
+                $mimeType = $matches[1];
                 $fileData = base64_decode($matches[2], true);
 
                 if ($fileData === false) {
                     throw new \Exception("Falha ao decodificar Base64");
                 }
 
-                Log::debug("✅ Base64 decodificado com sucesso", [
-                    'mimeType' => $mimeType,
-                    'size'     => strlen($fileData)
-                ]);
-
-                // descobrir extensão
                 $extension = explode('/', $mimeType)[1] ?? 'bin';
                 $randomName = $this->model::generateCustomRandomCode(12) . '.' . $extension;
                 $path = "complaintattachments/{$complaintId}/{$randomName}";
 
-                // salvar no disco
                 Storage::disk('public')->put($path, $fileData);
 
-                Log::debug("📂 Arquivo salvo no storage", ['path' => $path]);
-
-                // registrar no banco
                 $created = $this->model->create([
                     'fk_complaint' => $complaintId,
                     'file'         => $path,
                     'name'         => "dn_{$randomName}",
                 ]);
 
-                Log::info("💾 Anexo cadastrado no banco", ['id' => $created->id]);
-
                 $attachmentsCreated[] = $created;
-            } catch (Throwable $e) {
+
+                Log::info("💾 Anexo (base64) salvo", [
+                    'id' => $created->id,
+                    'path' => $path
+                ]);
+            } catch (\Throwable $e) {
                 Log::error("🔥 Erro ao salvar anexo da denúncia {$complaintId}", [
                     'index' => $index,
-                    'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
+                    'error' => $e->getMessage()
                 ]);
             }
         }
@@ -91,23 +112,58 @@ class ComplaintattachmentRepository extends AbstractRepository
     }
 
 
+    public function files($alert_id)
+    {
+        try {
+            $response = $this->model::where('fk_complaint', $alert_id)->get();
+
+            // $this->CraftHistory->log('info', 'Visualizou ficheiros da solicitação com o código ' .  $code, Auth::user()->fullName, Auth::user()->id, null, 'user', null);
+            $data = [];
+            foreach ($response as $attachment) {
+                $filePath = storage_path("app/public/" . $attachment->path);
+                if (file_exists($filePath)) {
+                    $fileSize = filesize($filePath);
+                    $fileType = mime_content_type($filePath);
+                    $data[] = [
+                        'id' => $attachment->id,
+                        'name' => $attachment->name,
+                        'size' => $fileSize,
+                        'type' => $fileType,
+                    ];
+                } else {
+                    $data[] = [
+                        'id' => $attachment->id,
+                        'name' => $attachment->name,
+                        'size' => 0,
+                        'type' => 'unknown',
+                        'message' => 'Arquivo não encontrado.',
+                    ];
+                }
+            }
+
+            if (empty($data)) {
+                return response()->json([
+                    "message" => "Nenhum anexo encontrado."
+                ], 404);
+            }
+
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "message" => "Erro ao listar arquivos",
+                "error" => $th->getMessage()
+            ], 400);
+        }
+    }
     public function showFile($id)
     {
         $file = $this->model::findOrFail($id);
 
-        $currentDomain = request()->getSchemeAndHttpHost();
-
-        if (Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao')) {
-            $baseUrl = 'https://nossa-denuncias.keepcomply.co.ao:1130/';
-        } else {
-            $baseUrl = 'http://172.17.100.11:1121';
+        if (!$file->file || !Storage::disk('public')->exists($file->file)) {
+            throw new \Exception('Arquivo não encontrado.');
         }
-        $url = "{$baseUrl}/storage/{$file->file}";
 
-        return response()->json([
-            'id'  => $file->id,
-            'url' => $url,
-            'domain_detected' => $currentDomain, // opcional, para debug
-        ]);
+        // Retorna o caminho absoluto para o controller
+        return Storage::disk('public')->path($file->file);
     }
 }

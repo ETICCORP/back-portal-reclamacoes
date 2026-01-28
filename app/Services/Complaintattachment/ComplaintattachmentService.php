@@ -11,5 +11,12 @@ class ComplaintattachmentService extends AbstractService
         parent::__construct($repository);
     }
 
+    public function files($alertID){
+        return $this->repository->files($alertID);
+    }
+      public function showFile($id)
+    {
+        return $this->repository->showFile($id);
+    }
   
 }

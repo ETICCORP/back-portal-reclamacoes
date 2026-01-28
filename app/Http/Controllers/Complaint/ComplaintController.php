@@ -82,15 +82,19 @@ class ComplaintController extends AbstractController
     public function store(ComplaintRequest $request)
     {
         try {
-            //return response()->json($request);
-            
             $this->logRequest();
-       
-            $complaint = $this->service->storeData($request->validated());
-            
+            // Concatena os anexos ao array de dados
+            $attachments = $request->file('attachments');
+            if ($attachments && !is_array($attachments)) {
+                $attachments = [$attachments]; // transforma 1 arquivo em array
+            }
+            $data['attachments'] = $attachments;
+                  $data = $request->validated();
+            // Envia tudo para o service
+            $complaint = $this->service->storeData($data);
+
             //SendReportCopy::dispatch($complaint->id);
             return response()->json($complaint, Response::HTTP_CREATED);
-
         } catch (Exception $e) {
             $this->logRequest($e);
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
@@ -140,7 +144,7 @@ class ComplaintController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-//========================================
+    //========================================
     public function timeResponse()
     {
         try {
@@ -153,7 +157,7 @@ class ComplaintController extends AbstractController
         }
     }
 
-//========================================
+    //========================================
 
     public function totalForCurrentWeek()
     {
@@ -223,12 +227,12 @@ class ComplaintController extends AbstractController
     public function updateStatus(UpdateStatusRequest $request, $id)
     {
 
-            $this->logRequest();
-            $complaint = $this->service->updateStatus($request->validated(), $id);
-            return response()->json($complaint, Response::HTTP_OK);
-               try {
+        $this->logRequest();
+        $complaint = $this->service->updateStatus($request->validated(), $id);
+        return response()->json($complaint, Response::HTTP_OK);
+        try {
         } catch (Exception $e) {
-      
+
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
@@ -237,30 +241,27 @@ class ComplaintController extends AbstractController
     public function byManth()
     {
 
-            $this->logRequest();
-            $complaint = $this->service->byManth();
-            return response()->json($complaint, Response::HTTP_OK);
-               try {
+        $this->logRequest();
+        $complaint = $this->service->byManth();
+        return response()->json($complaint, Response::HTTP_OK);
+        try {
         } catch (Exception $e) {
-      
+
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
-    
+
     public function repeatOffenders()
     {
 
-            $this->logRequest();
-            $complaint = $this->service->repeatOffenders();
-            return response()->json($complaint, Response::HTTP_OK);
-               try {
+        $this->logRequest();
+        $complaint = $this->service->repeatOffenders();
+        return response()->json($complaint, Response::HTTP_OK);
+        try {
         } catch (Exception $e) {
-      
+
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-  
-
-    
 }

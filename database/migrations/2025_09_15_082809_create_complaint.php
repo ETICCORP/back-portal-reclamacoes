@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('policy_number')->nullable();
             $table->string('entity');
             $table->string('code');
-            $table->longText('description');
+            $table->longText('description')->nullable();
             $table->string('incidentDateTime');
             $table->string('location');
             $table->string('status')->nullable();
