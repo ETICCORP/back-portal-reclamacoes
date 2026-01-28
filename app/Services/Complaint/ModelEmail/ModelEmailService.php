@@ -15,7 +15,10 @@ class ModelEmailService extends AbstractService
         return $this->repository->complaintResponse($data);
     }
 
-    public function showFile($id)
+    public function files($alertID){
+        return $this->repository->files($alertID);
+    }
+      public function showFile($id)
     {
         return $this->repository->showFile($id);
     }

@@ -4,10 +4,9 @@ namespace App\Repositories\Complaint\ModelEmail;
 
 use App\Models\Complaint\ModelEmail\ModelEmail;
 use App\Repositories\AbstractRepository;
-use App\Repositories\Complaint\ComplaintRepository;
+use Illuminate\Http\UploadedFile; // ✅ Corrigido
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
-
 use Illuminate\Support\Str;
 
 class ModelEmailRepository extends AbstractRepository
@@ -15,106 +14,155 @@ class ModelEmailRepository extends AbstractRepository
     public function __construct(ModelEmail $model)
     {
         parent::__construct($model);
-       
     }
+
     public function complaintResponse(array $data)
     {
-
+        // 1️⃣ Cria a reclamação SEM assinatura
         $complaint = $this->model->create([
             'subject' => $data['subject'],
-            'name' => $data['name'],
-            'body' => $data['body'],
-            'signature_path' => $data['signature_path'],
+            'name'    => $data['name'],
+            'body'    => $data['body'],
             'user_id' => $data['user_id'],
-
         ]);
-        // 📎 Anexos
-        $this->uploadSignature($data['signature_path'] ?? null, $complaint->id);
 
-      
-        $complaint->load([
-            "user"
-        ]);
+        // 2️⃣ Upload da assinatura (form-data)
+        $signaturePath = $this->uploadSignature(
+            $data['signature_path'] ?? null,
+            $complaint->id
+        );
+
+        // 3️⃣ Guarda o caminho da imagem, se existir
+        if ($signaturePath) {
+            $complaint->update([
+                'signature_path' => $signaturePath
+            ]);
+        }
+
+        // 4️⃣ Carrega relações
+        $complaint->load(['user']);
 
         return $complaint;
     }
 
-    public function uploadSignature(string $base64Image, int $responseId): ?string
+    public function uploadSignature(?UploadedFile $signature, int $responseId): ?string
     {
-        Log::debug("🖋️ Iniciando upload da assinatura digital para resposta #{$responseId}");
+        Log::debug("🖋️ Iniciando upload da assinatura (form-data) para resposta #{$responseId}");
+
         try {
-            // Valida se o conteúdo é uma string
-            if (!is_string($base64Image)) {
-                Log::warning("⚠️ A assinatura não é uma string base64", ['value' => $base64Image]);
+            // Se não veio assinatura, simplesmente ignora
+            if (!$signature) {
+                Log::info("ℹ️ Nenhuma assinatura enviada");
                 return null;
             }
 
-            // Verifica se está no formato Base64 padrão
-            if (!preg_match('/^data:(.*?);base64,(.*)$/', $base64Image, $matches)) {
-                Log::warning("❌ String não corresponde ao padrão Base64 esperado", [
-                    'preview' => substr($base64Image, 0, 50)
+            if (!$signature->isValid()) {
+                Log::warning("⚠️ Ficheiro de assinatura inválido");
+                return null;
+            }
+
+            if (!str_starts_with($signature->getMimeType(), 'image/')) {
+                Log::warning("❌ Ficheiro enviado não é imagem", [
+                    'mime' => $signature->getMimeType()
                 ]);
                 return null;
             }
 
-            $mimeType = $matches[1] ?? 'image/png';
-            $fileData = base64_decode($matches[2], true);
+            // Upload
+            $path = $signature->store(
+                "complaint_signatures/{$responseId}",
+                'public'
+            );
 
-            if ($fileData === false) {
-                throw new \Exception("Falha ao decodificar Base64 da assinatura.");
-            }
-
-            Log::debug("✅ Base64 da assinatura decodificado com sucesso", [
-                'mimeType' => $mimeType,
-                'size'     => strlen($fileData)
+            Log::info("💾 Assinatura salva no storage", [
+                'path' => $path,
+                'name' => $signature->getClientOriginalName()
             ]);
 
-            // Determina a extensão do ficheiro
-            $extension = explode('/', $mimeType)[1] ?? 'png';
-            $randomName = 'signature_' . now()->timestamp . '_' . uniqid() . '.' . $extension;
-            $path = "complaint_signatures/{$responseId}/{$randomName}";
-
-            // Salva no storage (public)
-            Storage::disk('public')->put($path, $fileData);
-
-            Log::info("📂 Assinatura salva com sucesso no storage", ['path' => $path]);
-
-            // Atualiza o caminho no banco
+            // Atualiza no banco
             $response = $this->model::find($responseId);
-            if ($response) {
-                $response->update(['signature_path' => $path]);
-                Log::info("💾 Caminho da assinatura atualizado no banco", ['response_id' => $response->id]);
-            } else {
-                Log::warning("⚠️ Resposta de reclamação não encontrada", ['response_id' => $responseId]);
+
+            if (!$response) {
+                Log::warning("⚠️ Resposta não encontrada", [
+                    'response_id' => $responseId
+                ]);
+                return null;
             }
+
+            $response->update([
+                'signature_path' => $path
+            ]);
+
+            Log::info("✅ Assinatura associada à resposta", [
+                'response_id' => $response->id
+            ]);
 
             return $path;
         } catch (\Throwable $e) {
-            Log::error("🔥 Erro ao salvar assinatura digital para resposta {$responseId}", [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
+            Log::error("🔥 Erro ao salvar assinatura da resposta {$responseId}", [
+                'error' => $e->getMessage()
             ]);
+
             return null;
         }
     }
 
-    public function showFile($id)
+    public function files($modelID)
     {
-        $file = $this->model::findOrFail($id);
+        try {
+            $response = $this->model::where('id', $modelID)->get();
 
-        $currentDomain = request()->getSchemeAndHttpHost();
+            // $this->CraftHistory->log('info', 'Visualizou ficheiros da solicitação com o código ' .  $code, Auth::user()->fullName, Auth::user()->id, null, 'user', null);
+            $data = [];
+            foreach ($response as $attachment) {
+                $filePath = storage_path("app/public/" . $attachment->path);
+                if (file_exists($filePath)) {
+                    $fileSize = filesize($filePath);
+                    $fileType = mime_content_type($filePath);
+                    $data[] = [
+                        'id' => $attachment->id,
+                        'name' => $attachment->name,
+                        'size' => $fileSize,
+                        'type' => $fileType,
+                    ];
+                } else {
+                    $data[] = [
+                        'id' => $attachment->id,
+                        'name' => $attachment->name,
+                        'size' => 0,
+                        'type' => 'unknown',
+                        'message' => 'Arquivo não encontrado.',
+                    ];
+                }
+            }
 
-        if (Str::contains($currentDomain, 'nossa-denuncias.keepcomply.co.ao')) {
-            $baseUrl = 'https://nossa-denuncias.keepcomply.co.ao:1130/';
-        } else {
-            $baseUrl = 'http://172.17.100.11:1121';
+            if (empty($data)) {
+                return response()->json([
+                    "message" => "Nenhum anexo encontrado."
+                ], 404);
+            }
+
+            return response()->json($data);
+        } catch (\Throwable $th) {
+            return response()->json([
+                "message" => "Erro ao listar arquivos",
+                "error" => $th->getMessage()
+            ], 400);
         }
-        $url = "{$baseUrl}/storage/{$file->signature_path}";
-
-        return response()->json([
-            'id'  => $file->id,
-            'url' => $url,
-            'domain_detected' => $currentDomain, // opcional, para debug
-        ]);
     }
+
+
+   public function showFile($id)
+{
+    $file = $this->model::findOrFail($id);
+
+    // Verifica se existe assinatura
+    if (!$file->signature_path || !Storage::disk('public')->exists($file->signature_path)) {
+        throw new \Exception('Arquivo não encontrado.');
+    }
+
+    // Retorna o caminho absoluto para o controller
+    return Storage::disk('public')->path($file->signature_path);
+}
+
 }

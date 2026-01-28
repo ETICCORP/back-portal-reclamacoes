@@ -19,13 +19,14 @@ class ModelEmailRequest extends BaseFormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules(): array
-    {
-        return [
-            'name' => 'required',
-            'subject' => 'required',
-            'body' => 'required',
-            'signature_path' => 'required'
-        ];
-    }
+    public function rules()
+{
+    return [
+        'subject'        => 'required|string',
+        'name'           => 'required|string',
+        'body'           => 'required|string',
+       /// 'user_id'        => 'required|integer',
+        'signature_path'=> 'required|image|max:2048',
+    ];
+}
 }

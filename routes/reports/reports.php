@@ -170,6 +170,13 @@ Route::prefix('modelEmail')->group(function () {
         ->whereNumber('id')
         ->name('modelEmail.show');
 
+   Route::get('/files/{modelID}', [ModelEmailController::class, 'files'])
+    ->name('modelEmail.index');
+Route::post('/files/{modelID}', [ModelEmailController::class, 'store'])
+    ->name('modelEmail.store');;
+    Route::get('/files/showFile/{modelID}', [ModelEmailController::class, 'showFile'])
+    ->name('modelEmail.showFile');;
+
          Route::put('/{id}', [ModelEmailController::class, 'update']);
     Route::post('/{id}/sendEmailResponse', [ModelEmailController::class, 'sendEmailResponse']);
     Route::post('/', [ModelEmailController::class, 'complaintResponse']);
