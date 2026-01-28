@@ -88,9 +88,13 @@
 
       <div class="signature">
       
-        @if($response->signature_path)
-          <img src="http://172.17.100.11:1121/storage/{{ $response->signature_path }}" alt="Assinatura" width="200">
-        @endif
+      @if($response->signature_path && Storage::disk('public')->exists($response->signature_path))
+  <img src="{{ $message->embed(storage_path("app/public/{$response->signature_path}")) }}" 
+     alt="Assinatura" 
+     style="width:400px; height:auto; display:block;">
+
+@endif
+
       </div>
     </div>
 

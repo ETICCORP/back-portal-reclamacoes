@@ -4,6 +4,7 @@ namespace App\Repositories\Complaint;
 
 use App\Mail\ComplaintResponseMail;
 use App\Models\Complaint\ComplaintResponses;
+use App\Models\Complaint\ModelEmail\ModelEmail;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Complaintattachment\ComplaintattachmentRepository;
 use Illuminate\Support\Facades\Log;
@@ -26,17 +27,15 @@ class ComplaintResponsesRepository extends AbstractRepository
 
     public function complaintResponse(array $data)
     {
-
+        $modelEmail = ModelEmail::find($data['model_id']);
         $complaint = $this->model->create([
             'user_id' => $data['user_id'],
             'complaint_id' => $data['complaint_id'],
             'subject' => $data['subject'],
             'body' => $data['body'],
-            'signature_path' => $data['signature_path'],
+            'signature_path' => $modelEmail->signature_path,
 
         ]);
-        // 📎 Anexos
-        $this->uploadSignature($data['signature_path'] ?? null, $complaint->id);
 
         $complaint->load([
             "complaint",

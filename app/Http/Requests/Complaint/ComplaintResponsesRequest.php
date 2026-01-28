@@ -22,8 +22,9 @@ class ComplaintResponsesRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-        
+
             'complaint_id' => 'required|exists:complaint,id',
+            'model_id' => 'required|exists:model_email,id',
             'subject' => 'nullable|string|max:255',
             'body' => 'required|string|min:5',
             'signature_path' => 'nullable',
@@ -40,11 +41,7 @@ class ComplaintResponsesRequest extends BaseFormRequest
             'subject.string' => 'O assunto deve ser um texto.',
             'body.required' => 'O corpo da mensagem é obrigatório.',
             'body.min' => 'O corpo da mensagem deve conter pelo menos :min caracteres.',
-            'signature_path.file' => 'A assinatura deve ser um ficheiro válido.',
-            'signature_path.mimes' => 'A assinatura deve estar em formato PNG, JPG, JPEG ou PDF.',
-            'signature_path.max' => 'A assinatura não pode exceder 2MB.',
+
         ];
     }
-    
-    
 }

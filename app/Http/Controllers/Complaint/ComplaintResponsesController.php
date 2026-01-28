@@ -8,7 +8,7 @@ use App\Http\Requests\Complaint\ComplaintResponsesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
-
+use App\Http\Requests\Complaint\SendEmailResponseRequest;
 class ComplaintResponsesController extends AbstractController
 {
     public function __construct(ComplaintResponsesService $service)
