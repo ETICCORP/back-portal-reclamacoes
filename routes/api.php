@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\Complaint\ComplaintController;
 use App\Http\Controllers\Complaint\ModelEmail\ModelEmailController;
+use App\Http\Controllers\Complaint\Proviver\ComplaintProviderController;
 use App\Http\Controllers\Complaint\TypeComplaintsController;
+use App\Http\Controllers\Proviver\ProviderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 
@@ -40,4 +42,14 @@ Route::prefix('reports')->group(function () {
     Route::put('/type/{id}', [TypeComplaintsController::class, 'update']);
     Route::delete('/type/{id}', [TypeComplaintsController::class, 'destroy']);
   
+});
+Route::prefix('providers')->group(function () {
+ Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
+   
+});
+
+Route::prefix('provider')->group(function () {
+
+Route::get('/', [ProviderController::class, 'index'])->name('provider.index');
+   
 });

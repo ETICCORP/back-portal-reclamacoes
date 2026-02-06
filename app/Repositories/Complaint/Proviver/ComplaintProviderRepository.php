@@ -8,6 +8,7 @@ use App\Models\Complaint\Proviver\ComplaintProvider;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Complaint\ComplaintRepository;
 use App\Repositories\Reporter\ReporterRepository;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 
@@ -27,8 +28,8 @@ class ComplaintProviderRepository extends AbstractRepository
             'provider_id' => $data['provider_id'],
             'summary' => $data['summary'],
             'notes' => $data['notes'],
-            'sent_at' => $data['complaint_id'],
-            'deadline' => $data['deadline'],
+            'sent_at'  => now(),
+            'deadline' => Carbon::now()->addDays(15),
             'status' => 'sent'
 
         ]);

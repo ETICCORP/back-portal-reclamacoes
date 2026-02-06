@@ -18,7 +18,6 @@ Route::delete('/{id}', [grupProvederController::class, 'destroy'])->name('users.
 
 });
 
-Route::get('/', [ProviderController::class, 'index'])->name('provider.index');
 Route::post('/', [ProviderController::class, 'store'])->name('provider.store');
 Route::get('/{id}', [ProviderController::class, 'show'])->name('provider.show');
 Route::put('/{id}', [ProviderController::class, 'update'])->name('provider.update');

@@ -187,7 +187,7 @@ Route::post('/files/{modelID}', [ModelEmailController::class, 'store'])
 
 Route::prefix('providers')->group(function () {
     // Encaminhar reclamação
-    Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
+   // Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
     Route::get('forward', [ComplaintProviderController::class, 'index']);
 
     Route::get('response', [ComplaintProviderResponseController::class, 'index']);
