@@ -78,7 +78,15 @@ class ComplaintRepository extends AbstractRepository
         ]);
 
         AlertJob::dispatch($complaint->id);
+      
+try {
+    if (!empty($data['email'])) {
         Mail::to($data['email'])->send(new ReportAlertMail($complaint));
+    }
+} catch (\Throwable $e) {
+    // Aqui você pode logar o erro ou apenas ignorar
+    Log::error("Falha ao enviar email para {$data['email']}: " . $e->getMessage());
+}
         $startDate = Carbon::now();
 
         // Função para adicionar 15 dias úteis
