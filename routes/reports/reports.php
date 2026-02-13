@@ -49,14 +49,14 @@ Route::get('/total-last-week', [ComplaintController::class, 'totalForLastWeek'])
 Route::get('/types', [ComplaintController::class, 'getTopTypes'])->name('complaints.types');
 Route::match(['get', 'post'], '/count-by-date', [ComplaintController::class, 'countByDate'])->name('complaints.countByDate');
 Route::get('/time-of-response', [ComplaintController::class, 'timeResponse'])->name('complaints.timeResponse');
-
 Route::get('/byManth', [ComplaintController::class, 'byManth'])->name('complaints.byManth');
-
 Route::get('/repeatOffenders', [ComplaintController::class, 'repeatOffenders'])->name('complaints.repeatOffenders');
-
-
 Route::get('/percentageServicedWithinDeadline', action: [ComplaintDeadlineController::class, 'percentageServicedWithinDeadline'])->name('complaints.percentageServicedWithinDeadline');
 
+ Route::post('/type', [TypeComplaintsController::class, 'store']);
+ Route::get('/type/{id}', [TypeComplaintsController::class, 'show']);
+Route::put('/type/{id}', [TypeComplaintsController::class, 'update']);
+Route::delete('/type/{id}', [TypeComplaintsController::class, 'destroy']);
 
 // Atualização de status
 Route::put('/updateStatus/{id}', [ComplaintController::class, 'updateStatus'])
@@ -155,7 +155,7 @@ Route::prefix('responses')->group(function () {
     Route::post('/', [ComplaintResponsesController::class, 'complaintResponse'])->name('responses.complaintResponse');
     Route::get('/{id}', [ComplaintResponsesController::class, 'show'])
         ->whereNumber('id')
-        ->name( 'response.show');
+        ->name('response.show');
     Route::post('/{id}/sendEmailResponse', [ComplaintResponsesController::class, 'sendEmailResponse']);
     Route::post('/', [ComplaintResponsesController::class, 'complaintResponse'])->name('responses.complaintResponse');
 
@@ -170,14 +170,14 @@ Route::prefix('modelEmail')->group(function () {
         ->whereNumber('id')
         ->name('modelEmail.show');
 
-   Route::get('/files/{modelID}', [ModelEmailController::class, 'files'])
-    ->name('modelEmail.index');
-Route::post('/files/{modelID}', [ModelEmailController::class, 'store'])
-    ->name('modelEmail.store');;
+    Route::get('/files/{modelID}', [ModelEmailController::class, 'files'])
+        ->name('modelEmail.index');
+    Route::post('/files/{modelID}', [ModelEmailController::class, 'store'])
+        ->name('modelEmail.store');;
     Route::get('/files/showFile/{modelID}', [ModelEmailController::class, 'showFile'])
-    ->name('modelEmail.showFile');;
+        ->name('modelEmail.showFile');;
 
-         Route::put('/{id}', [ModelEmailController::class, 'update']);
+    Route::put('/{id}', [ModelEmailController::class, 'update']);
     Route::post('/{id}/sendEmailResponse', [ModelEmailController::class, 'sendEmailResponse']);
     Route::post('/', [ModelEmailController::class, 'complaintResponse']);
     Route::delete('/{id}', [ModelEmailController::class, 'destroy'])->whereNumber('id');
@@ -187,7 +187,7 @@ Route::post('/files/{modelID}', [ModelEmailController::class, 'store'])
 
 Route::prefix('providers')->group(function () {
     // Encaminhar reclamação
-   // Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
+    // Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
     Route::get('forward', [ComplaintProviderController::class, 'index']);
 
     Route::get('response', [ComplaintProviderResponseController::class, 'index']);
@@ -204,9 +204,9 @@ Route::get('/count-by-forward-providers-manth', [ComplaintProviderController::cl
 
 
 
-    Route::get('/files/{alertID}', [ComplaintattachmentController::class, 'files'])
+Route::get('/files/{alertID}', [ComplaintattachmentController::class, 'files'])
     ->name('alertAttachment.index');
 Route::post('/files/{idAlert}', [ComplaintattachmentController::class, 'store'])
     ->name('alertAttachment.store');;
-    Route::get('/files/showFile/{id}', [ComplaintattachmentController::class, 'showFile'])
+Route::get('/files/showFile/{id}', [ComplaintattachmentController::class, 'showFile'])
     ->name('alertAttachment.showFile');;

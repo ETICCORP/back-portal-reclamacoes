@@ -203,7 +203,10 @@ class ComplaintRepository extends AbstractRepository
     {
         $complaint = $this->model::with([
             "attachments",
-            "typeReport"
+            "typeReport",
+             "triages",
+             "proverResponse",
+               "forwardProvider"
         ])->where('code', $code)->firstOrFail();
 
         return $complaint;
