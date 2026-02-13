@@ -30,19 +30,19 @@ class ComplaintRequest extends BaseFormRequest
             'location'           => ['nullable',  'max:50'],
             'status'           => ['nullable',  'max:50'],
             'type'           => ['nullable'],
-            'email'             => ['nullable', 'email', 'max:255'],
+            'email'             => ['nullable','max:255'],
             'policy_number'     => ['nullable',  'max:100'],
             'entity'            => ['required', 'string', 'max:255'],
             'description'       => ['nullable'],
             'incidentDateTime'       => ['required'],
             "representative"   => ['nullable'],
- "location"   => ['required'],
-  "type"   => ['required'],
-            
+            "location"   => ['required'],
+            "type"   => ['required'],
+
 
             // 📎 Validação dos anexos
             'attachments'            => 'nullable|array',
-          
+
         ];
     }
 
