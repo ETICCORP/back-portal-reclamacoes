@@ -9,11 +9,17 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
 use App\Http\Requests\Complaint\SendEmailResponseRequest;
+use App\Services\Complaint\ComplaintDeadlineService;
+use Carbon\Carbon;
+
 class ComplaintResponsesController extends AbstractController
 {
-    public function __construct(ComplaintResponsesService $service)
+    private  $complaintDeadlineService;
+
+    public function __construct(ComplaintResponsesService $service, ComplaintDeadlineService $complaintDeadlineService)
     {
         $this->service = $service;
+        $this->complaintDeadlineService = $complaintDeadlineService;
     }
 
     /**
@@ -24,6 +30,24 @@ class ComplaintResponsesController extends AbstractController
         try {
             $this->logRequest();
             $complaintResponses = $this->service->store($request->validated());
+
+            $inicio = 15;
+            $conclusao = 15;
+
+            $days = $inicio + $conclusao;
+
+            $startDate = Carbon::now();
+            $endDate = $startDate->copy()->addDays(15);
+
+            $data = [
+                "days" => $days,
+                "start_date" => $startDate->toDateString(),
+                "end_date" => $endDate->toDateString(),
+                "status" => "Pendente",
+                "notified_at" => null
+            ];
+            $complaintResponses = $this->complaintDeadlineService->store($data);
+
             return response()->json($complaintResponses, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -34,12 +58,12 @@ class ComplaintResponsesController extends AbstractController
     public function complaintResponse(ComplaintResponsesRequest $request)
     {
         try {
-      
+
             $this->logRequest();
             $data = $request->validated();
             // Atribui automaticamente o ID do utilizador autenticado
             $data['user_id'] = auth()->id();
-            $complaintResponses = $this->service->complaintResponse(   $data );
+            $complaintResponses = $this->service->complaintResponse($data);
             return response()->json($complaintResponses, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -47,10 +71,10 @@ class ComplaintResponsesController extends AbstractController
         }
     }
 
-     public function sendEmailResponse($id)
+    public function sendEmailResponse($id)
     {
         try {
-      
+
             $this->logRequest();
             $complaintResponses = $this->service->sendEmailResponse($id);
             return response()->json($complaintResponses, Response::HTTP_CREATED);
