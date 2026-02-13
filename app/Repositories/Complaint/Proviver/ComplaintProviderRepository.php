@@ -29,7 +29,7 @@ class ComplaintProviderRepository extends AbstractRepository
             'summary' => $data['summary'],
             'notes' => $data['notes'],
             'sent_at'  => now(),
-            'deadline' => Carbon::now()->addDays(20),
+            'deadline' => Carbon::now()->addWeekdays(20),
             'status' => 'sent'
 
         ]);

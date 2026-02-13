@@ -37,7 +37,7 @@ class ComplaintResponsesController extends AbstractController
             $days = $inicio + $conclusao;
 
             $startDate = Carbon::now();
-            $endDate = $startDate->copy()->addDays(15);
+            $endDate = $startDate->copy()->addWeekdays(15);
 
             $data = [
                 "days" => $days,
