@@ -21,12 +21,15 @@ class ProviderRequest extends BaseFormRequest
      */
     public function rules(): array
     {
+        $id = $this->route('id') ?? null;
         return [
             'nif' => 'required',
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
-          
+            'email' => ['required', 'email', 'max:255', "unique:users,email,{$id},id"],
+
+
         ];
     }
 }
