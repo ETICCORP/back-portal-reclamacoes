@@ -46,6 +46,6 @@ Route::prefix('providers')->group(function () {
 
 Route::prefix('provider')->group(function () {
 
-Route::get('/', [ProviderController::class, 'index'])->name('provider.index');
+Route::get('/', [ProviderController::class, 'index']);
    
 });

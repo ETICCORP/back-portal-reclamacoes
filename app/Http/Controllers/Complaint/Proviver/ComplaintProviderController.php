@@ -27,6 +27,7 @@ class ComplaintProviderController extends AbstractController
 
     public function index(Request $request)
     {
+  
         try {
             $userId = Auth::user()->id ?? null;
             $providerID =    $this->grupProvederService->getUserProviderIdByUser($userId);

@@ -7,7 +7,8 @@
     use App\Http\Requests\Proviver\ProviderRequest;
     use Exception;
     use Illuminate\Database\Eloquent\ModelNotFoundException;
-    use Illuminate\Http\Response;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
     
     class ProviderController extends AbstractController
     {
@@ -15,7 +16,20 @@
         {
             $this->service = $service;
         }
-    
+    public function index(Request $request)
+    {
+        try {
+        
+            $filters = $request['filters'] ?? $request['filtersV2'];
+            $service = $this->service->index($request['paginate'], $filters, $request['orderBy'], $request['relationships']);
+            return response()->json($service);
+        } catch (Exception $e) {
+            if ($this->logRequest) {
+                $this->logRequest($e);
+            }
+            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
         /**
          * Store a newly created resource in storage.
          */
