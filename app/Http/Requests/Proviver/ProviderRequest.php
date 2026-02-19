@@ -25,7 +25,8 @@ class ProviderRequest extends BaseFormRequest
             'nif' => 'required',
             'name' => 'required',
             'email' => 'required',
-            'phone' => 'required'
+            'phone' => 'required',
+          
         ];
     }
 }

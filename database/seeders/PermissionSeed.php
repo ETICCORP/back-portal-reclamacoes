@@ -11,83 +11,105 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionSeed extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-
-        $role = Role::updateOrCreate(
+        /*
+        |--------------------------------------------------------------------------
+        | ROLES
+        |--------------------------------------------------------------------------
+        */
+        $adminRole = Role::updateOrCreate(
             ['name' => 'Administrador'],
             [
-                'name' => 'Administrador',
                 'description' => 'Administrador do sistema',
                 'is_active' => true,
-            ],
+            ]
+        );
+
+        $providerRole = Role::updateOrCreate(
+            ['name' => 'Provedor'],
             [
-                'name' => 'Provedor',
                 'description' => 'Provedor do sistema',
                 'is_active' => true,
             ]
         );
 
-
-        // Definir módulos com suas descrições base
+        /*
+        |--------------------------------------------------------------------------
+        | MÓDULOS
+        |--------------------------------------------------------------------------
+        */
         $modules = [
             ['name' => 'Usuário', 'description' => 'Permite gerenciar usuários'],
             ['name' => 'Estatística', 'description' => 'Permite gerenciar estatísticas'],
             ['name' => 'Regra', 'description' => 'Permite gerenciar regras'],
-            ['name' => 'Denúcias', 'description' => 'Permite gerenciar entidades'],
-            ['name' => "Perfil", "description" => 'Permite gerenciar perfil'],
-            ['name' => "Alertas", "description" => 'Permite gerenciar Alertas'],
-             ['name' => "Provedor", "description" => 'Permite gerenciar Provedores']
+            ['name' => 'Denúcias', 'description' => 'Permite gerenciar denúncias'],
+            ['name' => 'Perfil', 'description' => 'Permite gerenciar perfil'],
+            ['name' => 'Alertas', 'description' => 'Permite gerenciar alertas'],
+            ['name' => 'Histórico', 'description' => 'Permite visualizar histórico'],
+            ['name' => 'Provedor', 'description' => 'Permite gerenciar provedores'],
         ];
 
-        // Operações básicas
         $operations = ['show', 'create', 'edit', 'delete'];
-        $permission_id = [];
 
+        $adminPermissions = [];
+        $providerPermissions = [];
+
+        /*
+        |--------------------------------------------------------------------------
+        | PERMISSÕES
+        |--------------------------------------------------------------------------
+        */
         foreach ($modules as $module) {
             foreach ($operations as $operation) {
-                // Ajustar descrição para cada operação
-                $operationDescriptions = [
-                    'show' => "Permite listar {$module['name']}",
-                    'create' => "Permite criar {$module['name']}",
-                    'edit' => "Permite editar {$module['name']}",
-                    'delete' => "Permite excluir {$module['name']}",
-                ];
 
-                // Gerar nome da permissão
                 $permissionName = Helper::formatarString($module['name']) . "-$operation";
 
-                // Criar ou atualizar permissão
                 $permission = Permission::updateOrCreate(
                     ['name' => $permissionName],
                     [
-                        'name' => $permissionName,
-                        'description' => $operationDescriptions[$operation],
+                        'description' => "Permite {$operation} {$module['name']}",
                         'is_active' => true,
                     ]
                 );
-                $permission_id[] = $permission->id;
-                echo "Permissão {$permission->name} criada ou atualizada.\n";
+
+                // Administrador recebe TODAS
+                $adminPermissions[] = $permission->id;
+
+                // Provedor recebe APENAS SHOW de Denúcias, Alertas e Histórico
+                if (
+                    $operation === 'show' &&
+                    in_array($module['name'], ['Denúcias', 'Alertas', 'Histórico'])
+                ) {
+                    $providerPermissions[] = $permission->id;
+                }
             }
         }
 
-        $role->permissions()->sync($permission_id);
-        echo "Permissão {$permission->name} associada ao papel {$role->name}.\n";
+        /*
+        |--------------------------------------------------------------------------
+        | ASSOCIAR PERMISSÕES
+        |--------------------------------------------------------------------------
+        */
+        $adminRole->permissions()->sync($adminPermissions);
+        $providerRole->permissions()->sync($providerPermissions);
 
-        User::updateOrCreate([
-            'email' => 'admin@gmail.com'
-        ], [
-            'first_name' => 'Administrador',
-            'last_name' => 'Sistema',
-            'phone' => '11999999999',
-            'email' => 'marcia.buienga@etic.co.ao',
-            'password' => bcrypt('12345678'),
-            'role_id' => $role->id,
-            'is_active' => true
-        ]);
-        echo "Usuário administrador criado ou atualizado.\n";
+        /*
+        |--------------------------------------------------------------------------
+        | USUÁRIO ADMIN
+        |--------------------------------------------------------------------------
+        */
+        User::updateOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'first_name' => 'Administrador',
+                'last_name' => 'Sistema',
+                'phone' => '11999999999',
+                'email' => 'admin@gmail.com',
+                'password' => bcrypt('12345678'),
+                'role_id' => $adminRole->id,
+                'is_active' => true
+            ]
+        );
     }
 }
