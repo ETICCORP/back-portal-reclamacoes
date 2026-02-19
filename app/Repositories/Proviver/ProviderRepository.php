@@ -10,4 +10,22 @@ class ProviderRepository extends AbstractRepository
     {
         parent::__construct($model);
     }
+
+      public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
+    {
+
+        $orderByParams = [
+            'name' => 'asc'
+        ];
+        $query = $this->buildQuery(
+            $paginate,
+            $filterParams,
+            $orderByParams,
+            $relationships,
+         
+        );
+
+      
+        return $query;
+    }
 }
