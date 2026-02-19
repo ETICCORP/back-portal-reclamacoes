@@ -26,7 +26,7 @@ class ModelEmailRequest extends BaseFormRequest
         'name'           => 'required|string',
         'body'           => 'required|string',
        /// 'user_id'        => 'required|integer',
-   'signature_path' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+   'signature_path' => 'required',
     ];
 }
 }
