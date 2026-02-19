@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('entity');
             $table->string('code');
             $table->longText('description')->nullable();
-            $table->string('incidentDateTime');
+            $table->string('incidentDateTime')->nullable();;
             $table->string('location');
             $table->string('status')->nullable();
             $table->string('type');

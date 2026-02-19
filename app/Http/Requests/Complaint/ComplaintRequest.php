@@ -26,7 +26,7 @@ class ComplaintRequest extends BaseFormRequest
             'full_name'         => ['required', 'string', 'max:255'],
             'complainant_role'  => ['required', 'string', 'max:100'],
             'contact'           => ['nullable',  'max:50'],
-            'incidentDateTime'           => ['nullable',  'max:50'],
+           
             'location'           => ['nullable',  'max:50'],
             'status'           => ['nullable',  'max:50'],
             'type'           => ['nullable'],
@@ -34,7 +34,7 @@ class ComplaintRequest extends BaseFormRequest
             'policy_number'     => ['nullable',  'max:100'],
             'entity'            => ['required', 'string', 'max:255'],
             'description'       => ['nullable'],
-            'incidentDateTime'       => ['required'],
+            'incidentDateTime'       => ['nullable'],
             "representative"   => ['nullable'],
             "location"   => ['required'],
             "type"   => ['required'],
