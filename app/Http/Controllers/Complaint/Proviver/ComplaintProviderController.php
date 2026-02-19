@@ -26,50 +26,73 @@ class ComplaintProviderController extends AbstractController
      */
 
     public function index(Request $request)
-    {
-  
-        try {
-            $userId = Auth::user()->id ?? null;
-            $providerID =    $this->grupProvederService->getUserProviderIdByUser($userId);
-            if (is_callable([$this, 'logRequest'])) {
-                $this->logRequest();
-                $this->logToDatabase(
-                    type: $this->logType,
-                    level: 'info',
-                    customMessage: "O usuário " . Auth::user()->first_name . " visualizou todos os registros de reclamações"
-                );
-            }
+{
+    try {
 
-            // Valor default para filtersV2
-            $defaultFiltersV2 = [
-                [
-                    "field" => "provider_id",
-                    "filterType" => "EQUALS",
-                    "filterValue" =>  $providerID 
-                ]
-            ];
+        
+        $user = Auth::user();
+        $userId = $user->id ?? null;
 
-            // Define filters com prioridade: filters -> filtersV2 -> defaultFiltersV2
-            $filters = $request['filters'] ?? $request['filtersV2'] ?? $defaultFiltersV2;
-
-            $service = $this->service->index(
-                $request['paginate'] ?? null,
-                $filters,
-                $request->input('orderBy', ['id' => 'desc']),
-                $request->input('relationships', [])
-            );
-
-            return response()->json($service);
-        } catch (Exception $e) {
-            if (is_callable([$this, 'logRequest'])) {
-                $this->logRequest($e);
-            }
+        if (!$userId) {
             return response()->json([
-                'message' => $e->getMessage(),
-                'code' => Response::HTTP_INTERNAL_SERVER_ERROR
-            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+                'message' => 'Usuário não autenticado',
+                'code' => 401
+            ], 401);
         }
+
+        $providerID = $this->grupProvederService->getUserProviderIdByUser($userId);
+
+        // Se providerID não existir, lança um erro ou define valor padrão
+        if (!$providerID) {
+            return response()->json([
+                'message' => 'Provedor associado ao usuário não encontrado',
+                'code' => 404
+            ], 404);
+        }
+    
+     
+
+        if (is_callable([$this, 'logRequest'])) {
+            $this->logRequest();
+            $this->logToDatabase(
+                type: $this->logType,
+                level: 'info',
+                customMessage: "O usuário " . ($user->first_name ?? 'Desconhecido') . " visualizou todos os registros de reclamações"
+            );
+        }
+
+        // Valor default para filtersV2
+        $defaultFiltersV2 = [
+            [
+                "field" => "provider_id",
+                "filterType" => "EQUALS",
+                "filterValue" => $providerID
+            ]
+        ];
+
+        // Define filters com prioridade: filters -> filtersV2 -> defaultFiltersV2
+        $filters = $request['filters'] ?? $request['filtersV2'] ?? $defaultFiltersV2;
+
+        $service = $this->service->index(
+            $request['paginate'] ?? null,
+            $filters,
+            $request->input('orderBy', ['id' => 'desc']),
+            $request->input('relationships', [])
+        );
+
+        return response()->json($service);
+
+    } catch (\Exception $e) {
+        if (is_callable([$this, 'logRequest'])) {
+            $this->logRequest($e);
+        }
+        return response()->json([
+            'message' => $e->getMessage(),
+            'code' => 500
+        ], 500);
     }
+}
+
 
 
 

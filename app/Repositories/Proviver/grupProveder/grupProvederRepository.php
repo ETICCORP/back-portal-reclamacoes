@@ -26,10 +26,11 @@ class grupProvederRepository extends AbstractRepository
         );
         return $inserted;
     }
+public function getUserProviderIdByUser($idUser)
+{
+    $inserted = $this->model::where('user_id', $idUser)->first();
 
-    public function getUserProviderIdByUser($idUser){
-         $inserted = $this->model::where('user_id',$idUser)->first();
+    return $inserted?->proveder_id ?? null;
+}
 
-         return  $inserted->proveder_id;
-    }
 }
