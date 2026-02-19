@@ -78,15 +78,15 @@ class ComplaintRepository extends AbstractRepository
         ]);
 
         AlertJob::dispatch($complaint->id);
-      
-try {
-    if (!empty($data['email'])) {
-        Mail::to($data['email'])->send(new ReportAlertMail($complaint));
-    }
-} catch (\Throwable $e) {
-    // Aqui você pode logar o erro ou apenas ignorar
-    Log::error("Falha ao enviar email para {$data['email']}: " . $e->getMessage());
-}
+
+        try {
+            if (!empty($data['email'])) {
+                Mail::to($data['email'])->send(new ReportAlertMail($complaint));
+            }
+        } catch (\Throwable $e) {
+            // Aqui você pode logar o erro ou apenas ignorar
+            Log::error("Falha ao enviar email para {$data['email']}: " . $e->getMessage());
+        }
         $startDate = Carbon::now();
 
         // Função para adicionar 15 dias úteis
@@ -139,12 +139,14 @@ try {
         $model = $this->model->findOrFail($id);
 
         $model->update(['status' => $data['status']]);
+        if (isset($data['comment']) ) {
+            $this->commentRepository->model::create([
+                "comment"   => $data['comment'],
+                "report_id" => $id,
+                "fk_user" => Auth::user()->id
+            ]);
+        }
 
-        $this->commentRepository->model::create([
-            "comment"   => $data['comment'],
-            "report_id" => $id,
-            "fk_user" => Auth::user()->id
-        ]);
 
         // 📎 Anexos
         $this->handleAttachments($data['attachments'] ?? null, $id);
@@ -212,9 +214,9 @@ try {
         $complaint = $this->model::with([
             "attachments",
             "typeReport",
-             "triages",
-             "proverResponse",
-               "forwardProvider"
+            "triages",
+            "proverResponse",
+            "forwardProvider"
         ])->where('code', $code)->firstOrFail();
 
         return $complaint;

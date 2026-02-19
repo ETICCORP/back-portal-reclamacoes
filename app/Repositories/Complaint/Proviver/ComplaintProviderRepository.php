@@ -38,7 +38,7 @@ class ComplaintProviderRepository extends AbstractRepository
         $data['status'] = "Encaminhado ao Provedor";
         $data['comment'] = $data['notes'];
 
-        $this->complaintRepository->updateStatus($data, $data['complaint_id']);
+        //$this->complaintRepository->updateStatus($data, $data['complaint_id']);
         $complaintProvider->load([
             "complaint",
             "provider"

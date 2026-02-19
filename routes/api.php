@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 
 Route::prefix('reports')->group(base_path('routes/reports/reportsFre.php'));
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('permission')->group(base_path('routes/user/permission/permission.php'));
     Route::prefix('role')->group(base_path('routes/user/permission/role.php'));
@@ -39,13 +40,11 @@ Route::prefix('reports')->group(function () {
     Route::get('/type', [TypeComplaintsController::class, 'index']);
 
 });
-Route::prefix('providers')->group(function () {
- Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
-   
-});
+
 
 Route::prefix('provider')->group(function () {
 
 Route::get('/', [ProviderController::class, 'index']);
+ //Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
    
 });

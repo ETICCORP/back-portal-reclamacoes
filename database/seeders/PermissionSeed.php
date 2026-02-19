@@ -34,6 +34,7 @@ class PermissionSeed extends Seeder
             ]
         );
 
+
         /*
         |--------------------------------------------------------------------------
         | MÓDULOS
@@ -48,12 +49,15 @@ class PermissionSeed extends Seeder
             ['name' => 'Alertas', 'description' => 'Permite gerenciar alertas'],
             ['name' => 'Histórico', 'description' => 'Permite visualizar histórico'],
             ['name' => 'Provedor', 'description' => 'Permite gerenciar provedores'],
+
+            ['name' => 'Provedor Reclamações', 'description' => 'Permite gerenciar Provedor Reclamações'],
         ];
 
         $operations = ['show', 'create', 'edit', 'delete'];
 
         $adminPermissions = [];
         $providerPermissions = [];
+        $providerReclamacoesPermissions = [];
 
         /*
         |--------------------------------------------------------------------------
@@ -76,13 +80,15 @@ class PermissionSeed extends Seeder
                 // Administrador recebe TODAS
                 $adminPermissions[] = $permission->id;
 
-                // Provedor recebe APENAS SHOW de Denúcias, Alertas e Histórico
                 if (
-                    $operation === 'show' &&
-                    in_array($module['name'], ['Denúcias', 'Alertas', 'Histórico'])
+                    in_array($operation, ['show', 'create', 'edit', 'delete']) &&
+                    $module['name'] === 'Provedor Reclamacoes'
                 ) {
                     $providerPermissions[] = $permission->id;
                 }
+
+                // Provedor Reclamacoes recebe TODAS as permissões
+                $providerReclamacoesPermissions[] = $permission->id;
             }
         }
 
@@ -93,6 +99,7 @@ class PermissionSeed extends Seeder
         */
         $adminRole->permissions()->sync($adminPermissions);
         $providerRole->permissions()->sync($providerPermissions);
+
 
         /*
         |--------------------------------------------------------------------------
