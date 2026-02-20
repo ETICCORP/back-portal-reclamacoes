@@ -35,7 +35,10 @@
               </p>
 
               <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:35px; margin-bottom:40px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
-                <div style="font-size:16px; line-height:1.8; color:#334155; white-space: pre-wrap;">{!! nl2br(e($response->body)) !!}</div>
+                <div style="font-size:16px; line-height:1.8; color:#334155; white-space: pre-wrap;">
+                    {!! html_entity_decode($response->body ?? 'Sem descrição fornecida.') !!}
+                  
+              </div>
               </div>
 
               <div style="margin-top:40px; border-top:1px solid #f1f5f9; padding-top:30px;">
