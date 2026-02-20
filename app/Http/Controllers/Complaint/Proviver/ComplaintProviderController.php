@@ -50,8 +50,7 @@ class ComplaintProviderController extends AbstractController
             ], 404);
         }
     
-     
-
+    
         if (is_callable([$this, 'logRequest'])) {
             $this->logRequest();
             $this->logToDatabase(

@@ -3,6 +3,7 @@
 namespace App\Models\Complaint\Proviver;
 
 use App\Models\Complaint\Complaint;
+use App\Models\Complaint\ComplaintResponses;
 use App\Models\Proviver\Provider;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,5 +25,17 @@ protected $casts = [
        public function provider()
     {
         return $this->belongsTo(Provider::class, 'provider_id');
+    }
+
+      public function forwardProvider()
+    {
+        return $this->hasMany(ComplaintProvider::class, 'complaint_id');
+    }
+
+
+
+     public function entitiyResponse()
+    {
+        return $this->hasMany(ComplaintResponses::class, 'complaint_id');
     }
 }

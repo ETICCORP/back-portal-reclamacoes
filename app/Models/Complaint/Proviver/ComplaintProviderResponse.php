@@ -22,4 +22,6 @@ class ComplaintProviderResponse extends Model
     {
         return $this->belongsTo(Provider::class, 'provider_id');
     }
+
+    
 }
