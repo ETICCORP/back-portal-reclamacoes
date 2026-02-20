@@ -1,134 +1,113 @@
-<!DOCTYPE html>
-<html lang="pt">
+<!doctype html>
+<html lang="pt-PT">
 <head>
-    <meta charset="UTF-8">
-    <title>Nova Reclamação Encaminhada</title>
-    <style>
-        body {
-            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f5f8fa;
-            color: #333;
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nova Reclamação Encaminhada</title>
+  </head>
+<body style="margin:0; padding:0; background: #eef2f7 linear-gradient(135deg, #eef2f7 0%, #dbeafe 100%); font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#1e293b; min-height: 100vh;">
 
-        .email-wrapper {
-            max-width: 720px;
-            margin: 40px auto;
-            background-color: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 3px 12px rgba(0, 0, 0, 0.08);
-            overflow: hidden;
-        }
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+    <tr>
+      <td align="center" style="padding:50px 20px;">
+        
+        <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%" style="max-width:640px; background:#ffffff; border-radius:24px; overflow:hidden; box-shadow:0 20px 40px rgba(0,0,0,0.1);">
+          
+          <tr>
+            <td style="background: #0f172a; padding:45px 50px; text-align:center;">
+              <div style="color: #3b82f6; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 10px;">Gestão de Prestadores</div>
+              <h1 style="margin:0; font-size:24px; font-weight:700; color:#ffffff; letter-spacing:-0.5px;">
+                Nova Reclamação Encaminhada
+              </h1>
+            </td>
+          </tr>
 
-        .email-header {
-            background-color: #004aad;
-            color: #fff;
-            padding: 25px 40px;
-            text-align: center;
-        }
+          <tr>
+            <td align="center" style="padding: 0;">
+              <div style="display:inline-block; margin-top:-20px; background:#ffffff; border: 2px solid #3b82f6; color:#3b82f6; padding:6px 20px; border-radius:50px; font-size:13px; font-weight:700; box-shadow:0 4px 10px rgba(0,0,0,0.05);">
+                ID DO PROCESSO: #{{ $complaintProvider->complaint_id }}
+              </div>
+            </td>
+          </tr>
 
-        .email-header h2 {
-            margin: 0;
-            font-size: 22px;
-            letter-spacing: 0.5px;
-        }
+          <tr>
+            <td style="padding:40px 50px;">
+              <p style="margin:0 0 20px 0; font-size:16px; color:#475569;">
+                Prezado(a) <strong style="color:#0f172a;">{{ $complaintProvider->provider->name }}</strong>,
+              </p>
+              
+              <p style="margin:0 0 30px 0; font-size:15px; line-height:1.7; color:#64748b;">
+                Informamos que uma nova exposição foi encaminhada para a sua análise e acompanhamento obrigatório dentro do prazo estabelecido.
+              </p>
 
-        .email-body {
-            padding: 30px 40px;
-        }
+              <div style="background:#f8fafc; border-radius:16px; padding:25px; border:1px solid #e2e8f0; margin-bottom:35px;">
+                <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                  <tr>
+                    <td style="padding-bottom:15px;">
+                      <div style="font-size:12px; font-weight:800; color:#94a3b8; text-transform:uppercase; letter-spacing:1px; margin-bottom:12px;">Resumo do Encaminhamento</div>
+                      
+                      <div style="margin-bottom:10px; font-size:15px;">
+                        <span style="color:#64748b;">Assunto:</span> <strong style="color:#1e293b;">{{ $complaintProvider->summary }}</strong>
+                      </div>
 
-        p {
-            font-size: 15px;
-            line-height: 1.7;
-            margin-bottom: 16px;
-        }
+                      @if($complaintProvider->deadline)
+                      <div style="display:inline-block; background:#fef2f2; border:1px solid #fee2e2; color:#ef4444; padding:4px 12px; border-radius:6px; font-size:13px; font-weight:700;">
+                        ⏱ Prazo limite: {{ $complaintProvider->deadline->format('d/m/Y') }}
+                      </div>
+                      @endif
+                    </td>
+                  </tr>
+                  
+                  @if($complaintProvider->notes)
+                  <tr>
+                    <td style="padding-top:15px; border-top:1px solid #e2e8f0;">
+                      <div style="font-size:12px; font-weight:700; color:#1e293b; margin-bottom:5px;">Notas Internas:</div>
+                      <div style="font-size:14px; line-height:1.6; color:#475569; font-style: italic;">
+               
 
-        ul {
-            list-style-type: none;
-            padding: 0;
-            margin: 20px 0;
-        }
+                        {!! html_entity_decode($complaintProvider->notes ?? 'Sem descrição fornecida.') !!}
+                      </div>
+                    </td>
+                  </tr>
+                  @endif
+                </table>
+              </div>
 
-        li {
-            background-color: #f0f4ff;
-            margin-bottom: 10px;
-            padding: 10px 15px;
-            border-radius: 8px;
-            font-size: 14.5px;
-        }
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
+                <tr>
+                  <td align="center">
+                    <p style="margin-bottom:20px; font-size:14px; color:#94a3b8;">Para consultar o processo completo e submeter a sua resposta:</p>
+                    <a href="{{ config('app.url') }}" style="display:inline-block; padding:18px 45px; background-color:#0f172a; color:#ffffff; font-weight:700; font-size:15px; text-decoration:none; border-radius:12px; box-shadow:0 10px 20px rgba(15,23,42,0.2);">
+                      Aceder ao Painel do Prestador
+                    </a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
 
-        li strong {
-            color: #004aad;
-        }
+          <tr>
+            <td style="padding:40px 50px; background-color:#f8fafc; border-top:1px solid #e2e8f0; text-align:center;">
+              <p style="margin:0; font-size:13px; color:#94a3b8; line-height:1.6;">
+                Atenciosamente,<br>
+                <strong style="color:#64748b;">Equipa de Gestão de Qualidade</strong><br>
+                {{ config('app.name') }}
+              </p>
+              <p style="margin-top:20px; font-size:11px; color:#cbd5e1; text-transform:uppercase;">
+                Este é um envio automático • Não responda a este endereço
+              </p>
+            </td>
+          </tr>
 
-        .cta {
-            display: inline-block;
-            margin-top: 20px;
-            background-color: #004aad;
-            color: #fff !important;
-            text-decoration: none;
-            padding: 10px 22px;
-            border-radius: 6px;
-            font-weight: 500;
-            font-size: 15px;
-        }
+        </table>
 
-        .cta:hover {
-            background-color: #003b8a;
-        }
+        <p style="margin-top:25px; font-size:12px; color:#94a3b8; text-align:center;">
+          © {{ date('Y') }} {{ config('app.name') }} Compliance
+        </p>
 
-        .footer {
-            border-top: 1px solid #e5e5e5;
-            margin-top: 30px;
-            padding-top: 18px;
-            font-size: 13px;
-            color: #777;
-            text-align: center;
-        }
+      </td>
+    </tr>
+  </table>
 
-        .footer p {
-            margin: 5px 0;
-        }
-    </style>
-</head>
-<body>
-    <div class="email-wrapper">
-        <div class="email-header">
-            <h2>Nova Reclamação Encaminhada</h2>
-        </div>
-
-        <div class="email-body">
-            <p>Prezado(a) <strong>{{ $complaintProvider->provider->name }}</strong>,</p>
-
-            <p>Informamos que uma nova reclamação foi encaminhada para o seu acompanhamento.  
-            Seguem abaixo os principais detalhes:</p>
-
-            <ul>
-                <li><strong>ID da Reclamação:</strong> {{ $complaintProvider->complaint_id }}</li>
-                <li><strong>Resumo:</strong> {{ $complaintProvider->summary }}</li>
-
-                @if($complaintProvider->notes)
-                    <li><strong>Notas Internas:</strong> {{ $complaintProvider->notes }}</li>
-                @endif
-
-                @if($complaintProvider->deadline)
-                    <li><strong>Prazo para Resposta:</strong> {{ $complaintProvider->deadline->format('d/m/Y') }}</li>
-                @endif
-            </ul>
-
-            <p>Para consultar mais informações ou responder à reclamação, aceda ao sistema através do link abaixo:</p>
-
-            <p style="text-align:center;">
-                <a href="{{ config('app.url') }}" class="cta">Aceder ao Sistema</a>
-            </p>
-
-            <div class="footer">
-                <p>Atenciosamente,<br><strong>Equipe de Reclamações</strong></p>
-                <p>Este é um e-mail automático enviado por <strong>{{ config('app.name') }}</strong>.<br>
-                Por favor, não responda diretamente a esta mensagem.</p>
-            </div>
-        </div>
-    </div>
 </body>
 </html>

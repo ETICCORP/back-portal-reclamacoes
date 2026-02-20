@@ -21,7 +21,7 @@ class ReportAlertMail extends Mailable
     public function build()
     {
 
-        return $this->subject('Resumo da Reclamnação')
+        return $this->subject('Resumo da Reclamação')
             ->view('emails.report_resume')
             ->with([
                 'complaint' => $this->dados,

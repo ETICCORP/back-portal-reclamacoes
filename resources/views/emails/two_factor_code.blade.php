@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <title>Código de Autenticação - Nossa Seguros</title>
+    <title>Código de Autenticação -Keepcomply</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -110,7 +110,7 @@
                  @if(in_array($currentHost, ['localhost', '127.0.0.1', '172.17.100.11', '172.17.100.12']))
               Keepcompay — Todos os direitos reservados.
         @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
-            Nossa Seguros — Todos os direitos reservados.
+           Keepcomply — Todos os direitos reservados.
         @endif
             
               </p>

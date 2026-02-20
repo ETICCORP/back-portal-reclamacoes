@@ -217,7 +217,8 @@ class ComplaintRepository extends AbstractRepository
             "triages",
             "proverResponse",
             "forwardProvider",
-             "entitiyResponse"
+             "entitiyResponse",
+             "forwardProvider"
         ])->where('code', $code)->firstOrFail();
 
         return $complaint;
