@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Complaint;
 
 use App\Repositories\Complaint\ComplaintDeadlineRepository;
@@ -11,7 +12,7 @@ class ComplaintDeadlineService extends AbstractService
         parent::__construct($repository);
     }
 
-    
+
 
     public function percentageServicedWithinDeadline()
     {

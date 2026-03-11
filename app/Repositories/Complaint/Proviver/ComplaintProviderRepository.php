@@ -62,9 +62,7 @@ class ComplaintProviderRepository extends AbstractRepository
 
     public function forward()
     {
-
-
-        return   $complaint = $this->model::count();
+        return  $this->model::count();
     }
 
     public function providersManth()
@@ -73,7 +71,6 @@ class ComplaintProviderRepository extends AbstractRepository
             DB::raw("DATE_FORMAT(created_at, '%M') as month"), // nome do mês
             DB::raw('COUNT(*) as total')
         )
-
             ->groupBy('month')
             ->orderBy('month')
             ->get();

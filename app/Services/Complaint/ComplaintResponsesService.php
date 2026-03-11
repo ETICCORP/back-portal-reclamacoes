@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Complaint;
 
 use App\Repositories\Complaint\ComplaintResponsesRepository;
@@ -10,11 +11,11 @@ class ComplaintResponsesService extends AbstractService
     {
         parent::__construct($repository);
     }
-      public function complaintResponse(array $data)
+    public function complaintResponse(array $data)
     {
         return $this->repository->complaintResponse($data);
     }
-   public function sendEmailResponse($id)
+    public function sendEmailResponse($id)
     {
         return $this->repository->sendEmailResponse($id);
     }
@@ -22,7 +23,4 @@ class ComplaintResponsesService extends AbstractService
     {
         return $this->repository->byManth();
     }
-
-    
-    
 }

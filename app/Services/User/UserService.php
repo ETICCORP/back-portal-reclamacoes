@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Mail\TwoFactorCodeMail as MailTwoFactorCodeMail;
+use App\Models\Log\Log;
 use App\Models\User\User;
 use Illuminate\Http\Request;
 use App\Services\AbstractService;
@@ -13,6 +14,7 @@ use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
+use PhpParser\Node\Stmt\TryCatch;
 use TwoFactorCodeMail;
 
 class UserService extends AbstractService
@@ -22,19 +24,26 @@ class UserService extends AbstractService
         parent::__construct($repository);
     }
 
-  public function store(array $data)
+    public function store(array $data)
     {
-      // 1. Gerar uma senha aleatória caso não venha do front
-    $password = Str::random(12); // gera senha aleatória de 12 caracteres
-    $data['password'] = Hash::make($password);
+        // 1. Gerar uma senha aleatória caso não venha do front
+        $password = Str::random(12); // gera senha aleatória de 12 caracteres
+        $data['password'] = Hash::make($password);
 
-    // 2. Salvar o usuário no repositório
-    $user = $this->repository->store($data);
+        // 2. Salvar o usuário no repositório
+        $user = $this->repository->store($data);
 
-    // 3. Enviar a senha por email para o usuário
-    Mail::to($data['email'])->send(new \App\Mail\UserCreatedMail($user, $password));
+        try {
+            // 3. Enviar a senha por email para o usuário
+            Mail::to($data['email'])->send(new \App\Mail\UserCreatedMail($user, $password));
+        } catch (\Throwable $th) {
+            Log::error('Erro ao enviar email para o utilizador', [
+                'email' => $data['email'],
+                'error' => $th->getMessage(),
+            ]);
+        }
 
-    return $user;
+        return $user;
     }
     public function changePassword(array $data)
     {

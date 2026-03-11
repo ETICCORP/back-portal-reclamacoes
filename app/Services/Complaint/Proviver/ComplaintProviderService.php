@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services\Complaint\Proviver;
 
 use App\Repositories\Complaint\Proviver\ComplaintProviderRepository;
@@ -10,11 +11,11 @@ class ComplaintProviderService extends AbstractService
     {
         parent::__construct($repository);
     }
- public function forwardComplaint($data)
+    public function forwardComplaint($data)
     {
         return $this->repository->forwardComplaint($data);
     }
-    
+
     public function forward()
     {
         return $this->repository->forward();

@@ -53,7 +53,6 @@ class ComplaintService extends AbstractService
         return $this->repository->getBycode($code);
     }
 
-
     public function countByDate(?string $startDate, ?string $endDate)
     {
         $startDate = $startDate ?? now()->subDays(7)->toDateString();
@@ -70,12 +69,9 @@ class ComplaintService extends AbstractService
     {
         return $this->repository->byManth();
     }
-
     public function repeatOffenders()
     {
         return $this->repository->repeatOffenders();
     }
    
-
-    
 }

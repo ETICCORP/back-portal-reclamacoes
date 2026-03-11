@@ -13,9 +13,6 @@ class ProviderRepository extends AbstractRepository
 
       public function index(?int $paginate, ?array $filterParams, ?array $orderByParams, $relationships = [])
     {
-
-    
-
         $orderByParams = [
             'name' => 'asc'
         ];
@@ -27,7 +24,6 @@ class ProviderRepository extends AbstractRepository
          
         );
 
-      
         return $query;
     }
 }
