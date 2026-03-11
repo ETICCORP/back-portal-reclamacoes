@@ -11,6 +11,7 @@ use App\Repositories\Reporter\ReporterRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ComplaintProviderRepository extends AbstractRepository
 {
@@ -45,9 +46,17 @@ class ComplaintProviderRepository extends AbstractRepository
 
         ]);
 
-        // Envio de e-mail ao Provedor
-        Mail::to($complaintProvider->provider->email)
-            ->send(new ComplaintForwardedMail($complaintProvider));
+        try {
+            // Envio de e-mail ao Provedor
+            Mail::to($complaintProvider->provider->email)
+                ->send(new ComplaintForwardedMail($complaintProvider));
+        } catch (\Throwable $e) {
+            Log::error('Erro ao enviar email para o provedor', [
+                'email' => $complaintProvider->provider->email,
+                'complaint_provider_id' => $complaintProvider->id,
+                'error' => $e->getMessage(),
+            ]);
+        }
         return $complaintProvider;
     }
 
