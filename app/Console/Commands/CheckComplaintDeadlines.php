@@ -16,7 +16,7 @@ class CheckComplaintDeadlines extends Command
 
     public function handle()
     {
-        $deadlines = ComplaintDeadline::where('status', 'em_andamento')->get();
+        $deadlines = ComplaintDeadline::where('status', 'Pendente')->get();
 
         $this->info("Total de deadlines em andamento: " . $deadlines->count());
 

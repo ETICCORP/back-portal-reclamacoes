@@ -5,30 +5,35 @@ WORKDIR /var/www
 # Remover html antigo
 RUN rm -rf /var/www/html
 
-# Instala dependências e extensões PHP
+# Instala dependências do sistema
 RUN apt-get update && apt-get install -y \
         build-essential \
         libpng-dev \
-        libjpeg62-turbo-dev \
+        libjpeg-dev \
         libfreetype6-dev \
-        locales \
-        zip \
-        jpegoptim optipng pngquant gifsicle \
-        vim \
-        unzip \
-        git \
-        curl \
+        libwebp-dev \
+        libxpm-dev \
         libzip-dev \
-        apt-utils \
         libonig-dev \
         supervisor \
         procps \
-    && docker-php-ext-configure gd --with-freetype --with-jpeg \
-    && docker-php-ext-install zip pdo_mysql mbstring exif bcmath gd pcntl \
+        curl \
+        git \
+        unzip \
+        vim \
+        zip \
+        jpegoptim optipng pngquant gifsicle \
+        libssl-dev pkg-config ca-certificates \
     && rm -rf /var/lib/apt/lists/*
 
-# Instala Redis via PECL
-RUN pecl install redis \
+# Configura e instala extensões PHP
+RUN docker-php-ext-configure gd \
+        --with-freetype \
+        --with-jpeg \
+        --with-webp \
+        --with-xpm \
+    && docker-php-ext-install gd zip pdo_mysql mbstring exif bcmath pcntl \
+    && pecl install redis-5.3.7 \
     && docker-php-ext-enable redis
 
 # Instala Composer
@@ -39,18 +44,16 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 # Copia aplicação
 COPY . /var/www
 
-# Cria pastas necessárias e dá permissões
+# Cria pastas e permissões
 RUN mkdir -p /var/run/supervisor /var/log/supervisord /var/www/storage/logs \
     && chmod -R 777 /var/run/supervisor /var/log/supervisord /var/www/storage
 
-# Configuração do Supervisor
+# Supervisor
 COPY docker/php/supervisord.conf /etc/supervisor/supervisord.conf
 
 # PHP ini custom
-COPY ./docker/php/local.ini /usr/local/etc/php/conf.d/local.ini
+COPY ./docker/php/99-local.ini /usr/local/etc/php/conf.d/99-local.ini
 
-# Expor porta do PHP-FPM
 EXPOSE 9000
 
-# Iniciar Supervisor
 CMD ["supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]
