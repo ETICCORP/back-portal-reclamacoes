@@ -10,6 +10,7 @@ services:
     tty: true
     volumes:
       - ./:/var/www
+      - ./docker/php/99-local.ini:/usr/local/etc/php/conf.d/99-local.ini
     networks:
       - portalReclamacoes-network
     ports:
