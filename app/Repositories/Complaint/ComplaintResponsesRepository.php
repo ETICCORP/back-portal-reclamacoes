@@ -46,7 +46,13 @@ class ComplaintResponsesRepository extends AbstractRepository
 
         $this->complaintRepository->updateStatus($data, $data['complaint_id']);
 
-        Mail::to($complaint->complaint->email)->send(new ComplaintResponseMail($complaint));
+        try {
+            Mail::to($complaint->complaint->email)->send(new ComplaintResponseMail($complaint));
+        } catch (\Throwable $th) {
+            //throw $th;
+        }
+
+
         return $complaint;
     }
 
@@ -115,7 +121,16 @@ class ComplaintResponsesRepository extends AbstractRepository
     {
 
         $complaint = $this->model::with('complaint', 'user')->find($id);
-        Mail::to($complaint->complaint->email)->send(new ComplaintResponseMail($complaint));
-        return $complaint;
+
+        try {
+            Mail::to($complaint->complaint->email)->send(new ComplaintResponseMail($complaint));
+            return $complaint;
+        } catch (\Throwable $th) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Erro ao enviar o email.',
+                'error' => $th->getMessage()
+            ], 500);
+        }
     }
 }

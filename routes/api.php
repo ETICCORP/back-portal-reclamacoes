@@ -11,40 +11,38 @@ use App\Http\Controllers\User\UserController;
 Route::prefix('reports')->group(base_path('routes/reports/reportsFre.php'));
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::prefix('permission')->group(base_path('routes/user/permission/permission.php'));
-    Route::prefix('role')->group(base_path('routes/user/permission/role.php'));
-    Route::prefix('user')->group(base_path('routes/user/user.php'));
-    Route::prefix('logs')->group(base_path('routes/logs/logs.php'));
-    Route::prefix('alert')->group(base_path('routes/alert/alert.php'));
-    //Route::prefix('statistics')->group(base_path('routes/statistics/statistics.php'));
-    Route::prefix('reports')->group(base_path('routes/reports/reports.php'));
-    Route::prefix('comment')->group(base_path('routes/comment/comment.php'));
-     Route::prefix('provider')->group(base_path('routes/provider/provider.php'));
+  Route::prefix('permission')->group(base_path('routes/user/permission/permission.php'));
+  Route::prefix('role')->group(base_path('routes/user/permission/role.php'));
+  Route::prefix('user')->group(base_path('routes/user/user.php'));
+  Route::prefix('logs')->group(base_path('routes/logs/logs.php'));
+  Route::prefix('alert')->group(base_path('routes/alert/alert.php'));
+  //Route::prefix('statistics')->group(base_path('routes/statistics/statistics.php'));
+  Route::prefix('reports')->group(base_path('routes/reports/reports.php'));
+  Route::prefix('comment')->group(base_path('routes/comment/comment.php'));
+  Route::prefix('provider')->group(base_path('routes/provider/provider.php'));
 });
- 
+
 Route::post('/auth/login', [UserController::class, 'login']);
 Route::prefix('auth')->middleware('guest')->group(base_path('routes/user/auth.php'));
 Route::post('auth/2fa', [UserController::class, 'verify2fa']);
 
 
 Route::middleware('web')->get('/reports/show/{id}/file', [ComplaintController::class, 'showFile'])
-    ->name('reports.showFile');
+  ->name('reports.showFile');
 
-    Route::middleware('web')->get('/reports/show/{id}/minuta', [ModelEmailController::class, 'showFile'])
-   ;
-    //routes publics
+Route::middleware('web')->get('/reports/show/{id}/minuta', [ModelEmailController::class, 'showFile']);
+//routes publics
 
 Route::prefix('reports')->group(function () {
   Route::post('/', [ComplaintController::class, 'store'])->name('reportsFre.php.store');
-    Route::get('/getBycode/{id}', [ComplaintController::class, 'getBycode']);
-    Route::get('/type', [TypeComplaintsController::class, 'index']);
-
+  Route::get('/getBycode/{id}', [ComplaintController::class, 'getBycode']);
+  Route::get('/type', [TypeComplaintsController::class, 'index']);
 });
 
 
 Route::prefix('provider')->group(function () {
 
-Route::get('/', [ProviderController::class, 'index']);
- //Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
-   
+  Route::get('/', [ProviderController::class, 'index']);
+  //Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
+
 });

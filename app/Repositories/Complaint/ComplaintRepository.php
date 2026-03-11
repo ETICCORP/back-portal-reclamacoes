@@ -139,15 +139,13 @@ class ComplaintRepository extends AbstractRepository
         $model = $this->model->findOrFail($id);
 
         $model->update(['status' => $data['status']]);
-        if (isset($data['comment']) ) {
+        if (isset($data['comment'])) {
             $this->commentRepository->model::create([
                 "comment"   => $data['comment'],
                 "report_id" => $id,
                 "fk_user" => Auth::user()->id
             ]);
         }
-
-
         // 📎 Anexos
         $this->handleAttachments($data['attachments'] ?? null, $id);
 
@@ -212,16 +210,16 @@ class ComplaintRepository extends AbstractRepository
     public function getByCode(string $code)
     {
         $complaint = $this->model::with([
-         "attachments",
-        "soluctions",
-        "typeReport",
-        "interaction",
-        "opinions",
-        "triages",
-        "deadlines",
-        "proverResponse",
-        "forwardProvider",
-        "entitiyResponse"
+            "attachments",
+            "soluctions",
+            "typeReport",
+            "interaction",
+            "opinions",
+            "triages",
+            "deadlines",
+            "proverResponse",
+            "forwardProvider",
+            "entitiyResponse"
         ])->where('code', $code)->firstOrFail();
 
         return $complaint;

@@ -89,7 +89,7 @@ class ComplaintController extends AbstractController
                 $attachments = [$attachments]; // transforma 1 arquivo em array
             }
             $data['attachments'] = $attachments;
-                  $data = $request->validated();
+            $data = $request->validated();
             // Envia tudo para o service
             $complaint = $this->service->storeData($data);
 

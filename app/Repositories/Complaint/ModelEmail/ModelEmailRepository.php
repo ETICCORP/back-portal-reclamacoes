@@ -152,48 +152,49 @@ class ModelEmailRepository extends AbstractRepository
     }
 
 
-   public function showFile($id)
-{
-    $file = $this->model::findOrFail($id);
+    public function showFile($id)
+    {
+        $file = $this->model::findOrFail($id);
 
-    // Verifica se existe assinatura
-    if (!$file->signature_path || !Storage::disk('public')->exists($file->signature_path)) {
-        throw new \Exception('Arquivo não encontrado.');
-    }
-
-    // Retorna o caminho absoluto para o controller
-    return Storage::disk('public')->path($file->signature_path);
-}
-
-
-
-public function update(array $data, $id)
-{
-    $model = ModelEmail::findOrFail($id);
-
-    // atualiza texto
-    $model->update([
-        'subject' => $data['subject'],
-        'name'    => $data['name'],
-        'body'    => $data['body'],
-    ]);
-
-    // troca imagem se vier nova
-    if (isset($data['signature_path']) && $data['signature_path'] instanceof \Illuminate\Http\UploadedFile) {
-
-        if ($model->signature_path &&
-            Storage::disk('public')->exists($model->signature_path)) {
-            Storage::disk('public')->delete($model->signature_path);
+        // Verifica se existe assinatura
+        if (!$file->signature_path || !Storage::disk('public')->exists($file->signature_path)) {
+            throw new \Exception('Arquivo não encontrado.');
         }
 
-        $path = $data['signature_path']->store('signatures', 'public');
-
-        $model->update([
-            'signature_path' => $path
-        ]);
+        // Retorna o caminho absoluto para o controller
+        return Storage::disk('public')->path($file->signature_path);
     }
 
-    return $model;
-}
 
+
+    public function update(array $data, $id)
+    {
+        $model = ModelEmail::findOrFail($id);
+
+        // atualiza texto
+        $model->update([
+            'subject' => $data['subject'],
+            'name'    => $data['name'],
+            'body'    => $data['body'],
+        ]);
+
+        // troca imagem se vier nova
+        if (isset($data['signature_path']) && $data['signature_path'] instanceof \Illuminate\Http\UploadedFile) {
+
+            if (
+                $model->signature_path &&
+                Storage::disk('public')->exists($model->signature_path)
+            ) {
+                Storage::disk('public')->delete($model->signature_path);
+            }
+
+            $path = $data['signature_path']->store('signatures', 'public');
+
+            $model->update([
+                'signature_path' => $path
+            ]);
+        }
+
+        return $model;
+    }
 }
