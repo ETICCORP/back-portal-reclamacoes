@@ -326,7 +326,10 @@ class ComplaintRepository extends AbstractRepository
     public function repeatOffenders()
     {
         return DB::table('complaint')
-            ->select('full_name', DB::raw('COUNT(*) as total_complaints'))
+            ->select(
+                DB::raw('full_name as entity'), // mapeia full_name para entity
+                DB::raw('COUNT(*) as total_complaints')
+            )
             ->groupBy('full_name')
             ->having('total_complaints', '>', 1)
             ->get();
