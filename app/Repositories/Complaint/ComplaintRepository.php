@@ -325,9 +325,10 @@ class ComplaintRepository extends AbstractRepository
 
     public function repeatOffenders()
     {
-        return $this->model::select('entity', DB::raw(value: 'COUNT(*) as total_complaints'))
-            ->groupBy('entity')
-            ->having('total_complaints', '>', 1) // clientes com mais de 1 reclamação
+        return DB::table('complaint')
+            ->select('full_name', DB::raw('COUNT(*) as total_complaints'))
+            ->groupBy('full_name')
+            ->having('total_complaints', '>', 1)
             ->get();
     }
 }
