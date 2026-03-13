@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Notificação de Alerta - Nossa Seguros</title>
+    <title>Notificação de Alerta - Fortaleza Seguros</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -104,14 +104,14 @@
             </div>
         @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
             <div class="logo">
-                <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
+                <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Fortaleza Seguros">
             </div>
         @endif
 
         <p>Olá, <span class="highlight">{{ $user->first_name }}</span></p>
-        <p>Identificámos uma nova denúcia associado ao sistema:</p>
+        <p>Identificámos uma nova Reclamação associado ao sistema:</p>
 
-        <h2>Detalhes do Alerta #{{ $alert->id }}</h2>
+        <h2>Detalhes da Reclamação #{{ $alert->id }}</h2>
 
         <div class="info-box">
             <p><strong>Código:</strong> {{ $alert->code }}</p>
@@ -123,7 +123,7 @@
         </div>
 
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Nossa Seguros — Todos os direitos reservados.</p>
+            <p>&copy; {{ date('Y') }} Fortaleza Seguros — Todos os direitos reservados.</p>
         </div>
     </div>
 </body>
