@@ -73,7 +73,7 @@ class UserService extends AbstractService
 
         // Envia email
         Mail::to($user->email)->send(new MailTwoFactorCodeMail($user));
-        $token = $user->createToken("NOSSA_SEGUROS")->plainTextToken;
+        $token = $user->createToken("fortaleza_SEGUROS")->plainTextToken;
 
         //return $token;
         return response()->json([
