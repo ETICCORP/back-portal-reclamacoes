@@ -10,21 +10,28 @@ return new class extends Migration
     {
         Schema::table('complaint', function (Blueprint $table) {
 
-            // Origem da reclamação (portal, carta, email, etc.)
-            $table->string('source')->default('portal')->after('type');
+            // Adiciona a coluna 'source' apenas se não existir
+            if (!Schema::hasColumn('complaint', 'source')) {
+                $table->string('source')->default('portal')->after('type');
+            }
 
-            // Quem registrou (gestor ou sistema)
-            $table->foreignId('user_id')
-                  ->nullable()
-                  ->after('source')
-                  ->constrained('users')
-                  ->nullOnDelete();
+            // Adiciona 'user_id' apenas se não existir
+            if (!Schema::hasColumn('complaint', 'user_id')) {
+                $table->foreignId('user_id')
+                      ->nullable()
+                      ->after('source')
+                      ->constrained('users')
+                      ->nullOnDelete();
+            }
 
-
-            // Data de recepção da reclamação
-            $table->timestamp('received_at')
-                  ->nullable()
-                  ->after('representative');
+            // Adiciona 'received_at' apenas se não existir
+            if (!Schema::hasColumn('complaint', 'received_at')) {
+                // Ajuste o after para uma coluna existente, ex: 'representative' ou 'created_at'
+                $afterColumn = Schema::hasColumn('complaint', 'representative') ? 'representative' : 'created_at';
+                $table->timestamp('received_at')
+                      ->nullable()
+                      ->after($afterColumn);
+            }
         });
     }
 
@@ -42,6 +49,5 @@ return new class extends Migration
                 $table->dropColumn('received_at');
             }
         });
-    
     }
 };
