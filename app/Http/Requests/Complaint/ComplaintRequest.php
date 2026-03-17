@@ -26,8 +26,8 @@ class ComplaintRequest extends BaseFormRequest
             'full_name'         => ['required', 'string', 'max:255'],
             'complainant_role'  => ['required', 'string', 'max:100'],
             'contact'           => ['nullable',  'max:50'],
-           
-            'location'           => ['nullable',  'max:50'],
+            source              => ['nullable',  'max:50'],
+            'location'           => ['nullable',  'string', 'max:255'],
             'status'           => ['nullable',  'max:50'],
             'type'           => ['nullable'],
             'email'             => ['nullable','max:255'],

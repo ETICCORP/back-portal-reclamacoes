@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Soluction\Soluction;
 use App\Models\ComplaintAttachment\ComplaintAttachment; // cuidado: Service não é Model!
 use App\Models\ComplaintTriages\ComplaintTriages;
+use App\Models\User;
 
 class Complaint extends Model
 {
@@ -22,7 +23,17 @@ class Complaint extends Model
         'isAnonymous' => 'boolean', // Define o cast para o atributo isAnonymous
         'enabled' => 'boolean',
     ];
+
+
+
+    // Quem registrou (gestor ou sistema)
+  
+
     protected $fillable = [
+        'policy_number',
+        'user_id',
+        'source',
+        'received_at',
         'full_name',
         'complainant_role',
         'contact',
@@ -55,6 +66,15 @@ class Complaint extends Model
     /**
      * Relacionamentos
      */
+
+
+     
+
+
+     public function user()
+     {
+         return $this->hasMany(User::class, 'user_id');
+     }
 
     public function typeReport()
     {
@@ -108,6 +128,8 @@ class Complaint extends Model
         return $this->hasMany(ComplaintResponses::class, 'complaint_id');
     }
     
+
+
 }
 
 

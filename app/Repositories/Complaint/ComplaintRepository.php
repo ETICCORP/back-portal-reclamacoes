@@ -52,15 +52,21 @@ class ComplaintRepository extends AbstractRepository
 
         $randomCode = $this->generateUniqueCode(6);
 
+
         $complaint = $this->model->create([
 
-            'code' => "" . $randomCode,
+            'source' => $data['source'] ?? 'portal',
+            'user_id' => !empty($data['source'])
+                ? Auth::id()
+                : null,
+            'policy_number' => $data['policy_number'] ?? null,
             'description' => $data['description'] ?? null,
+            'code' => "" . $randomCode,
+
             'full_name' => $data['full_name'] ?? null,
             'complainant_role' => $data['complainant_role'] ?? null,
             'contact' => $data['contact'] ?? null,
             'email' => $data['email'] ?? null,
-            'policy_number' => $data['policy_number'] ?? null,
             'entity' => $data['entity'] ?? null,
             'incidentDateTime' => $data['incidentDateTime'] ?? null,
             'location' => $data['location'] ?? null,
