@@ -24,7 +24,7 @@ return new class extends Migration
             // Data de recepção da reclamação
             $table->timestamp('received_at')
                   ->nullable()
-                  ->after('incident_datetime');
+                  ->after('representative');
         });
     }
 
