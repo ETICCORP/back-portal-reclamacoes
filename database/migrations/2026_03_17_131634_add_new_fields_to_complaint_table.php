@@ -30,6 +30,18 @@ return new class extends Migration
 
     public function down(): void
     {
-       
+        Schema::table('complaint', function (Blueprint $table) {
+            if (Schema::hasColumn('complaint', 'user_id')) {
+                $table->dropForeign(['user_id']);
+                $table->dropColumn('user_id');
+            }
+            if (Schema::hasColumn('complaint', 'source')) {
+                $table->dropColumn('source');
+            }
+            if (Schema::hasColumn('complaint', 'received_at')) {
+                $table->dropColumn('received_at');
+            }
+        });
+    
     }
 };
