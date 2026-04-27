@@ -33,6 +33,7 @@ class PermissionSeed extends Seeder
             ]
         );
 
+
         /*
         |--------------------------------------------------------------------------
         | MÓDULOS
@@ -42,7 +43,7 @@ class PermissionSeed extends Seeder
             ['name' => 'Usuário', 'description' => 'Permite gerenciar usuários'],
             ['name' => 'Estatística', 'description' => 'Permite gerenciar estatísticas'],
             ['name' => 'Regra', 'description' => 'Permite gerenciar regras'],
-            ['name' => 'Reclamações', 'description' => 'Permite gerenciar reclamações'],
+            ['name' => 'Denúcias', 'description' => 'Permite gerenciar denúncias'],
             ['name' => 'Perfil', 'description' => 'Permite gerenciar perfil'],
             ['name' => 'Alertas', 'description' => 'Permite gerenciar alertas'],
             ['name' => 'Histórico', 'description' => 'Permite visualizar histórico'],
@@ -65,7 +66,7 @@ class PermissionSeed extends Seeder
         foreach ($modules as $module) {
             foreach ($operations as $operation) {
 
-                $permissionName = Helper::formatarString($module['name']) . " - $operation";
+                $permissionName = Helper::formatarString($module['name']) . "-$operation";
 
                 $permission = Permission::updateOrCreate(
                     ['name' => $permissionName],
