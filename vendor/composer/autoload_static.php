@@ -24,11 +24,11 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         '2203a247e6fda86070a5e4e07aed533a' => __DIR__ . '/..' . '/symfony/clock/Resources/now.php',
         'a1105708a18b76903365ca1c4aa61b02' => __DIR__ . '/..' . '/symfony/translation/Resources/functions.php',
         '47e1160838b5e5a10346ac4084b58c23' => __DIR__ . '/..' . '/laravel/prompts/src/helpers.php',
+        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '35a6ad97d21e794e7e22a17d806652e4' => __DIR__ . '/..' . '/nunomaduro/termwind/src/Functions.php',
         '3109cb1a231dcd04bee1f9f620d46975' => __DIR__ . '/..' . '/paragonie/sodium_compat/autoload.php',
         'e39a8b23c42d4e1452234d762b03835a' => __DIR__ . '/..' . '/ramsey/uuid/src/functions.php',
         '09f6b20656683369174dd6fa83b7e5fb' => __DIR__ . '/..' . '/symfony/polyfill-uuid/bootstrap.php',
-        '6124b4c8570aa390c21fafd04a26c69f' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/deep_copy.php',
         '801c31d8ed748cfa537fa45402288c95' => __DIR__ . '/..' . '/psy/psysh/src/functions.php',
         '265b4faa2b3a9766332744949e83bf97' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections/helpers.php',
         'c7a3c339e7e14b60e06a2d7fcce9476b' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Events/functions.php',
@@ -43,22 +43,22 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
     );
 
     public static $prefixLengthsPsr4 = array (
-        'v' => 
+        'v' =>
         array (
             'voku\\' => 5,
         ),
-        'W' => 
+        'W' =>
         array (
             'Whoops\\' => 7,
             'Webmozart\\Assert\\' => 17,
         ),
-        'T' => 
+        'T' =>
         array (
             'TijsVerkoyen\\CssToInlineStyles\\' => 31,
             'Tests\\' => 6,
             'Termwind\\' => 9,
         ),
-        'S' => 
+        'S' =>
         array (
             'Symfony\\Polyfill\\Uuid\\' => 22,
             'Symfony\\Polyfill\\Php83\\' => 23,
@@ -88,8 +88,9 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
             'Symfony\\Component\\CssSelector\\' => 30,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Clock\\' => 24,
+            'Spatie\\LaravelPackageTools\\' => 27,
         ),
-        'R' => 
+        'R' =>
         array (
             'React\\Stream\\' => 13,
             'React\\Socket\\' => 13,
@@ -102,7 +103,7 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
             'Ramsey\\Uuid\\' => 12,
             'Ramsey\\Collection\\' => 18,
         ),
-        'P' => 
+        'P' =>
         array (
             'Pusher\\' => 7,
             'Psy\\' => 4,
@@ -117,17 +118,18 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
             'PhpParser\\' => 10,
             'PhpOption\\' => 10,
             'ParagonIE\\ConstantTime\\' => 23,
+            'PHPStan\\PhpDocParser\\' => 21,
         ),
-        'N' => 
+        'N' =>
         array (
             'NunoMaduro\\Collision\\' => 21,
         ),
-        'M' => 
+        'M' =>
         array (
             'Monolog\\' => 8,
             'Mockery\\' => 8,
         ),
-        'L' => 
+        'L' =>
         array (
             'League\\MimeTypeDetection\\' => 25,
             'League\\Flysystem\\Local\\' => 23,
@@ -144,12 +146,12 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
             'Laravel\\Fortify\\' => 16,
             'Laravel\\Breeze\\' => 15,
         ),
-        'I' => 
+        'I' =>
         array (
             'Illuminate\\Support\\' => 19,
             'Illuminate\\' => 11,
         ),
-        'G' => 
+        'G' =>
         array (
             'GuzzleHttp\\UriTemplate\\' => 23,
             'GuzzleHttp\\Psr7\\' => 16,
@@ -157,28 +159,30 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
             'GuzzleHttp\\' => 11,
             'GrahamCampbell\\ResultType\\' => 26,
         ),
-        'F' => 
+        'F' =>
         array (
             'Fruitcake\\Cors\\' => 15,
             'Faker\\' => 6,
         ),
-        'E' => 
+        'E' =>
         array (
             'Evenement\\' => 10,
             'Egulias\\EmailValidator\\' => 23,
         ),
-        'D' => 
+        'D' =>
         array (
             'Dotenv\\' => 7,
             'Doctrine\\Inflector\\' => 19,
             'Doctrine\\Common\\Lexer\\' => 22,
             'Dflydev\\DotAccessData\\' => 22,
             'DeepCopy\\' => 9,
+            'Dedoc\\Scramble\\Database\\Factories\\' => 34,
+            'Dedoc\\Scramble\\' => 15,
             'Database\\Seeders\\' => 17,
             'Database\\Factories\\' => 19,
             'DASPRiD\\Enum\\' => 13,
         ),
-        'C' => 
+        'C' =>
         array (
             'Cron\\' => 5,
             'Clue\\Redis\\Protocol\\' => 20,
@@ -186,424 +190,440 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
             'Carbon\\Doctrine\\' => 16,
             'Carbon\\' => 7,
         ),
-        'B' => 
+        'B' =>
         array (
             'Brick\\Math\\' => 11,
             'BaconQrCode\\' => 12,
         ),
-        'A' => 
+        'A' =>
         array (
             'App\\' => 4,
         ),
     );
 
     public static $prefixDirsPsr4 = array (
-        'voku\\' => 
+        'voku\\' =>
         array (
             0 => __DIR__ . '/..' . '/voku/portable-ascii/src/voku',
         ),
-        'Whoops\\' => 
+        'Whoops\\' =>
         array (
             0 => __DIR__ . '/..' . '/filp/whoops/src/Whoops',
         ),
-        'Webmozart\\Assert\\' => 
+        'Webmozart\\Assert\\' =>
         array (
             0 => __DIR__ . '/..' . '/webmozart/assert/src',
         ),
-        'TijsVerkoyen\\CssToInlineStyles\\' => 
+        'TijsVerkoyen\\CssToInlineStyles\\' =>
         array (
             0 => __DIR__ . '/..' . '/tijsverkoyen/css-to-inline-styles/src',
         ),
-        'Tests\\' => 
+        'Tests\\' =>
         array (
             0 => __DIR__ . '/../..' . '/tests',
         ),
-        'Termwind\\' => 
+        'Termwind\\' =>
         array (
             0 => __DIR__ . '/..' . '/nunomaduro/termwind/src',
         ),
-        'Symfony\\Polyfill\\Uuid\\' => 
+        'Symfony\\Polyfill\\Uuid\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-uuid',
         ),
-        'Symfony\\Polyfill\\Php83\\' => 
+        'Symfony\\Polyfill\\Php83\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php83',
         ),
-        'Symfony\\Polyfill\\Php80\\' => 
+        'Symfony\\Polyfill\\Php80\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-php80',
         ),
-        'Symfony\\Polyfill\\Mbstring\\' => 
+        'Symfony\\Polyfill\\Mbstring\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-mbstring',
         ),
-        'Symfony\\Polyfill\\Intl\\Normalizer\\' => 
+        'Symfony\\Polyfill\\Intl\\Normalizer\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer',
         ),
-        'Symfony\\Polyfill\\Intl\\Idn\\' => 
+        'Symfony\\Polyfill\\Intl\\Idn\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-idn',
         ),
-        'Symfony\\Polyfill\\Intl\\Grapheme\\' => 
+        'Symfony\\Polyfill\\Intl\\Grapheme\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme',
         ),
-        'Symfony\\Polyfill\\Ctype\\' => 
+        'Symfony\\Polyfill\\Ctype\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/polyfill-ctype',
         ),
-        'Symfony\\Contracts\\Translation\\' => 
+        'Symfony\\Contracts\\Translation\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/translation-contracts',
         ),
-        'Symfony\\Contracts\\Service\\' => 
+        'Symfony\\Contracts\\Service\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/service-contracts',
         ),
-        'Symfony\\Contracts\\EventDispatcher\\' => 
+        'Symfony\\Contracts\\EventDispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher-contracts',
         ),
-        'Symfony\\Component\\Yaml\\' => 
+        'Symfony\\Component\\Yaml\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/yaml',
         ),
-        'Symfony\\Component\\VarDumper\\' => 
+        'Symfony\\Component\\VarDumper\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/var-dumper',
         ),
-        'Symfony\\Component\\Uid\\' => 
+        'Symfony\\Component\\Uid\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/uid',
         ),
-        'Symfony\\Component\\Translation\\' => 
+        'Symfony\\Component\\Translation\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/translation',
         ),
-        'Symfony\\Component\\String\\' => 
+        'Symfony\\Component\\String\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/string',
         ),
-        'Symfony\\Component\\Routing\\' => 
+        'Symfony\\Component\\Routing\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/routing',
         ),
-        'Symfony\\Component\\Process\\' => 
+        'Symfony\\Component\\Process\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/process',
         ),
-        'Symfony\\Component\\Mime\\' => 
+        'Symfony\\Component\\Mime\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/mime',
         ),
-        'Symfony\\Component\\Mailer\\' => 
+        'Symfony\\Component\\Mailer\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/mailer',
         ),
-        'Symfony\\Component\\HttpKernel\\' => 
+        'Symfony\\Component\\HttpKernel\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/http-kernel',
         ),
-        'Symfony\\Component\\HttpFoundation\\' => 
+        'Symfony\\Component\\HttpFoundation\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/http-foundation',
         ),
-        'Symfony\\Component\\Finder\\' => 
+        'Symfony\\Component\\Finder\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/finder',
         ),
-        'Symfony\\Component\\EventDispatcher\\' => 
+        'Symfony\\Component\\EventDispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/event-dispatcher',
         ),
-        'Symfony\\Component\\ErrorHandler\\' => 
+        'Symfony\\Component\\ErrorHandler\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/error-handler',
         ),
-        'Symfony\\Component\\CssSelector\\' => 
+        'Symfony\\Component\\CssSelector\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/css-selector',
         ),
-        'Symfony\\Component\\Console\\' => 
+        'Symfony\\Component\\Console\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
         ),
-        'Symfony\\Component\\Clock\\' => 
+        'Symfony\\Component\\Clock\\' =>
         array (
             0 => __DIR__ . '/..' . '/symfony/clock',
         ),
-        'React\\Stream\\' => 
+        'Spatie\\LaravelPackageTools\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/spatie/laravel-package-tools/src',
+        ),
+        'React\\Stream\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/stream/src',
         ),
-        'React\\Socket\\' => 
+        'React\\Socket\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/socket/src',
         ),
-        'React\\Promise\\Timer\\' => 
+        'React\\Promise\\Timer\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/promise-timer/src',
         ),
-        'React\\Promise\\' => 
+        'React\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/promise/src',
         ),
-        'React\\EventLoop\\' => 
+        'React\\EventLoop\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/event-loop/src',
         ),
-        'React\\Dns\\' => 
+        'React\\Dns\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/dns/src',
         ),
-        'React\\Cache\\' => 
+        'React\\Cache\\' =>
         array (
             0 => __DIR__ . '/..' . '/react/cache/src',
         ),
-        'Ratchet\\RFC6455\\' => 
+        'Ratchet\\RFC6455\\' =>
         array (
             0 => __DIR__ . '/..' . '/ratchet/rfc6455/src',
         ),
-        'Ramsey\\Uuid\\' => 
+        'Ramsey\\Uuid\\' =>
         array (
             0 => __DIR__ . '/..' . '/ramsey/uuid/src',
         ),
-        'Ramsey\\Collection\\' => 
+        'Ramsey\\Collection\\' =>
         array (
             0 => __DIR__ . '/..' . '/ramsey/collection/src',
         ),
-        'Pusher\\' => 
+        'Pusher\\' =>
         array (
             0 => __DIR__ . '/..' . '/pusher/pusher-php-server/src',
         ),
-        'Psy\\' => 
+        'Psy\\' =>
         array (
             0 => __DIR__ . '/..' . '/psy/psysh/src',
         ),
-        'Psr\\SimpleCache\\' => 
+        'Psr\\SimpleCache\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/simple-cache/src',
         ),
-        'Psr\\Log\\' => 
+        'Psr\\Log\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/log/src',
         ),
-        'Psr\\Http\\Message\\' => 
+        'Psr\\Http\\Message\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-factory/src',
             1 => __DIR__ . '/..' . '/psr/http-message/src',
         ),
-        'Psr\\Http\\Client\\' => 
+        'Psr\\Http\\Client\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/http-client/src',
         ),
-        'Psr\\EventDispatcher\\' => 
+        'Psr\\EventDispatcher\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/event-dispatcher/src',
         ),
-        'Psr\\Container\\' => 
+        'Psr\\Container\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
-        'Psr\\Clock\\' => 
+        'Psr\\Clock\\' =>
         array (
             0 => __DIR__ . '/..' . '/psr/clock/src',
         ),
-        'PragmaRX\\Google2FA\\' => 
+        'PragmaRX\\Google2FA\\' =>
         array (
             0 => __DIR__ . '/..' . '/pragmarx/google2fa/src',
         ),
-        'PhpParser\\' => 
+        'PhpParser\\' =>
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
         ),
-        'PhpOption\\' => 
+        'PhpOption\\' =>
         array (
             0 => __DIR__ . '/..' . '/phpoption/phpoption/src/PhpOption',
         ),
-        'ParagonIE\\ConstantTime\\' => 
+        'ParagonIE\\ConstantTime\\' =>
         array (
             0 => __DIR__ . '/..' . '/paragonie/constant_time_encoding/src',
         ),
-        'NunoMaduro\\Collision\\' => 
+        'PHPStan\\PhpDocParser\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src',
+        ),
+        'NunoMaduro\\Collision\\' =>
         array (
             0 => __DIR__ . '/..' . '/nunomaduro/collision/src',
         ),
-        'Monolog\\' => 
+        'Monolog\\' =>
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
-        'Mockery\\' => 
+        'Mockery\\' =>
         array (
             0 => __DIR__ . '/..' . '/mockery/mockery/library/Mockery',
         ),
-        'League\\MimeTypeDetection\\' => 
+        'League\\MimeTypeDetection\\' =>
         array (
             0 => __DIR__ . '/..' . '/league/mime-type-detection/src',
         ),
-        'League\\Flysystem\\Local\\' => 
+        'League\\Flysystem\\Local\\' =>
         array (
             0 => __DIR__ . '/..' . '/league/flysystem-local',
         ),
-        'League\\Flysystem\\' => 
+        'League\\Flysystem\\' =>
         array (
             0 => __DIR__ . '/..' . '/league/flysystem/src',
         ),
-        'League\\Config\\' => 
+        'League\\Config\\' =>
         array (
             0 => __DIR__ . '/..' . '/league/config/src',
         ),
-        'League\\CommonMark\\' => 
+        'League\\CommonMark\\' =>
         array (
             0 => __DIR__ . '/..' . '/league/commonmark/src',
         ),
-        'Laravel\\Tinker\\' => 
+        'Laravel\\Tinker\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/tinker/src',
         ),
-        'Laravel\\SerializableClosure\\' => 
+        'Laravel\\SerializableClosure\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/serializable-closure/src',
         ),
-        'Laravel\\Sanctum\\' => 
+        'Laravel\\Sanctum\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/sanctum/src',
         ),
-        'Laravel\\Sail\\' => 
+        'Laravel\\Sail\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/sail/src',
         ),
-        'Laravel\\Reverb\\' => 
+        'Laravel\\Reverb\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/reverb/src',
         ),
-        'Laravel\\Prompts\\' => 
+        'Laravel\\Prompts\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/prompts/src',
         ),
-        'Laravel\\Horizon\\' => 
+        'Laravel\\Horizon\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/horizon/src',
         ),
-        'Laravel\\Fortify\\' => 
+        'Laravel\\Fortify\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/fortify/src',
         ),
-        'Laravel\\Breeze\\' => 
+        'Laravel\\Breeze\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/breeze/src',
         ),
-        'Illuminate\\Support\\' => 
+        'Illuminate\\Support\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Macroable',
             1 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Collections',
             2 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Conditionable',
         ),
-        'Illuminate\\' => 
+        'Illuminate\\' =>
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate',
         ),
-        'GuzzleHttp\\UriTemplate\\' => 
+        'GuzzleHttp\\UriTemplate\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/uri-template/src',
         ),
-        'GuzzleHttp\\Psr7\\' => 
+        'GuzzleHttp\\Psr7\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
         ),
-        'GuzzleHttp\\Promise\\' => 
+        'GuzzleHttp\\Promise\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/promises/src',
         ),
-        'GuzzleHttp\\' => 
+        'GuzzleHttp\\' =>
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/guzzle/src',
         ),
-        'GrahamCampbell\\ResultType\\' => 
+        'GrahamCampbell\\ResultType\\' =>
         array (
             0 => __DIR__ . '/..' . '/graham-campbell/result-type/src',
         ),
-        'Fruitcake\\Cors\\' => 
+        'Fruitcake\\Cors\\' =>
         array (
             0 => __DIR__ . '/..' . '/fruitcake/php-cors/src',
         ),
-        'Faker\\' => 
+        'Faker\\' =>
         array (
             0 => __DIR__ . '/..' . '/fakerphp/faker/src/Faker',
         ),
-        'Evenement\\' => 
+        'Evenement\\' =>
         array (
             0 => __DIR__ . '/..' . '/evenement/evenement/src',
         ),
-        'Egulias\\EmailValidator\\' => 
+        'Egulias\\EmailValidator\\' =>
         array (
             0 => __DIR__ . '/..' . '/egulias/email-validator/src',
         ),
-        'Dotenv\\' => 
+        'Dotenv\\' =>
         array (
             0 => __DIR__ . '/..' . '/vlucas/phpdotenv/src',
         ),
-        'Doctrine\\Inflector\\' => 
+        'Doctrine\\Inflector\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Inflector',
         ),
-        'Doctrine\\Common\\Lexer\\' => 
+        'Doctrine\\Common\\Lexer\\' =>
         array (
             0 => __DIR__ . '/..' . '/doctrine/lexer/src',
         ),
-        'Dflydev\\DotAccessData\\' => 
+        'Dflydev\\DotAccessData\\' =>
         array (
             0 => __DIR__ . '/..' . '/dflydev/dot-access-data/src',
         ),
-        'DeepCopy\\' => 
+        'DeepCopy\\' =>
         array (
             0 => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy',
         ),
-        'Database\\Seeders\\' => 
+        'Dedoc\\Scramble\\Database\\Factories\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/dedoc/scramble/database/factories',
+        ),
+        'Dedoc\\Scramble\\' =>
+        array (
+            0 => __DIR__ . '/..' . '/dedoc/scramble/src',
+        ),
+        'Database\\Seeders\\' =>
         array (
             0 => __DIR__ . '/../..' . '/database/seeders',
             1 => __DIR__ . '/..' . '/laravel/pint/database/seeders',
         ),
-        'Database\\Factories\\' => 
+        'Database\\Factories\\' =>
         array (
             0 => __DIR__ . '/../..' . '/database/factories',
             1 => __DIR__ . '/..' . '/laravel/pint/database/factories',
         ),
-        'DASPRiD\\Enum\\' => 
+        'DASPRiD\\Enum\\' =>
         array (
             0 => __DIR__ . '/..' . '/dasprid/enum/src',
         ),
-        'Cron\\' => 
+        'Cron\\' =>
         array (
             0 => __DIR__ . '/..' . '/dragonmantank/cron-expression/src/Cron',
         ),
-        'Clue\\Redis\\Protocol\\' => 
+        'Clue\\Redis\\Protocol\\' =>
         array (
             0 => __DIR__ . '/..' . '/clue/redis-protocol/src',
         ),
-        'Clue\\React\\Redis\\' => 
+        'Clue\\React\\Redis\\' =>
         array (
             0 => __DIR__ . '/..' . '/clue/redis-react/src',
         ),
-        'Carbon\\Doctrine\\' => 
+        'Carbon\\Doctrine\\' =>
         array (
             0 => __DIR__ . '/..' . '/carbonphp/carbon-doctrine-types/src/Carbon/Doctrine',
         ),
-        'Carbon\\' => 
+        'Carbon\\' =>
         array (
             0 => __DIR__ . '/..' . '/nesbot/carbon/src/Carbon',
         ),
-        'Brick\\Math\\' => 
+        'Brick\\Math\\' =>
         array (
             0 => __DIR__ . '/..' . '/brick/math/src',
         ),
-        'BaconQrCode\\' => 
+        'BaconQrCode\\' =>
         array (
             0 => __DIR__ . '/..' . '/bacon/bacon-qr-code/src',
         ),
-        'App\\' => 
+        'App\\' =>
         array (
             0 => __DIR__ . '/../..' . '/app',
             1 => __DIR__ . '/..' . '/laravel/pint/app',
@@ -662,6 +682,7 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'App\\Http\\Controllers\\Permission\\PermissionRoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/Permission/PermissionRoleController.php',
         'App\\Http\\Controllers\\Permission\\RoleController' => __DIR__ . '/../..' . '/app/Http/Controllers/Permission/RoleController.php',
         'App\\Http\\Controllers\\Proviver\\ProviderController' => __DIR__ . '/../..' . '/app/Http/Controllers/Proviver/ProviderController.php',
+        'App\\Http\\Controllers\\Proviver\\grupProveder\\grupProvederController' => __DIR__ . '/../..' . '/app/Http/Controllers/Proviver/grupProveder/grupProvederController.php',
         'App\\Http\\Controllers\\Soluction\\SoluctionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Soluction/SoluctionController.php',
         'App\\Http\\Controllers\\User\\UserController' => __DIR__ . '/../..' . '/app/Http/Controllers/User/UserController.php',
         'App\\Http\\Middleware\\Can' => __DIR__ . '/../..' . '/app/Http/Middleware/Can.php',
@@ -683,6 +704,7 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'App\\Http\\Requests\\Complaint\\ModelEmail\\ModelEmailRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Complaint/ModelEmail/ModelEmailRequest.php',
         'App\\Http\\Requests\\Complaint\\Proviver\\ComplaintProviderRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Complaint/Proviver/ComplaintProviderRequest.php',
         'App\\Http\\Requests\\Complaint\\Proviver\\ComplaintProviderResponseRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Complaint/Proviver/ComplaintProviderResponseRequest.php',
+        'App\\Http\\Requests\\Complaint\\SendEmailResponseRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Complaint/SendEmailResponseRequest.php',
         'App\\Http\\Requests\\Complaint\\TypeComplaintsRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Complaint/TypeComplaintsRequest.php',
         'App\\Http\\Requests\\Complaint\\UpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Complaint/UpdateRequest.php',
         'App\\Http\\Requests\\Complaint\\UpdateStatusRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Complaint/UpdateStatusRequest.php',
@@ -691,6 +713,7 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'App\\Http\\Requests\\Permission\\PermissionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Permission/PermissionRequest.php',
         'App\\Http\\Requests\\Permission\\RoleRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Permission/RoleRequest.php',
         'App\\Http\\Requests\\Proviver\\ProviderRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Proviver/ProviderRequest.php',
+        'App\\Http\\Requests\\Proviver\\grupProveder\\grupProvederRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Proviver/grupProveder/grupProvederRequest.php',
         'App\\Http\\Requests\\Reporter\\ReporterRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Reporter/ReporterRequest.php',
         'App\\Http\\Requests\\Soluction\\SoluctionRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Soluction/SoluctionRequest.php',
         'App\\Http\\Requests\\User\\AuthRequest' => __DIR__ . '/../..' . '/app/Http/Requests/User/AuthRequest.php',
@@ -709,6 +732,7 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'App\\Mail\\GrupoAlertMail' => __DIR__ . '/../..' . '/app/Mail/GrupoAlertMail.php',
         'App\\Mail\\ReportAlertMail' => __DIR__ . '/../..' . '/app/Mail/ReportAlertMail.php',
         'App\\Mail\\TwoFactorCodeMail' => __DIR__ . '/../..' . '/app/Mail/TwoFactorCodeMail.php',
+        'App\\Mail\\UserCreatedMail' => __DIR__ . '/../..' . '/app/Mail/UserCreatedMail.php',
         'App\\Models\\Alert\\Alert' => __DIR__ . '/../..' . '/app/Models/Alert/Alert.php',
         'App\\Models\\Alert\\AlertUser\\AlertUser' => __DIR__ . '/../..' . '/app/Models/Alert/AlertUser/AlertUser.php',
         'App\\Models\\Alert\\CommentAlert\\CommentAlert' => __DIR__ . '/../..' . '/app/Models/Alert/CommentAlert/CommentAlert.php',
@@ -733,6 +757,7 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'App\\Models\\Permission\\PermissionRole' => __DIR__ . '/../..' . '/app/Models/Permission/PermissionRole.php',
         'App\\Models\\Permission\\Role' => __DIR__ . '/../..' . '/app/Models/Permission/Role.php',
         'App\\Models\\Proviver\\Provider' => __DIR__ . '/../..' . '/app/Models/Proviver/Provider.php',
+        'App\\Models\\Proviver\\grupProveder\\grupProveder' => __DIR__ . '/../..' . '/app/Models/Proviver/grupProveder/grupProveder.php',
         'App\\Models\\Reporter\\Reporter' => __DIR__ . '/../..' . '/app/Models/Reporter/Reporter.php',
         'App\\Models\\Soluction\\Soluction' => __DIR__ . '/../..' . '/app/Models/Soluction/Soluction.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
@@ -767,6 +792,7 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'App\\Repositories\\Permission\\PermissionRoleRepository' => __DIR__ . '/../..' . '/app/Repositories/Permission/PermissionRoleRepository.php',
         'App\\Repositories\\Permission\\RoleRepository' => __DIR__ . '/../..' . '/app/Repositories/Permission/RoleRepository.php',
         'App\\Repositories\\Proviver\\ProviderRepository' => __DIR__ . '/../..' . '/app/Repositories/Proviver/ProviderRepository.php',
+        'App\\Repositories\\Proviver\\grupProveder\\grupProvederRepository' => __DIR__ . '/../..' . '/app/Repositories/Proviver/grupProveder/grupProvederRepository.php',
         'App\\Repositories\\Reporter\\ReporterRepository' => __DIR__ . '/../..' . '/app/Repositories/Reporter/ReporterRepository.php',
         'App\\Repositories\\Soluction\\SoluctionRepository' => __DIR__ . '/../..' . '/app/Repositories/Soluction/SoluctionRepository.php',
         'App\\Repositories\\User\\UserRepository' => __DIR__ . '/../..' . '/app/Repositories/User/UserRepository.php',
@@ -796,6 +822,7 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'App\\Services\\Permission\\PermissionService' => __DIR__ . '/../..' . '/app/Services/Permission/PermissionService.php',
         'App\\Services\\Permission\\RoleService' => __DIR__ . '/../..' . '/app/Services/Permission/RoleService.php',
         'App\\Services\\Proviver\\ProviderService' => __DIR__ . '/../..' . '/app/Services/Proviver/ProviderService.php',
+        'App\\Services\\Proviver\\grupProveder\\grupProvederService' => __DIR__ . '/../..' . '/app/Services/Proviver/grupProveder/grupProvederService.php',
         'App\\Services\\Reporter\\ReporterService' => __DIR__ . '/../..' . '/app/Services/Reporter/ReporterService.php',
         'App\\Services\\Soluction\\SoluctionService' => __DIR__ . '/../..' . '/app/Services/Soluction/SoluctionService.php',
         'App\\Services\\User\\UserService' => __DIR__ . '/../..' . '/app/Services/User/UserService.php',
@@ -1027,6 +1054,402 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'DateMalformedStringException' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateMalformedStringException.php',
         'DateObjectError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateObjectError.php',
         'DateRangeError' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/DateRangeError.php',
+        'Dedoc\\Scramble\\AbstractOpenApiVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/AbstractOpenApiVisitor.php',
+        'Dedoc\\Scramble\\Attributes\\BodyParameter' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/BodyParameter.php',
+        'Dedoc\\Scramble\\Attributes\\CookieParameter' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/CookieParameter.php',
+        'Dedoc\\Scramble\\Attributes\\Endpoint' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/Endpoint.php',
+        'Dedoc\\Scramble\\Attributes\\Example' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/Example.php',
+        'Dedoc\\Scramble\\Attributes\\ExcludeAllRoutesFromDocs' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/ExcludeAllRoutesFromDocs.php',
+        'Dedoc\\Scramble\\Attributes\\ExcludeRouteFromDocs' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/ExcludeRouteFromDocs.php',
+        'Dedoc\\Scramble\\Attributes\\Group' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/Group.php',
+        'Dedoc\\Scramble\\Attributes\\Header' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/Header.php',
+        'Dedoc\\Scramble\\Attributes\\HeaderParameter' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/HeaderParameter.php',
+        'Dedoc\\Scramble\\Attributes\\Hidden' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/Hidden.php',
+        'Dedoc\\Scramble\\Attributes\\MissingValue' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/MissingValue.php',
+        'Dedoc\\Scramble\\Attributes\\Parameter' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/Parameter.php',
+        'Dedoc\\Scramble\\Attributes\\PathParameter' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/PathParameter.php',
+        'Dedoc\\Scramble\\Attributes\\QueryParameter' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/QueryParameter.php',
+        'Dedoc\\Scramble\\Attributes\\Response' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/Response.php',
+        'Dedoc\\Scramble\\Attributes\\SchemaName' => __DIR__ . '/..' . '/dedoc/scramble/src/Attributes/SchemaName.php',
+        'Dedoc\\Scramble\\Configuration\\DocumentTransformers' => __DIR__ . '/..' . '/dedoc/scramble/src/Configuration/DocumentTransformers.php',
+        'Dedoc\\Scramble\\Configuration\\GeneratorConfigCollection' => __DIR__ . '/..' . '/dedoc/scramble/src/Configuration/GeneratorConfigCollection.php',
+        'Dedoc\\Scramble\\Configuration\\InferConfig' => __DIR__ . '/..' . '/dedoc/scramble/src/Configuration/InferConfig.php',
+        'Dedoc\\Scramble\\Configuration\\JsonApiConfig' => __DIR__ . '/..' . '/dedoc/scramble/src/Configuration/JsonApiConfig.php',
+        'Dedoc\\Scramble\\Configuration\\OperationTransformers' => __DIR__ . '/..' . '/dedoc/scramble/src/Configuration/OperationTransformers.php',
+        'Dedoc\\Scramble\\Configuration\\ParametersExtractors' => __DIR__ . '/..' . '/dedoc/scramble/src/Configuration/ParametersExtractors.php',
+        'Dedoc\\Scramble\\Configuration\\RuleTransformers' => __DIR__ . '/..' . '/dedoc/scramble/src/Configuration/RuleTransformers.php',
+        'Dedoc\\Scramble\\Configuration\\ServerVariables' => __DIR__ . '/..' . '/dedoc/scramble/src/Configuration/ServerVariables.php',
+        'Dedoc\\Scramble\\Console\\Commands\\AnalyzeDocumentation' => __DIR__ . '/..' . '/dedoc/scramble/src/Console/Commands/AnalyzeDocumentation.php',
+        'Dedoc\\Scramble\\Console\\Commands\\Components\\Code' => __DIR__ . '/..' . '/dedoc/scramble/src/Console/Commands/Components/Code.php',
+        'Dedoc\\Scramble\\Console\\Commands\\Components\\Component' => __DIR__ . '/..' . '/dedoc/scramble/src/Console/Commands/Components/Component.php',
+        'Dedoc\\Scramble\\Console\\Commands\\Components\\TermsOfContentItem' => __DIR__ . '/..' . '/dedoc/scramble/src/Console/Commands/Components/TermsOfContentItem.php',
+        'Dedoc\\Scramble\\Console\\Commands\\ExportDocumentation' => __DIR__ . '/..' . '/dedoc/scramble/src/Console/Commands/ExportDocumentation.php',
+        'Dedoc\\Scramble\\ContextReferences' => __DIR__ . '/..' . '/dedoc/scramble/src/ContextReferences.php',
+        'Dedoc\\Scramble\\ContextReferencesCollection' => __DIR__ . '/..' . '/dedoc/scramble/src/ContextReferencesCollection.php',
+        'Dedoc\\Scramble\\Contracts\\AllRulesSchemasTransformer' => __DIR__ . '/..' . '/dedoc/scramble/src/Contracts/AllRulesSchemasTransformer.php',
+        'Dedoc\\Scramble\\Contracts\\DocumentTransformer' => __DIR__ . '/..' . '/dedoc/scramble/src/Contracts/DocumentTransformer.php',
+        'Dedoc\\Scramble\\Contracts\\OperationTransformer' => __DIR__ . '/..' . '/dedoc/scramble/src/Contracts/OperationTransformer.php',
+        'Dedoc\\Scramble\\Contracts\\RuleTransformer' => __DIR__ . '/..' . '/dedoc/scramble/src/Contracts/RuleTransformer.php',
+        'Dedoc\\Scramble\\DocumentTransformers\\AddDocumentTags' => __DIR__ . '/..' . '/dedoc/scramble/src/DocumentTransformers/AddDocumentTags.php',
+        'Dedoc\\Scramble\\DocumentTransformers\\CleanupUnusedResponseReferencesTransformer' => __DIR__ . '/..' . '/dedoc/scramble/src/DocumentTransformers/CleanupUnusedResponseReferencesTransformer.php',
+        'Dedoc\\Scramble\\Enums\\JsonApiArraySerialization' => __DIR__ . '/..' . '/dedoc/scramble/src/Enums/JsonApiArraySerialization.php',
+        'Dedoc\\Scramble\\Exceptions\\ConsoleRenderable' => __DIR__ . '/..' . '/dedoc/scramble/src/Exceptions/ConsoleRenderable.php',
+        'Dedoc\\Scramble\\Exceptions\\InvalidSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Exceptions/InvalidSchema.php',
+        'Dedoc\\Scramble\\Exceptions\\OpenApiReferenceTargetNotFoundException' => __DIR__ . '/..' . '/dedoc/scramble/src/Exceptions/OpenApiReferenceTargetNotFoundException.php',
+        'Dedoc\\Scramble\\Exceptions\\RouteAware' => __DIR__ . '/..' . '/dedoc/scramble/src/Exceptions/RouteAware.php',
+        'Dedoc\\Scramble\\Exceptions\\RouteAwareTrait' => __DIR__ . '/..' . '/dedoc/scramble/src/Exceptions/RouteAwareTrait.php',
+        'Dedoc\\Scramble\\Exceptions\\RulesEvaluationException' => __DIR__ . '/..' . '/dedoc/scramble/src/Exceptions/RulesEvaluationException.php',
+        'Dedoc\\Scramble\\Extensions\\ExceptionToResponseExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Extensions/ExceptionToResponseExtension.php',
+        'Dedoc\\Scramble\\Extensions\\OperationExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Extensions/OperationExtension.php',
+        'Dedoc\\Scramble\\Extensions\\TypeToSchemaExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Extensions/TypeToSchemaExtension.php',
+        'Dedoc\\Scramble\\Generator' => __DIR__ . '/..' . '/dedoc/scramble/src/Generator.php',
+        'Dedoc\\Scramble\\GeneratorConfig' => __DIR__ . '/..' . '/dedoc/scramble/src/GeneratorConfig.php',
+        'Dedoc\\Scramble\\Http\\Middleware\\RestrictedDocsAccess' => __DIR__ . '/..' . '/dedoc/scramble/src/Http/Middleware/RestrictedDocsAccess.php',
+        'Dedoc\\Scramble\\Infer' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer.php',
+        'Dedoc\\Scramble\\Infer\\Analyzer\\ClassAnalyzer' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Analyzer/ClassAnalyzer.php',
+        'Dedoc\\Scramble\\Infer\\Analyzer\\MethodAnalyzer' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Analyzer/MethodAnalyzer.php',
+        'Dedoc\\Scramble\\Infer\\Analyzer\\MethodQuery' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Analyzer/MethodQuery.php',
+        'Dedoc\\Scramble\\Infer\\Analyzer\\PropertyAnalyzer' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Analyzer/PropertyAnalyzer.php',
+        'Dedoc\\Scramble\\Infer\\AutoResolvingArgumentTypeBag' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/AutoResolvingArgumentTypeBag.php',
+        'Dedoc\\Scramble\\Infer\\Configuration\\ClassLike' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Configuration/ClassLike.php',
+        'Dedoc\\Scramble\\Infer\\Configuration\\ClassLikeAndChildren' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Configuration/ClassLikeAndChildren.php',
+        'Dedoc\\Scramble\\Infer\\Configuration\\DefinitionMatcher' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Configuration/DefinitionMatcher.php',
+        'Dedoc\\Scramble\\Infer\\Context' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Context.php',
+        'Dedoc\\Scramble\\Infer\\Contracts\\ArgumentTypeBag' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Contracts/ArgumentTypeBag.php',
+        'Dedoc\\Scramble\\Infer\\Contracts\\ClassDefinition' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Contracts/ClassDefinition.php',
+        'Dedoc\\Scramble\\Infer\\Contracts\\ClassDefinitionBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Contracts/ClassDefinitionBuilder.php',
+        'Dedoc\\Scramble\\Infer\\Contracts\\FunctionLikeDefinitionBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Contracts/FunctionLikeDefinitionBuilder.php',
+        'Dedoc\\Scramble\\Infer\\Contracts\\Index' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Contracts/Index.php',
+        'Dedoc\\Scramble\\Infer\\DefinitionBuilders\\FunctionLikeAstDefinitionBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/DefinitionBuilders/FunctionLikeAstDefinitionBuilder.php',
+        'Dedoc\\Scramble\\Infer\\DefinitionBuilders\\FunctionLikeDeclarationAstDefinitionBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/DefinitionBuilders/FunctionLikeDeclarationAstDefinitionBuilder.php',
+        'Dedoc\\Scramble\\Infer\\DefinitionBuilders\\FunctionLikeDeclarationPhpDocDefinitionBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/DefinitionBuilders/FunctionLikeDeclarationPhpDocDefinitionBuilder.php',
+        'Dedoc\\Scramble\\Infer\\DefinitionBuilders\\FunctionLikeReflectionDefinitionBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/DefinitionBuilders/FunctionLikeReflectionDefinitionBuilder.php',
+        'Dedoc\\Scramble\\Infer\\DefinitionBuilders\\LazyClassReflectionDefinitionBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/DefinitionBuilders/LazyClassReflectionDefinitionBuilder.php',
+        'Dedoc\\Scramble\\Infer\\DefinitionBuilders\\SelfOutTypeBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/DefinitionBuilders/SelfOutTypeBuilder.php',
+        'Dedoc\\Scramble\\Infer\\DefinitionBuilders\\ShallowClassReflectionDefinitionBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/DefinitionBuilders/ShallowClassReflectionDefinitionBuilder.php',
+        'Dedoc\\Scramble\\Infer\\Definition\\ClassDefinition' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Definition/ClassDefinition.php',
+        'Dedoc\\Scramble\\Infer\\Definition\\ClassPropertyDefinition' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Definition/ClassPropertyDefinition.php',
+        'Dedoc\\Scramble\\Infer\\Definition\\FunctionLikeAstDefinition' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Definition/FunctionLikeAstDefinition.php',
+        'Dedoc\\Scramble\\Infer\\Definition\\FunctionLikeDefinition' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Definition/FunctionLikeDefinition.php',
+        'Dedoc\\Scramble\\Infer\\Definition\\LazyShallowClassDefinition' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Definition/LazyShallowClassDefinition.php',
+        'Dedoc\\Scramble\\Infer\\Definition\\ShallowClassDefinition' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Definition/ShallowClassDefinition.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\AfterClassDefinitionCreatedExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/AfterClassDefinitionCreatedExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\AfterSideEffectCallAnalyzed' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/AfterSideEffectCallAnalyzed.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\AnyMethodReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/AnyMethodReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\Event\\AnyMethodCallEvent' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/Event/AnyMethodCallEvent.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\Event\\ClassDefinitionCreatedEvent' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/Event/ClassDefinitionCreatedEvent.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\Event\\Concerns\\ArgumentTypesAware' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/Event/Concerns/ArgumentTypesAware.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\Event\\FunctionCallEvent' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/Event/FunctionCallEvent.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\Event\\MethodCallEvent' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/Event/MethodCallEvent.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\Event\\PropertyFetchEvent' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/Event/PropertyFetchEvent.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\Event\\ReferenceResolutionEvent' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/Event/ReferenceResolutionEvent.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\Event\\SideEffectCallEvent' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/Event/SideEffectCallEvent.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\Event\\StaticMethodCallEvent' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/Event/StaticMethodCallEvent.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\ExpressionExceptionExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/ExpressionExceptionExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\ExpressionTypeInferExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/ExpressionTypeInferExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\ExtensionsBroker' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/ExtensionsBroker.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\FunctionReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/FunctionReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\IndexBuildingBroker' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/IndexBuildingBroker.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\InferExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/InferExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\MethodCallExceptionsExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/MethodCallExceptionsExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\MethodReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/MethodReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\PropertyTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/PropertyTypeExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\ResolvingType' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/ResolvingType.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\StaticMethodReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/StaticMethodReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Infer\\Extensions\\TypeResolverExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Extensions/TypeResolverExtension.php',
+        'Dedoc\\Scramble\\Infer\\FlowBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/FlowBuilder.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\AbstractNode' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/AbstractNode.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\ConditionNode' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/ConditionNode.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\Edge' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/Edge.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\ExpressionTypeInferrer' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/ExpressionTypeInferrer.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\MergeNode' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/MergeNode.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\Node' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/Node.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\Nodes' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/Nodes.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\StartNode' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/StartNode.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\StatementNode' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/StatementNode.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\TerminateNode' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/TerminateNode.php',
+        'Dedoc\\Scramble\\Infer\\Flow\\TerminationKind' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Flow/TerminationKind.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\ArrayHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/ArrayHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\ArrayItemHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/ArrayItemHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\AssignHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/AssignHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\ClassHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/ClassHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\CreatesScope' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/CreatesScope.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\ExceptionInferringExtensions' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/ExceptionInferringExtensions.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\ExpressionTypeInferringExtensions' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/ExpressionTypeInferringExtensions.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\FunctionLikeHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/FunctionLikeHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\IndexBuildingHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/IndexBuildingHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\PhpDocHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/PhpDocHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\PropertyHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/PropertyHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\ReturnHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/ReturnHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\ThrowHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/ThrowHandler.php',
+        'Dedoc\\Scramble\\Infer\\Handler\\UnsetHandler' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Handler/UnsetHandler.php',
+        'Dedoc\\Scramble\\Infer\\Reflector\\ClassReflector' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Reflector/ClassReflector.php',
+        'Dedoc\\Scramble\\Infer\\Reflector\\ClosureReflector' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Reflector/ClosureReflector.php',
+        'Dedoc\\Scramble\\Infer\\Reflector\\MethodReflector' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Reflector/MethodReflector.php',
+        'Dedoc\\Scramble\\Infer\\Reflector\\PropertyReflector' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Reflector/PropertyReflector.php',
+        'Dedoc\\Scramble\\Infer\\Scope\\GlobalScope' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Scope/GlobalScope.php',
+        'Dedoc\\Scramble\\Infer\\Scope\\Index' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Scope/Index.php',
+        'Dedoc\\Scramble\\Infer\\Scope\\LazyShallowReflectionIndex' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Scope/LazyShallowReflectionIndex.php',
+        'Dedoc\\Scramble\\Infer\\Scope\\NodeTypesResolver' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Scope/NodeTypesResolver.php',
+        'Dedoc\\Scramble\\Infer\\Scope\\Scope' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Scope/Scope.php',
+        'Dedoc\\Scramble\\Infer\\Scope\\ScopeContext' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Scope/ScopeContext.php',
+        'Dedoc\\Scramble\\Infer\\Services\\ConstFetchTypeGetter' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/ConstFetchTypeGetter.php',
+        'Dedoc\\Scramble\\Infer\\Services\\FileNameResolver' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/FileNameResolver.php',
+        'Dedoc\\Scramble\\Infer\\Services\\FileParser' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/FileParser.php',
+        'Dedoc\\Scramble\\Infer\\Services\\FileParserResult' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/FileParserResult.php',
+        'Dedoc\\Scramble\\Infer\\Services\\KeyedArrayUnpackingTypeVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/KeyedArrayUnpackingTypeVisitor.php',
+        'Dedoc\\Scramble\\Infer\\Services\\LateTypeResolvingTypeVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/LateTypeResolvingTypeVisitor.php',
+        'Dedoc\\Scramble\\Infer\\Services\\RecursionGuard' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/RecursionGuard.php',
+        'Dedoc\\Scramble\\Infer\\Services\\ReferenceTypeResolver' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/ReferenceTypeResolver.php',
+        'Dedoc\\Scramble\\Infer\\Services\\ShallowTypeResolver' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/ShallowTypeResolver.php',
+        'Dedoc\\Scramble\\Infer\\Services\\TemplateTypesSolver' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/TemplateTypesSolver.php',
+        'Dedoc\\Scramble\\Infer\\Services\\TemplatesMap' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/TemplatesMap.php',
+        'Dedoc\\Scramble\\Infer\\Services\\UnionNormalizingTypeVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Services/UnionNormalizingTypeVisitor.php',
+        'Dedoc\\Scramble\\Infer\\SimpleTypeGetters\\BooleanNotTypeGetter' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/SimpleTypeGetters/BooleanNotTypeGetter.php',
+        'Dedoc\\Scramble\\Infer\\SimpleTypeGetters\\CastTypeGetter' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/SimpleTypeGetters/CastTypeGetter.php',
+        'Dedoc\\Scramble\\Infer\\SimpleTypeGetters\\ClassConstFetchTypeGetter' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/SimpleTypeGetters/ClassConstFetchTypeGetter.php',
+        'Dedoc\\Scramble\\Infer\\SimpleTypeGetters\\ConstFetchTypeGetter' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/SimpleTypeGetters/ConstFetchTypeGetter.php',
+        'Dedoc\\Scramble\\Infer\\SimpleTypeGetters\\ScalarTypeGetter' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/SimpleTypeGetters/ScalarTypeGetter.php',
+        'Dedoc\\Scramble\\Infer\\TypeInferer' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/TypeInferer.php',
+        'Dedoc\\Scramble\\Infer\\UnresolvableArgumentTypeBag' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/UnresolvableArgumentTypeBag.php',
+        'Dedoc\\Scramble\\Infer\\Visitors\\PhpDocResolver' => __DIR__ . '/..' . '/dedoc/scramble/src/Infer/Visitors/PhpDocResolver.php',
+        'Dedoc\\Scramble\\OpenApiContext' => __DIR__ . '/..' . '/dedoc/scramble/src/OpenApiContext.php',
+        'Dedoc\\Scramble\\OpenApiTraverser' => __DIR__ . '/..' . '/dedoc/scramble/src/OpenApiTraverser.php',
+        'Dedoc\\Scramble\\OpenApiVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/OpenApiVisitor.php',
+        'Dedoc\\Scramble\\OpenApiVisitor\\SchemaEnforceVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/OpenApiVisitor/SchemaEnforceVisitor.php',
+        'Dedoc\\Scramble\\PhpDoc\\AbstractPhpDocTypeVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/PhpDoc/AbstractPhpDocTypeVisitor.php',
+        'Dedoc\\Scramble\\PhpDoc\\PhpDocParser' => __DIR__ . '/..' . '/dedoc/scramble/src/PhpDoc/PhpDocParser.php',
+        'Dedoc\\Scramble\\PhpDoc\\PhpDocTypeHelper' => __DIR__ . '/..' . '/dedoc/scramble/src/PhpDoc/PhpDocTypeHelper.php',
+        'Dedoc\\Scramble\\PhpDoc\\PhpDocTypeVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/PhpDoc/PhpDocTypeVisitor.php',
+        'Dedoc\\Scramble\\PhpDoc\\PhpDocTypeWalker' => __DIR__ . '/..' . '/dedoc/scramble/src/PhpDoc/PhpDocTypeWalker.php',
+        'Dedoc\\Scramble\\PhpDoc\\ResolveFqnPhpDocTypeVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/PhpDoc/ResolveFqnPhpDocTypeVisitor.php',
+        'Dedoc\\Scramble\\Reflection\\JsonApiRelationship' => __DIR__ . '/..' . '/dedoc/scramble/src/Reflection/JsonApiRelationship.php',
+        'Dedoc\\Scramble\\Reflection\\ReflectionJsonApiResource' => __DIR__ . '/..' . '/dedoc/scramble/src/Reflection/ReflectionJsonApiResource.php',
+        'Dedoc\\Scramble\\Reflection\\ReflectionModel' => __DIR__ . '/..' . '/dedoc/scramble/src/Reflection/ReflectionModel.php',
+        'Dedoc\\Scramble\\Reflection\\ReflectionRoute' => __DIR__ . '/..' . '/dedoc/scramble/src/Reflection/ReflectionRoute.php',
+        'Dedoc\\Scramble\\RuleTransformers\\ConfirmedRule' => __DIR__ . '/..' . '/dedoc/scramble/src/RuleTransformers/ConfirmedRule.php',
+        'Dedoc\\Scramble\\RuleTransformers\\EnumRule' => __DIR__ . '/..' . '/dedoc/scramble/src/RuleTransformers/EnumRule.php',
+        'Dedoc\\Scramble\\RuleTransformers\\ExistsRule' => __DIR__ . '/..' . '/dedoc/scramble/src/RuleTransformers/ExistsRule.php',
+        'Dedoc\\Scramble\\RuleTransformers\\InRule' => __DIR__ . '/..' . '/dedoc/scramble/src/RuleTransformers/InRule.php',
+        'Dedoc\\Scramble\\RuleTransformers\\RegexRule' => __DIR__ . '/..' . '/dedoc/scramble/src/RuleTransformers/RegexRule.php',
+        'Dedoc\\Scramble\\SchemaValidator' => __DIR__ . '/..' . '/dedoc/scramble/src/SchemaValidator.php',
+        'Dedoc\\Scramble\\Scramble' => __DIR__ . '/..' . '/dedoc/scramble/src/Scramble.php',
+        'Dedoc\\Scramble\\ScrambleServiceProvider' => __DIR__ . '/..' . '/dedoc/scramble/src/ScrambleServiceProvider.php',
+        'Dedoc\\Scramble\\Support\\ContainerUtils' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/ContainerUtils.php',
+        'Dedoc\\Scramble\\Support\\ExceptionToResponseExtensions\\AuthenticationExceptionToResponseExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/ExceptionToResponseExtensions/AuthenticationExceptionToResponseExtension.php',
+        'Dedoc\\Scramble\\Support\\ExceptionToResponseExtensions\\AuthorizationExceptionToResponseExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/ExceptionToResponseExtensions/AuthorizationExceptionToResponseExtension.php',
+        'Dedoc\\Scramble\\Support\\ExceptionToResponseExtensions\\HttpExceptionToResponseExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/ExceptionToResponseExtensions/HttpExceptionToResponseExtension.php',
+        'Dedoc\\Scramble\\Support\\ExceptionToResponseExtensions\\NotFoundExceptionToResponseExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/ExceptionToResponseExtensions/NotFoundExceptionToResponseExtension.php',
+        'Dedoc\\Scramble\\Support\\ExceptionToResponseExtensions\\ValidationExceptionToResponseExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/ExceptionToResponseExtensions/ValidationExceptionToResponseExtension.php',
+        'Dedoc\\Scramble\\Support\\Factories\\JsonApiQueryParameterFactory' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Factories/JsonApiQueryParameterFactory.php',
+        'Dedoc\\Scramble\\Support\\Generator\\ClassBasedReference' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/ClassBasedReference.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Combined\\AllOf' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Combined/AllOf.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Combined\\AnyOf' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Combined/AnyOf.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Components' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Components.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Encoding' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Encoding.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Example' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Example.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Header' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Header.php',
+        'Dedoc\\Scramble\\Support\\Generator\\InfoObject' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/InfoObject.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Link' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Link.php',
+        'Dedoc\\Scramble\\Support\\Generator\\MediaType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/MediaType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\MissingExample' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/MissingExample.php',
+        'Dedoc\\Scramble\\Support\\Generator\\MissingValue' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/MissingValue.php',
+        'Dedoc\\Scramble\\Support\\Generator\\OpenApi' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/OpenApi.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Operation' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Operation.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Parameter' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Parameter.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Path' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Path.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Reference' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Reference.php',
+        'Dedoc\\Scramble\\Support\\Generator\\RequestBodyObject' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/RequestBodyObject.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Response' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Response.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Schema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Schema.php',
+        'Dedoc\\Scramble\\Support\\Generator\\SecurityRequirement' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/SecurityRequirement.php',
+        'Dedoc\\Scramble\\Support\\Generator\\SecurityScheme' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/SecurityScheme.php',
+        'Dedoc\\Scramble\\Support\\Generator\\SecuritySchemes\\ApiKeySecurityScheme' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/SecuritySchemes/ApiKeySecurityScheme.php',
+        'Dedoc\\Scramble\\Support\\Generator\\SecuritySchemes\\HttpSecurityScheme' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/SecuritySchemes/HttpSecurityScheme.php',
+        'Dedoc\\Scramble\\Support\\Generator\\SecuritySchemes\\OAuthFlow' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/SecuritySchemes/OAuthFlow.php',
+        'Dedoc\\Scramble\\Support\\Generator\\SecuritySchemes\\OAuthFlows' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/SecuritySchemes/OAuthFlows.php',
+        'Dedoc\\Scramble\\Support\\Generator\\SecuritySchemes\\Oauth2SecurityScheme' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/SecuritySchemes/Oauth2SecurityScheme.php',
+        'Dedoc\\Scramble\\Support\\Generator\\SecuritySchemes\\OpenIdConnectUrlSecurityScheme' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/SecuritySchemes/OpenIdConnectUrlSecurityScheme.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Server' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Server.php',
+        'Dedoc\\Scramble\\Support\\Generator\\ServerVariable' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/ServerVariable.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Tag' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Tag.php',
+        'Dedoc\\Scramble\\Support\\Generator\\TypeTransformer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/TypeTransformer.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\ArrayType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/ArrayType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\BooleanType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/BooleanType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\IntegerType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/IntegerType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\MixedType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/MixedType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\NullType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/NullType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\NumberType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/NumberType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\ObjectType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/ObjectType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\StringType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/StringType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\Type' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/Type.php',
+        'Dedoc\\Scramble\\Support\\Generator\\Types\\UnknownType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/Types/UnknownType.php',
+        'Dedoc\\Scramble\\Support\\Generator\\UniqueNameOptions' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/UniqueNameOptions.php',
+        'Dedoc\\Scramble\\Support\\Generator\\UniqueNamesOptionsCollection' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/UniqueNamesOptionsCollection.php',
+        'Dedoc\\Scramble\\Support\\Generator\\WithAttributes' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/WithAttributes.php',
+        'Dedoc\\Scramble\\Support\\Generator\\WithExtensions' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Generator/WithExtensions.php',
+        'Dedoc\\Scramble\\Support\\Helpers\\ExamplesExtractor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Helpers/ExamplesExtractor.php',
+        'Dedoc\\Scramble\\Support\\Helpers\\JsonResourceHelper' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Helpers/JsonResourceHelper.php',
+        'Dedoc\\Scramble\\Support\\IndexBuilders\\Bag' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/IndexBuilders/Bag.php',
+        'Dedoc\\Scramble\\Support\\IndexBuilders\\IndexBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/IndexBuilders/IndexBuilder.php',
+        'Dedoc\\Scramble\\Support\\IndexBuilders\\PaginatorsCandidatesBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/IndexBuilders/PaginatorsCandidatesBuilder.php',
+        'Dedoc\\Scramble\\Support\\IndexBuilders\\RequestParametersBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/IndexBuilders/RequestParametersBuilder.php',
+        'Dedoc\\Scramble\\Support\\IndexBuilders\\ScopeCollector' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/IndexBuilders/ScopeCollector.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\AbortHelpersExceptionInfer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/AbortHelpersExceptionInfer.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\AfterAnonymousResourceCollectionDefinitionCreatedExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/AfterAnonymousResourceCollectionDefinitionCreatedExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\AfterJsonApiResourceDefinitionCreatedExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/AfterJsonApiResourceDefinitionCreatedExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\AfterJsonResourceDefinitionCreatedExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/AfterJsonResourceDefinitionCreatedExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\AfterResourceCollectionDefinitionCreatedExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/AfterResourceCollectionDefinitionCreatedExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\ArrayMergeReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/ArrayMergeReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\BinaryFileResponseTypeFactory' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/BinaryFileResponseTypeFactory.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\EloquentBuilderExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/EloquentBuilderExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\JsonApiResourceCollectionMethodReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/JsonApiResourceCollectionMethodReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\JsonApiResourceMethodReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/JsonApiResourceMethodReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\JsonResourceExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/JsonResourceExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\JsonResponseMethodReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/JsonResponseMethodReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\ModelExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/ModelExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\PaginateMethodsReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/PaginateMethodsReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\PossibleExceptionInfer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/PossibleExceptionInfer.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\RequestExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/RequestExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\ResourceCollectionTypeInfer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/ResourceCollectionTypeInfer.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\ResourceResponseMethodReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/ResourceResponseMethodReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\ResponseFactoryTypeInfer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/ResponseFactoryTypeInfer.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\ResponseMethodReturnTypeExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/ResponseMethodReturnTypeExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\ShallowFunctionDefinition' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/ShallowFunctionDefinition.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\TransformsToResourceCollectionExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/TransformsToResourceCollectionExtension.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\TypeTraceInfer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/TypeTraceInfer.php',
+        'Dedoc\\Scramble\\Support\\InferExtensions\\ValidatorTypeInfer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/InferExtensions/ValidatorTypeInfer.php',
+        'Dedoc\\Scramble\\Support\\OperationBuilder' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationBuilder.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\DeprecationExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/DeprecationExtension.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ErrorResponsesExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ErrorResponsesExtension.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\AttributesParametersExtractor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/AttributesParametersExtractor.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\FormRequestParametersExtractor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/FormRequestParametersExtractor.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\InferredParameter' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/InferredParameter.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\JsonApiResourceParametersExtractor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/JsonApiResourceParametersExtractor.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\MethodCallsParametersExtractor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/MethodCallsParametersExtractor.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\ParameterExtractor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/ParameterExtractor.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\PathParametersExtractor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/PathParametersExtractor.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\RulesDocumentationRetriever' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/RulesDocumentationRetriever.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\RulesNodes' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/RulesNodes.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\TypeBasedRulesDocumentationRetriever' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/TypeBasedRulesDocumentationRetriever.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ParameterExtractor\\ValidateCallParametersExtractor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ParameterExtractor/ValidateCallParametersExtractor.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RequestBodyExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RequestBodyExtension.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RequestEssentialsExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RequestEssentialsExtension.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ResponseExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ResponseExtension.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\ResponseHeadersExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/ResponseHeadersExtension.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesEvaluator\\ComposedFormRequestRulesEvaluator' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesEvaluator/ComposedFormRequestRulesEvaluator.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesEvaluator\\ConstFetchEvaluator' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesEvaluator/ConstFetchEvaluator.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesEvaluator\\FormRequestRulesEvaluator' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesEvaluator/FormRequestRulesEvaluator.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesEvaluator\\NodeRulesEvaluator' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesEvaluator/NodeRulesEvaluator.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesEvaluator\\RulesEvaluator' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesEvaluator/RulesEvaluator.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesExtractor\\DeepParametersMerger' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesExtractor/DeepParametersMerger.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesExtractor\\GeneratesParametersFromRules' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesExtractor/GeneratesParametersFromRules.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesExtractor\\ParametersExtractionResult' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesExtractor/ParametersExtractionResult.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesExtractor\\PhpDocSchemaTransformer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesExtractor/PhpDocSchemaTransformer.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesExtractor\\QueryParametersConverter' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesExtractor/QueryParametersConverter.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesExtractor\\RulesMapper' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesExtractor/RulesMapper.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesExtractor\\RulesToParameters' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesExtractor/RulesToParameters.php',
+        'Dedoc\\Scramble\\Support\\OperationExtensions\\RulesExtractor\\SchemaBagToParametersTransformer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/OperationExtensions/RulesExtractor/SchemaBagToParametersTransformer.php',
+        'Dedoc\\Scramble\\Support\\PhpDoc' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/PhpDoc.php',
+        'Dedoc\\Scramble\\Support\\ResponseExtractor\\ModelInfo' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/ResponseExtractor/ModelInfo.php',
+        'Dedoc\\Scramble\\Support\\RouteInfo' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/RouteInfo.php',
+        'Dedoc\\Scramble\\Support\\RouteResponseTypeRetriever' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/RouteResponseTypeRetriever.php',
+        'Dedoc\\Scramble\\Support\\RuleTransforming\\NormalizedRule' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/RuleTransforming/NormalizedRule.php',
+        'Dedoc\\Scramble\\Support\\RuleTransforming\\RuleSetToSchemaTransformer' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/RuleTransforming/RuleSetToSchemaTransformer.php',
+        'Dedoc\\Scramble\\Support\\RuleTransforming\\RuleTransformerContext' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/RuleTransforming/RuleTransformerContext.php',
+        'Dedoc\\Scramble\\Support\\RuleTransforming\\SchemaBag' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/RuleTransforming/SchemaBag.php',
+        'Dedoc\\Scramble\\Support\\SchemaClassDocReflector' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/SchemaClassDocReflector.php',
+        'Dedoc\\Scramble\\Support\\ServerFactory' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/ServerFactory.php',
+        'Dedoc\\Scramble\\Support\\TypeManagers\\CursorPaginatorTypeManager' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeManagers/CursorPaginatorTypeManager.php',
+        'Dedoc\\Scramble\\Support\\TypeManagers\\JsonApiResourceTypeManager' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeManagers/JsonApiResourceTypeManager.php',
+        'Dedoc\\Scramble\\Support\\TypeManagers\\LengthAwarePaginatorTypeManager' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeManagers/LengthAwarePaginatorTypeManager.php',
+        'Dedoc\\Scramble\\Support\\TypeManagers\\ManagesProperties' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeManagers/ManagesProperties.php',
+        'Dedoc\\Scramble\\Support\\TypeManagers\\PaginatorTypeManager' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeManagers/PaginatorTypeManager.php',
+        'Dedoc\\Scramble\\Support\\TypeManagers\\ResourceCollectionTypeManager' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeManagers/ResourceCollectionTypeManager.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\AnonymousResourceCollectionTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/AnonymousResourceCollectionTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\ArrayableToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/ArrayableToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\BinaryFileResponseToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/BinaryFileResponseToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\CollectionToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/CollectionToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\CursorPaginatorTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/CursorPaginatorTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\EloquentCollectionToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/EloquentCollectionToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\EnumToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/EnumToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\FlattensMergeValues' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/FlattensMergeValues.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\HandlesJsonApiResourceResponse' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/HandlesJsonApiResourceResponse.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\JsonApiAnonymousCollectionTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/JsonApiAnonymousCollectionTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\JsonApiPaginatedResourceResponseToSchemaExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/JsonApiPaginatedResourceResponseToSchemaExtension.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\JsonApiResourceResponseToSchemaExtension' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/JsonApiResourceResponseToSchemaExtension.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\JsonApiResourceTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/JsonApiResourceTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\JsonResourceTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/JsonResourceTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\LengthAwarePaginatorTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/LengthAwarePaginatorTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\MergesOpenApiObjects' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/MergesOpenApiObjects.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\ModelToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/ModelToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\PaginatedResourceResponseTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/PaginatedResourceResponseTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\PaginatorTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/PaginatorTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\ResourceCollectionTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/ResourceCollectionTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\ResourceResponseTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/ResourceResponseTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\ResponseTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/ResponseTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\StreamedResponseToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/StreamedResponseToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\VoidTypeToSchema' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/VoidTypeToSchema.php',
+        'Dedoc\\Scramble\\Support\\TypeToSchemaExtensions\\WithCollectedPaginatedItems' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/TypeToSchemaExtensions/WithCollectedPaginatedItems.php',
+        'Dedoc\\Scramble\\Support\\Type\\AbstractType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/AbstractType.php',
+        'Dedoc\\Scramble\\Support\\Type\\AbstractTypeVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/AbstractTypeVisitor.php',
+        'Dedoc\\Scramble\\Support\\Type\\ArrayItemType_' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/ArrayItemType_.php',
+        'Dedoc\\Scramble\\Support\\Type\\ArrayType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/ArrayType.php',
+        'Dedoc\\Scramble\\Support\\Type\\BooleanType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/BooleanType.php',
+        'Dedoc\\Scramble\\Support\\Type\\CallableStringType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/CallableStringType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Contracts\\Generic' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Contracts/Generic.php',
+        'Dedoc\\Scramble\\Support\\Type\\Contracts\\LateResolvingType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Contracts/LateResolvingType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Contracts\\LiteralString' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Contracts/LiteralString.php',
+        'Dedoc\\Scramble\\Support\\Type\\Contracts\\LiteralType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Contracts/LiteralType.php',
+        'Dedoc\\Scramble\\Support\\Type\\EnumCaseType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/EnumCaseType.php',
+        'Dedoc\\Scramble\\Support\\Type\\FloatType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/FloatType.php',
+        'Dedoc\\Scramble\\Support\\Type\\FunctionLikeType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/FunctionLikeType.php',
+        'Dedoc\\Scramble\\Support\\Type\\FunctionType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/FunctionType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Generic' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Generic.php',
+        'Dedoc\\Scramble\\Support\\Type\\GenericClassStringType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/GenericClassStringType.php',
+        'Dedoc\\Scramble\\Support\\Type\\IntegerRangeType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/IntegerRangeType.php',
+        'Dedoc\\Scramble\\Support\\Type\\IntegerType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/IntegerType.php',
+        'Dedoc\\Scramble\\Support\\Type\\IntersectionType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/IntersectionType.php',
+        'Dedoc\\Scramble\\Support\\Type\\KeyedArrayType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/KeyedArrayType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Literal\\LiteralBooleanType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Literal/LiteralBooleanType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Literal\\LiteralFloatType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Literal/LiteralFloatType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Literal\\LiteralIntegerType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Literal/LiteralIntegerType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Literal\\LiteralStringType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Literal/LiteralStringType.php',
+        'Dedoc\\Scramble\\Support\\Type\\MissingType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/MissingType.php',
+        'Dedoc\\Scramble\\Support\\Type\\MixedType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/MixedType.php',
+        'Dedoc\\Scramble\\Support\\Type\\NeverType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/NeverType.php',
+        'Dedoc\\Scramble\\Support\\Type\\NullType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/NullType.php',
+        'Dedoc\\Scramble\\Support\\Type\\ObjectType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/ObjectType.php',
+        'Dedoc\\Scramble\\Support\\Type\\OffsetAccessType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/OffsetAccessType.php',
+        'Dedoc\\Scramble\\Support\\Type\\OffsetSetType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/OffsetSetType.php',
+        'Dedoc\\Scramble\\Support\\Type\\OffsetUnsetType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/OffsetUnsetType.php',
+        'Dedoc\\Scramble\\Support\\Type\\RecursiveTemplateSolver' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/RecursiveTemplateSolver.php',
+        'Dedoc\\Scramble\\Support\\Type\\Reference\\AbstractReferenceType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Reference/AbstractReferenceType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Reference\\CallableCallReferenceType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Reference/CallableCallReferenceType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Reference\\ConstFetchReferenceType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Reference/ConstFetchReferenceType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Reference\\MethodCallReferenceType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Reference/MethodCallReferenceType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Reference\\NewCallReferenceType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Reference/NewCallReferenceType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Reference\\PropertyFetchReferenceType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Reference/PropertyFetchReferenceType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Reference\\StaticMethodCallReferenceType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Reference/StaticMethodCallReferenceType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Reference\\StaticReference' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Reference/StaticReference.php',
+        'Dedoc\\Scramble\\Support\\Type\\SelfType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/SelfType.php',
+        'Dedoc\\Scramble\\Support\\Type\\StringType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/StringType.php',
+        'Dedoc\\Scramble\\Support\\Type\\TemplatePlaceholderType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TemplatePlaceholderType.php',
+        'Dedoc\\Scramble\\Support\\Type\\TemplateType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TemplateType.php',
+        'Dedoc\\Scramble\\Support\\Type\\Type' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Type.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypeAttributes' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypeAttributes.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypeHelper' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypeHelper.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypePath' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypePath.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypePathFindingVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypePathFindingVisitor.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypePathItem' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypePathItem.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypePathItemCondition' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypePathItemCondition.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypeTraverser' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypeTraverser.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypeVisitor' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypeVisitor.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypeWalker' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypeWalker.php',
+        'Dedoc\\Scramble\\Support\\Type\\TypeWidener' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/TypeWidener.php',
+        'Dedoc\\Scramble\\Support\\Type\\Union' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/Union.php',
+        'Dedoc\\Scramble\\Support\\Type\\UnknownType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/UnknownType.php',
+        'Dedoc\\Scramble\\Support\\Type\\VoidType' => __DIR__ . '/..' . '/dedoc/scramble/src/Support/Type/VoidType.php',
         'DeepCopy\\DeepCopy' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/DeepCopy.php',
         'DeepCopy\\Exception\\CloneException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/CloneException.php',
         'DeepCopy\\Exception\\PropertyException' => __DIR__ . '/..' . '/myclabs/deep-copy/src/DeepCopy/Exception/PropertyException.php',
@@ -4331,6 +4754,96 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'NunoMaduro\\Collision\\SolutionsRepositories\\NullSolutionsRepository' => __DIR__ . '/..' . '/nunomaduro/collision/src/SolutionsRepositories/NullSolutionsRepository.php',
         'NunoMaduro\\Collision\\Writer' => __DIR__ . '/..' . '/nunomaduro/collision/src/Writer.php',
         'Override' => __DIR__ . '/..' . '/symfony/polyfill-php83/Resources/stubs/Override.php',
+        'PHPStan\\PhpDocParser\\Ast\\AbstractNodeVisitor' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/AbstractNodeVisitor.php',
+        'PHPStan\\PhpDocParser\\Ast\\Attribute' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Attribute.php',
+        'PHPStan\\PhpDocParser\\Ast\\Comment' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Comment.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayItemNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprArrayNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprArrayNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprFalseNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprFalseNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprFloatNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprFloatNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprIntegerNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprIntegerNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprNullNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprNullNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprStringNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprStringNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstExprTrueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstExprTrueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\ConstFetchNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/ConstFetchNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\ConstExpr\\DoctrineConstExprStringNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/ConstExpr/DoctrineConstExprStringNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Node' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Node.php',
+        'PHPStan\\PhpDocParser\\Ast\\NodeAttributes' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/NodeAttributes.php',
+        'PHPStan\\PhpDocParser\\Ast\\NodeTraverser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/NodeTraverser.php',
+        'PHPStan\\PhpDocParser\\Ast\\NodeVisitor' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/NodeVisitor.php',
+        'PHPStan\\PhpDocParser\\Ast\\NodeVisitor\\CloningVisitor' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/NodeVisitor/CloningVisitor.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagMethodValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagMethodValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagPropertyValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagPropertyValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\AssertTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/AssertTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\DeprecatedTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/DeprecatedTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineAnnotation' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineAnnotation.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineArgument' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineArgument.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineArray' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineArray.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineArrayItem' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineArrayItem.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\Doctrine\\DoctrineTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/Doctrine/DoctrineTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ExtendsTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ExtendsTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\GenericTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/GenericTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ImplementsTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ImplementsTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\InvalidTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/InvalidTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\MethodTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/MethodTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\MethodTagValueParameterNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/MethodTagValueParameterNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\MixinTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/MixinTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamClosureThisTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ParamClosureThisTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamImmediatelyInvokedCallableTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ParamImmediatelyInvokedCallableTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamLaterInvokedCallableTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ParamLaterInvokedCallableTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamOutTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ParamOutTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ParamTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ParamTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocChildNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocChildNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTagNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PhpDocTextNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PhpDocTextNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PropertyTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PropertyTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\PureUnlessCallableIsImpureTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/PureUnlessCallableIsImpureTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\RequireExtendsTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/RequireExtendsTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\RequireImplementsTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/RequireImplementsTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ReturnTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ReturnTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\SealedTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/SealedTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\SelfOutTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/SelfOutTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\TemplateTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/TemplateTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\ThrowsTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/ThrowsTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\TypeAliasImportTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/TypeAliasImportTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\TypeAliasTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/TypeAliasTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\TypelessParamTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/TypelessParamTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\UsesTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/UsesTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\PhpDoc\\VarTagValueNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/PhpDoc/VarTagValueNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeItemNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayShapeUnsealedTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayShapeUnsealedTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ArrayTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ArrayTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\CallableTypeParameterNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/CallableTypeParameterNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ConditionalTypeForParameterNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ConditionalTypeForParameterNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ConditionalTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ConditionalTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ConstTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ConstTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\GenericTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/GenericTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\IdentifierTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/IdentifierTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\IntersectionTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/IntersectionTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\InvalidTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/InvalidTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\NullableTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/NullableTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ObjectShapeItemNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ObjectShapeItemNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ObjectShapeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ObjectShapeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\OffsetAccessTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/OffsetAccessTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\ThisTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/ThisTypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\TypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/TypeNode.php',
+        'PHPStan\\PhpDocParser\\Ast\\Type\\UnionTypeNode' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Ast/Type/UnionTypeNode.php',
+        'PHPStan\\PhpDocParser\\Lexer\\Lexer' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Lexer/Lexer.php',
+        'PHPStan\\PhpDocParser\\ParserConfig' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/ParserConfig.php',
+        'PHPStan\\PhpDocParser\\Parser\\ConstExprParser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/ConstExprParser.php',
+        'PHPStan\\PhpDocParser\\Parser\\ParserException' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/ParserException.php',
+        'PHPStan\\PhpDocParser\\Parser\\PhpDocParser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/PhpDocParser.php',
+        'PHPStan\\PhpDocParser\\Parser\\StringUnescaper' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/StringUnescaper.php',
+        'PHPStan\\PhpDocParser\\Parser\\TokenIterator' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TokenIterator.php',
+        'PHPStan\\PhpDocParser\\Parser\\TypeParser' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Parser/TypeParser.php',
+        'PHPStan\\PhpDocParser\\Printer\\DiffElem' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Printer/DiffElem.php',
+        'PHPStan\\PhpDocParser\\Printer\\Differ' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Printer/Differ.php',
+        'PHPStan\\PhpDocParser\\Printer\\Printer' => __DIR__ . '/..' . '/phpstan/phpdoc-parser/src/Printer/Printer.php',
         'PHPUnit\\Event\\Application\\Finished' => __DIR__ . '/..' . '/phpunit/phpunit/src/Event/Events/Application/Finished.php',
         'PHPUnit\\Event\\Application\\FinishedSubscriber' => __DIR__ . '/..' . '/phpunit/phpunit/src/Event/Events/Application/FinishedSubscriber.php',
         'PHPUnit\\Event\\Application\\Started' => __DIR__ . '/..' . '/phpunit/phpunit/src/Event/Events/Application/Started.php',
@@ -6276,6 +6789,40 @@ class ComposerStaticInit929d8ff7a841961952a9fd7cd400b58d
         'SebastianBergmann\\Type\\UnknownType' => __DIR__ . '/..' . '/sebastian/type/src/type/UnknownType.php',
         'SebastianBergmann\\Type\\VoidType' => __DIR__ . '/..' . '/sebastian/type/src/type/VoidType.php',
         'SebastianBergmann\\Version' => __DIR__ . '/..' . '/sebastian/version/src/Version.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\AskToRunMigrations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/AskToRunMigrations.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\AskToStarRepoOnGitHub' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/AskToStarRepoOnGitHub.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\PublishesResources' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/PublishesResources.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\SupportsServiceProviderInApp' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/SupportsServiceProviderInApp.php',
+        'Spatie\\LaravelPackageTools\\Commands\\Concerns\\SupportsStartWithEndWith' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/Concerns/SupportsStartWithEndWith.php',
+        'Spatie\\LaravelPackageTools\\Commands\\InstallCommand' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Commands/InstallCommand.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessAssets' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessAssets.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessBladeComponents' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessBladeComponents.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessCommands' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessCommands.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessConfigs' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessConfigs.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessInertia' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessInertia.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessMigrations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessMigrations.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessRoutes' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessRoutes.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessServiceProviders' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessServiceProviders.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessTranslations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessTranslations.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessViewComposers' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessViewComposers.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessViewSharedData' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessViewSharedData.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\PackageServiceProvider\\ProcessViews' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/PackageServiceProvider/ProcessViews.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasAssets' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasAssets.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasBladeComponents' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasBladeComponents.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasCommands' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasCommands.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasConfigs' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasConfigs.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasInertia' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasInertia.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasInstallCommand' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasInstallCommand.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasMigrations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasMigrations.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasRoutes' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasRoutes.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasServiceProviders' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasServiceProviders.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasTranslations' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasTranslations.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasViewComposers' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasViewComposers.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasViewSharedData' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasViewSharedData.php',
+        'Spatie\\LaravelPackageTools\\Concerns\\Package\\HasViews' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Concerns/Package/HasViews.php',
+        'Spatie\\LaravelPackageTools\\Exceptions\\InvalidPackage' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Exceptions/InvalidPackage.php',
+        'Spatie\\LaravelPackageTools\\Package' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/Package.php',
+        'Spatie\\LaravelPackageTools\\PackageServiceProvider' => __DIR__ . '/..' . '/spatie/laravel-package-tools/src/PackageServiceProvider.php',
         'Stringable' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Stringable.php',
         'Symfony\\Component\\Clock\\Clock' => __DIR__ . '/..' . '/symfony/clock/Clock.php',
         'Symfony\\Component\\Clock\\ClockAwareTrait' => __DIR__ . '/..' . '/symfony/clock/ClockAwareTrait.php',

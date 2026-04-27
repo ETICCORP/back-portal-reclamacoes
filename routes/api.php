@@ -35,7 +35,7 @@ Route::middleware('web')->get('/reports/show/{id}/minuta', [ModelEmailController
 
 Route::prefix('reports')->group(function () {
   Route::post('/', [ComplaintController::class, 'store'])->name('reportsFre.php.store');
-  Route::get('/getBycode/{id}', [ComplaintController::class, 'getBycode']);
+  Route::get('/getBycode/{id}', [ComplaintController::class, 'GetBycode']);
   Route::get('/type', [TypeComplaintsController::class, 'index']);
 });
 

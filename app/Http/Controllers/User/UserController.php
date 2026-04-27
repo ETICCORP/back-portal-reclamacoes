@@ -30,6 +30,9 @@ class UserController extends AbstractController
         $this->service = $service;
     }
 
+    /**
+     * @unauthenticated
+     */
     public function login(AuthRequest $request)
     {
         try {
@@ -122,7 +125,7 @@ class UserController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
- 
+
     public function enabled(EnabledRequest $request, $id)
     {
         try {
@@ -152,7 +155,7 @@ class UserController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
- 
+
 
     public function changePassword(ChangePasswordRequest $request)
     {
@@ -172,8 +175,8 @@ class UserController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
- 
-    
+
+
     public function me()
     {
         try {
@@ -185,10 +188,14 @@ class UserController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * @unauthenticated
+     */
     public function verify2fa(Verify2faRequest $request)
     {
         try {
-          
+
             $user = $this->service->verify2fa($request->validated());
             return response()->json($user, Response::HTTP_CREATED);
         } catch (Exception $e) {
@@ -198,11 +205,11 @@ class UserController extends AbstractController
     }
 
 
-     public function changePasswordUser(changePasswordUser $request,$id)
+    public function changePasswordUser(changePasswordUser $request, $id)
     {
         try {
             $this->logRequest();
-            $user = $this->service->changePasswordUser($request->validated(),$id);
+            $user = $this->service->changePasswordUser($request->validated(), $id);
             $this->logToDatabase(
                 type: 'user',
                 level: 'info',
@@ -227,5 +234,4 @@ class UserController extends AbstractController
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
 }
