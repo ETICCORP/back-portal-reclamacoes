@@ -1,10 +1,12 @@
 <!doctype html>
 <html lang="pt-PT">
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Confirmação de Reclamação</title>
-  </head>
+</head>
+
 <body style="margin:0; padding:0; background-color:#f8fafc; font-family:'Segoe UI', Roboto, Helvetica, Arial, sans-serif; color:#1e293b; -webkit-font-smoothing:antialiased;">
 
   <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
@@ -57,9 +59,9 @@
               <div style="margin-bottom:32px;">
                 <h4 style="margin:0 0 8px 0; font-size:14px; font-weight:700; color:#0f172a; text-transform:uppercase; letter-spacing:0.025em;">Resumo da Exposição:</h4>
                 <div style="font-size:15px; line-height:1.6; color:#475569; font-style:italic; border-left:4px solid #3b82f6; padding-left:16px;">
-                  
-               {!! html_entity_decode($complaint->description ?? 'Sem descrição fornecida.') !!}
-                  
+
+                  {!! html_entity_decode($complaint->description ?? 'Sem descrição fornecida.') !!}
+
 
                 </div>
               </div>
@@ -67,7 +69,7 @@
               <table role="presentation" border="0" cellpadding="0" cellspacing="0" width="100%">
                 <tr>
                   <td align="center">
-                    <a href="{{ config('app.url') }}" style="display:inline-block; padding:14px 32px; background-color:#3b82f6; color:#ffffff; font-weight:600; font-size:15px; text-decoration:none; border-radius:6px; box-shadow:0 4px 6px -1px rgba(59,130,246,0.3);">
+                    <a href="{{ route('reports.showFile', ['id' => $complaint->id]) }}" style="display:inline-block; padding:14px 32px; background-color:#3b82f6; color:#ffffff; font-weight:600; font-size:15px; text-decoration:none; border-radius:6px; box-shadow:0 4px 6px -1px rgba(59,130,246,0.3);">
                       Acompanhar Processo Online
                     </a>
                   </td>
@@ -96,4 +98,5 @@
   </table>
 
 </body>
+
 </html>
