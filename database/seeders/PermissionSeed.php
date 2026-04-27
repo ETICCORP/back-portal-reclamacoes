@@ -7,7 +7,6 @@ use App\Models\Permission\Role;
 use Illuminate\Database\Seeder;
 use App\Models\Permission\Permission;
 use App\Models\User\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class PermissionSeed extends Seeder
 {
@@ -34,7 +33,6 @@ class PermissionSeed extends Seeder
             ]
         );
 
-
         /*
         |--------------------------------------------------------------------------
         | MÓDULOS
@@ -44,7 +42,7 @@ class PermissionSeed extends Seeder
             ['name' => 'Usuário', 'description' => 'Permite gerenciar usuários'],
             ['name' => 'Estatística', 'description' => 'Permite gerenciar estatísticas'],
             ['name' => 'Regra', 'description' => 'Permite gerenciar regras'],
-            ['name' => 'Denúcias', 'description' => 'Permite gerenciar denúncias'],
+            ['name' => 'Reclamações', 'description' => 'Permite gerenciar reclamações'],
             ['name' => 'Perfil', 'description' => 'Permite gerenciar perfil'],
             ['name' => 'Alertas', 'description' => 'Permite gerenciar alertas'],
             ['name' => 'Histórico', 'description' => 'Permite visualizar histórico'],
@@ -67,7 +65,7 @@ class PermissionSeed extends Seeder
         foreach ($modules as $module) {
             foreach ($operations as $operation) {
 
-                $permissionName = Helper::formatarString($module['name']) . "-$operation";
+                $permissionName = Helper::formatarString($module['name']) . " - $operation";
 
                 $permission = Permission::updateOrCreate(
                     ['name' => $permissionName],
