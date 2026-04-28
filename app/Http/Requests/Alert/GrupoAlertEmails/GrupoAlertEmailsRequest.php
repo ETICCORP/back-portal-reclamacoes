@@ -23,6 +23,7 @@ class GrupoAlertEmailsRequest extends BaseFormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
+            'description' => ['required', 'string'],
             'grupo_Type' => ['required', 'array'],              
             'grupo_Type.*.type_complaints_id' => ['required', 'integer', 'exists:type_complaints,id'],
         ];
