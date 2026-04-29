@@ -23,6 +23,7 @@ class TypeComplaintsRequest extends BaseFormRequest
     {
         return [
             'name' => 'required',
+            'description' => 'required',
             'level' => 'required'
         ];
     }
