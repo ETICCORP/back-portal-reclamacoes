@@ -22,14 +22,18 @@ class ComplaintTriagesRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'complaint_id' => ['required', 'exists:complaint,id'],
-            'classification_type' => 'required',
-            'severity' => 'required',
-            'urgency' => 'required',
-            'responsible_area' => 'required',
-            'is_refused' => 'required',
-            'refusal_reason' => 'required',
+            'complaint_id'     => ['required', 'exists:complaint,id'],
             'assigned_user_id' => ['required', 'exists:users,id'],
+            'is_refused'       => ['required', 'boolean'],
+
+            // Obrigatório apenas se NÃO for recusado
+            'classification_type' => ['required_if:is_refused,false', 'string'],
+            'severity'            => ['required_if:is_refused,false', 'string'],
+            'urgency'             => ['required_if:is_refused,false', 'string'],
+            'responsible_area'    => ['required_if:is_refused,false', 'string'],
+
+            // Obrigatório apenas se FOR recusado
+            'refusal_reason'      => ['required_if:is_refused,true', 'string', 'min:10'],
         ];
     }
 }
