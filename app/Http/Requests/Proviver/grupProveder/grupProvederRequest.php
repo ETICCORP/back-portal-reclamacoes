@@ -25,9 +25,7 @@ class grupProvederRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-         
-
-               '*.user_id' =>['required', Rule::exists(User::class, 'id')],
+            '*.user_id' => ['required', Rule::exists(User::class, 'id')],
             '*.proveder_id' => ['required', Rule::exists(Provider::class, 'id')],
         ];
     }
