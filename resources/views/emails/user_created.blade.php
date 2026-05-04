@@ -97,7 +97,7 @@
             </div>
         @elseif(Str::contains($currentHost, ['fortaleza.keepcomply.co.ao','102.219.127.167']))
             <div class="logo">
-                <img src="https://listapeps.keepcomply.co.ao/fortaze.png" alt="Fortaleza Seguros">
+                <img src="https://listapeps.keepcomply.co.ao/fortaze.png" alt="Portal de Reclamações">
             </div>
         @endif
 
@@ -138,7 +138,7 @@
                 @elseif(Str::contains($currentHost, ['globalseguros.keepcomply.co.ao','172.17.100.14']))
                     Global Seguros — Todos os direitos reservados.
                 @elseif(Str::contains($currentHost, ['fortaleza.keepcomply.co.ao','102.219.127.167']))
-                    Fortaleza Seguros — Todos os direitos reservados.
+                    Portal de Reclamações — Todos os direitos reservados.
                 @else
                     Sistema — Todos os direitos reservados.
                 @endif

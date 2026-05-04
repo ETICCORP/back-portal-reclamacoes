@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Notificação de Alerta - Fortaleza Seguros</title>
+    <title>Notificação de Alerta - Portal de Reclamações</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -104,7 +104,7 @@
             </div>
         @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
             <div class="logo">
-                <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Fortaleza Seguros">
+                <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Portal de Reclamações">
             </div>
         @endif
 
@@ -123,7 +123,7 @@
         </div>
 
         <div class="footer">
-            <p>&copy; {{ date('Y') }} Fortaleza Seguros — Todos os direitos reservados.</p>
+            <p>&copy; {{ date('Y') }} Portal de Reclamações — Todos os direitos reservados.</p>
         </div>
     </div>
 </body>
