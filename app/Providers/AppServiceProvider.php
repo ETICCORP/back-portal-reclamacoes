@@ -4,6 +4,8 @@ namespace App\Providers;
 
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
+use App\Models\Complaint;
+use App\Observers\ComplaintObserver;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
 use Dedoc\Scramble\Support\Generator\SecurityScheme;
@@ -29,6 +31,8 @@ class AppServiceProvider extends ServiceProvider
                     SecurityScheme::http('bearer')
                 );
             });
+
+        Complaint\Complaint::observe(ComplaintObserver::class);
 
         $this->loadViewsFrom(resource_path('views'), 'mail');
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) {

@@ -3,57 +3,35 @@
 namespace App\Observers;
 
 use App\Models\Complaint\Complaint;
-use App\Models\ComplaintTriages\ComplaintTriages;
+use App\Mail\ComplaintUpdatedMail;
+use App\Actions\StatusAction;
+use Illuminate\Support\Facades\Mail;
 
 class ComplaintObserver
 {
-    /**
-     * Handle the Complaint "created" event.
-     */
-    public function created(Complaint $complaint)
-    {
-        $days = $complaint->client->deadline_days ?? 15; // configurable per client
-        $start = now();
-        $end = $start->copy()->addWeekdays($days);
-
-        ComplaintTriages::create([
-            'complaint_id' => $complaint->id,
-            'days' => $days,
-            'start_date' => $start,
-            'end_date' => $end,
-        ]);
-    }
-
-
-    /**
-     * Handle the Complaint "updated" event.
-     */
     public function updated(Complaint $complaint): void
     {
-        //
-    }
+        // Só dispara se o status mudou
+        if (!$complaint->isDirty('status')) {
+            return;
+        }
 
-    /**
-     * Handle the Complaint "deleted" event.
-     */
-    public function deleted(Complaint $complaint): void
-    {
-        //
-    }
+        // 1. Obtemos a mensagem amigável da Action
+        $statusDescription = StatusAction::getStatusDescription($complaint->status);
 
-    /**
-     * Handle the Complaint "restored" event.
-     */
-    public function restored(Complaint $complaint): void
-    {
-        //
-    }
+        // 2. Definimos o assunto dinamicamente
+        $subject = match ($complaint->status) {
+            "Aprovada Classificação"   => "Exposição Aprovada para Análise",
+            "Negada Classificação"     => "Atualização: Exposição Não Classificada",
+            "Respondida ao Reclamante" => "Resposta Final Disponível",
+            default                    => "Atualização de Status: Protocolo #{$complaint->code}"
+        };
 
-    /**
-     * Handle the Complaint "force deleted" event.
-     */
-    public function forceDeleted(Complaint $complaint): void
-    {
-        //
+        // 3. Enviamos o e-mail
+        if ($complaint->email) {
+            Mail::to($complaint->email)->send(
+                new ComplaintUpdatedMail($complaint, $statusDescription, $subject)
+            );
+        }
     }
 }
