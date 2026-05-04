@@ -91,7 +91,7 @@
               <p style="margin:0; font-size:13px; color:#94a3b8; line-height:1.6;">
                 Atenciosamente,<br>
                 <strong style="color:#64748b;">Equipa de Gestão de Qualidade</strong><br>
-                {{ config('app.name') }}
+                {{ App\Helpers\Helper::clean_app_name() }}
               </p>
               <p style="margin-top:20px; font-size:11px; color:#cbd5e1; text-transform:uppercase;">
                 Este é um envio automático • Não responda a este endereço
@@ -102,7 +102,7 @@
         </table>
 
         <p style="margin-top:25px; font-size:12px; color:#94a3b8; text-align:center;">
-          © {{ date('Y') }} {{ config('app.name') }} Compliance
+          © {{ date('Y') }} {{ App\Helpers\Helper::clean_app_name() }} Compliance
         </p>
 
       </td>
