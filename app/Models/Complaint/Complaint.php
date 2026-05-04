@@ -27,7 +27,7 @@ class Complaint extends Model
 
 
     // Quem registrou (gestor ou sistema)
-  
+
 
     protected $fillable = [
         'policy_number',
@@ -68,13 +68,13 @@ class Complaint extends Model
      */
 
 
-     
 
 
-     public function user()
-     {
-         return $this->hasMany(User::class, 'user_id');
-     }
+
+    public function user()
+    {
+        return $this->hasMany(User::class, 'user_id');
+    }
 
     public function typeReport()
     {
@@ -91,16 +91,16 @@ class Complaint extends Model
         return $this->hasMany(Soluction::class, 'fk_complaint');
     }
 
-     public function triages()
+    public function triages()
     {
         return $this->hasMany(ComplaintTriages::class, 'complaint_id');
     }
 
-      public function opinions()
+    public function opinions()
     {
         return $this->hasMany(ComplaintOpinions::class, 'complaint_id');
     }
-       public function interaction()
+    public function interaction()
     {
         return $this->hasMany(ComplaintInteraction::class, 'complaint_id');
     }
@@ -109,9 +109,9 @@ class Complaint extends Model
         return $this->hasMany(ComplaintDeadline::class, 'complaint_id');
     }
 
-    
 
-     public function proverResponse()
+
+    public function proverResponse()
     {
         return $this->hasMany(ComplaintProviderResponse::class, 'complaint_id');
     }
@@ -123,16 +123,8 @@ class Complaint extends Model
 
 
 
-     public function entitiyResponse()
+    public function entitiyResponse()
     {
         return $this->hasMany(ComplaintResponses::class, 'complaint_id');
     }
-    
-
-
 }
-
-
-
-
-    

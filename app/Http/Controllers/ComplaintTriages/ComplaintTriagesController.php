@@ -34,7 +34,23 @@ class ComplaintTriagesController extends AbstractController
                     customMessage: "O usuário " . Auth::user()->first_name . "Foi registada uma nova triagem de reclamação",
                 );
             }
-            $complaintTriages = $this->service->store($request->validated());
+
+            // obtém os dados validados do request
+            $validated = $request->validated();
+
+            // Se for recusa, garantimos que nada de triagem técnica passe
+            if ($validated['is_refused']) {
+                logs()->info('Dados validados para criação de triagem de reclamação', $validated);
+                $validated['assigned_user_id'] = null;
+                $validated = array_merge($validated, [
+                    'severity' => null,
+                    'urgency' => null,
+                    'classification_type' => null,
+                    'responsible_area' => null
+                ]);
+            }
+
+            $complaintTriages = $this->service->store($validated);
             return response()->json($complaintTriages, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);

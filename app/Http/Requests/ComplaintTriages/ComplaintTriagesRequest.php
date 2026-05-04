@@ -2,12 +2,12 @@
 
 namespace App\Http\Requests\ComplaintTriages;
 
-use App\Http\Requests\BaseFormRequest;
+use Illuminate\Foundation\Http\FormRequest;
 
-class ComplaintTriagesRequest extends BaseFormRequest
+class ComplaintTriagesRequest extends FormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determina se o usuário está autorizado a fazer esta requisição.
      */
     public function authorize(): bool
     {
@@ -15,25 +15,43 @@ class ComplaintTriagesRequest extends BaseFormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Prepara os dados para validação (Sanitização).
+     * Útil para garantir que strings vazias ou nulas do front-end 
+     * não quebrem a regra 'exists'.
+     */
+    protected function prepareForValidation()
+    {
+        if ($this->is_refused === true || $this->is_refused === 'true') {
+            $this->merge([
+                'assigned_user_id' => null,
+                'classification_type' => null,
+                'severity' => null,
+                'urgency' => null,
+                'responsible_area' => null,
+            ]);
+        }
+    }
+
+    /**
+     * Regras de validação.
      */
     public function rules(): array
     {
         return [
-            'complaint_id'     => ['required', 'exists:complaint,id'],
-            'assigned_user_id' => ['required', 'exists:users,id'],
-            'is_refused'       => ['required', 'boolean'],
+            // Campos Identificadores
+            'complaint_id' => ['required', 'exists:complaint,id'],
+            'is_refused'   => ['required', 'boolean'],
 
-            // Obrigatório apenas se NÃO for recusado
-            'classification_type' => ['required_if:is_refused,false', 'string'],
-            'severity'            => ['required_if:is_refused,false', 'string'],
-            'urgency'             => ['required_if:is_refused,false', 'string'],
-            'responsible_area'    => ['required_if:is_refused,false', 'string'],
+            // Fluxo de Aceite (is_refused = false)
+            // Usamos required_if para obrigar o preenchimento apenas se não for recusado.
+            'assigned_user_id'    => ['required_if:is_refused,false', 'nullable', 'exists:users,id'],
+            'classification_type' => ['required_if:is_refused,false', 'nullable', 'string'],
+            'severity'            => ['required_if:is_refused,false', 'nullable', 'string'],
+            'urgency'             => ['required_if:is_refused,false', 'nullable', 'string'],
+            'responsible_area'    => ['required_if:is_refused,false', 'nullable', 'string'],
 
-            // Obrigatório apenas se FOR recusado
-            'refusal_reason'      => ['required_if:is_refused,true', 'string', 'min:10'],
+            // Fluxo de Recusa (is_refused = true)
+            'refusal_reason'      => ['required_if:is_refused,true', 'nullable', 'string', 'min:10'],
         ];
     }
 }
