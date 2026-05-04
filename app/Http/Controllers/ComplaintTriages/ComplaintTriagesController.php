@@ -64,7 +64,22 @@ class ComplaintTriagesController extends AbstractController
     {
         try {
             $this->logRequest();
-            $complaintTriages = $this->service->update($request->validated(), $id);
+
+            // obtém os dados validados do request
+            $validated = $request->validated();
+
+            // Se for recusa, garantimos que nada de triagem técnica passe
+            if ($validated['is_refused']) {
+                $validated['assigned_user_id'] = null;
+                $validated = array_merge($validated, [
+                    'severity' => null,
+                    'urgency' => null,
+                    'classification_type' => null,
+                    'responsible_area' => null
+                ]);
+            }
+
+            $complaintTriages = $this->service->update($validated, $id);
             return response()->json($complaintTriages, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
