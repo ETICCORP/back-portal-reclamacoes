@@ -20,6 +20,18 @@ class Helper
         $textoMinusculo = strtolower($textoSemEspeciais);
         return $textoMinusculo;
     }
+
+    /**
+     * Remove underscores do nome da aplicação definido no config.
+     * Ex: "Keep_Comply" -> "Keep Comply"
+     *
+     * @return string
+     */
+    public static function clean_app_name()
+    {
+        return str_replace('_', ' ', config('app.name'));
+    }
+
     public static function get_client_ip()
     {
         $ipaddress = '';
@@ -111,7 +123,7 @@ class Helper
 
 
 
-    
+
 
     public static function formatDate($data)
     {

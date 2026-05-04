@@ -20,7 +20,7 @@
                         <td style="background-color:#0f172a; padding:32px 40px; text-align:left;">
                             <h1
                                 style="margin:0; font-size:22px; font-weight:700; color:#ffffff; letter-spacing:-0.02em;">
-                                {{ config('app.name') }}
+                                {{ App\Helpers\Helper::clean_app_name() }}
                             </h1>
                             <div
                                 style="margin-top:8px; display:inline-block; padding:4px 12px; background:rgba(255,255,255,0.1); border-radius:20px; color:#cbd5e1; font-size:12px; font-weight:500; text-transform:uppercase; letter-spacing:0.05em;">
@@ -109,7 +109,7 @@
                         <td style="padding:32px 40px; background-color:#f1f5f9; text-align:center;">
                             <p style="margin:0; font-size:13px; color:#94a3b8; line-height:1.5;">
                                 Este é um e-mail automático, por favor não responda diretamente.<br>
-                                <strong>{{ config('app.name') }}</strong> • {{ config('app.url') }}
+                                <strong>{{ App\Helpers\Helper::clean_app_name() }}</strong>
                             </p>
                             <div style="margin-top:16px; border-top:1px solid #e2e8f0; padding-top:16px;">
                                 <p

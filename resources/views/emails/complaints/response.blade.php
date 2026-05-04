@@ -16,7 +16,7 @@
           <tr>
             <td style="background: #0f172a; padding:45px 50px; text-align:left;">
               <h1 style="margin:0; font-size:22px; font-weight:700; color:#ffffff; letter-spacing:-0.5px;">
-                {{ config('app.name') }}
+                {{ App\Helpers\Helper::clean_app_name() }}
               </h1>
               <div style="margin-top:10px; display:inline-block; background:rgba(59,130,246,0.2); color:#60a5fa; padding:4px 12px; border-radius:6px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:1px;">
                 Atualização do Processo
@@ -49,7 +49,7 @@
                        style="width:280px; height:auto; display:block; filter: contrast(1.1);">
                 @else
                   <p style="margin:0; font-size:15px; color:#1e293b;"><strong>A Equipa de Qualidade</strong></p>
-                  <p style="margin:4px 0 0 0; font-size:14px; color:#94a3b8;">{{ config('app.name') }}</p>
+                  <p style="margin:4px 0 0 0; font-size:14px; color:#94a3b8;">{{ App\Helpers\Helper::clean_app_name() }}</p>
                 @endif
               </div>
             </td>

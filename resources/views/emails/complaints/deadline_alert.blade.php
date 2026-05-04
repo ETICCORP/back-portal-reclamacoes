@@ -79,7 +79,7 @@
               <p style="margin:0; font-size:13px; color:#94a3b8; line-height:1.6;">
                 Atenciosamente,<br>
                 <strong style="color:#7c2d12;">Gestão de Fluxos e Prazos</strong><br>
-                {{ config('app.name') }}
+                {{ App\Helpers\Helper::clean_app_name() }}
               </p>
               <p style="margin-top:20px; font-size:11px; color:#cbd5e1; text-transform:uppercase;">
                 Notificação Automática de Compliance
@@ -90,7 +90,7 @@
         </table>
 
         <p style="margin-top:25px; font-size:12px; color:#94a3b8; text-align:center;">
-          © {{ date('Y') }} {{ config('app.name') }} • Monitorização de SLA
+          © {{ date('Y') }} {{ App\Helpers\Helper::clean_app_name() }} • Monitorização de SLA
         </p>
 
       </td>
