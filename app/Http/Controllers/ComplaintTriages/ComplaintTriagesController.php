@@ -40,7 +40,6 @@ class ComplaintTriagesController extends AbstractController
 
             // Se for recusa, garantimos que nada de triagem técnica passe
             if ($validated['is_refused']) {
-                logs()->info('Dados validados para criação de triagem de reclamação', $validated);
                 $validated['assigned_user_id'] = null;
                 $validated = array_merge($validated, [
                     'severity' => null,
