@@ -109,9 +109,9 @@
         @endif
 
         <p>Olá, <span class="highlight">{{ $user->first_name }}</span></p>
-        <p>Identificámos uma nova Reclamação associado ao sistema:</p>
+        <p>Identificámos uma nova Reclamação associada ao sistema:</p>
 
-        <h2>Detalhes da Reclamação #{{ $alert->id }}</h2>
+        <h2>Detalhes da Reclamação</h2>
 
         <div class="info-box">
             <p><strong>Código:</strong> {{ $alert->code }}</p>

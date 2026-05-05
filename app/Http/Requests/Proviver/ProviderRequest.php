@@ -35,7 +35,7 @@ class ProviderRequest extends BaseFormRequest
             'nif' => [
                 $isUpdate ? 'sometimes' : 'required',
                 'string',
-                Rule::unique('providers', 'nif')->ignore($providerId)
+                Rule::unique('provider', 'nif')->ignore($providerId)
             ],
             'phone' => [
                 $isUpdate ? 'sometimes' : 'required',
