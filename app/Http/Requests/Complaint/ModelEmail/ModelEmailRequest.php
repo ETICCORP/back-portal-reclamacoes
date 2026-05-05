@@ -29,7 +29,7 @@ class ModelEmailRequest extends BaseFormRequest
             'subject'        => "$requiredCondition|string|max:255",
             'name'           => "$requiredCondition|string|max:255",
             'body'           => "$requiredCondition|string",
-            'signature_path' => "$requiredCondition|string",
+            'signature_path' => "$requiredCondition|file|mimes:jpg,jpeg,png,pdf|max:2048",
             // 'user_id'     => "$requiredCondition|exists:users,id",
         ];
     }
