@@ -7,6 +7,7 @@ use App\Services\Alert\UserGrupoAlert\UserGrupoAlertService;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;
 use Exception;
+use Mockery;
 
 class UserGrupoAlertServiceTest extends TestCase
 {
@@ -17,52 +18,65 @@ class UserGrupoAlertServiceTest extends TestCase
     {
         parent::setUp();
 
-        // 1. Criamos um Mock do Repositório
         $this->repositoryMock = $this->mock(UserGrupoAlertRepository::class);
-
-        // 2. Instanciamos o Service com o Mock
         $this->service = new UserGrupoAlertService($this->repositoryMock);
     }
 
     /**
-     * Testa se o service sincroniza os dados corretamente.
+     * Testa se o service sincroniza os dados corretamente e retorna o resumo detalhado.
      */
-    public function test_should_sync_group_users_successfully()
+    public function test_should_sync_group_users_successfully_and_return_detailed_summary()
     {
-        // Dados de entrada simulando o que vem do Request
+        $groupId = 1;
+        // Simula que no banco já existe o usuário 10 e 30
+        $existingInDb = collect([
+            (object)['user_id' => 10],
+            (object)['user_id' => 30]
+        ]);
+
+        // Front envia 10 (mantido), 20 (novo) e um 10 duplicado. 
+        // O usuário 30 deve ser removido.
         $data = [
-            ['grup_alert_id' => 1, 'user_id' => 10],
-            ['grup_alert_id' => 1, 'user_id' => 20],
-            ['grup_alert_id' => 1, 'user_id' => 10], // Duplicado proposital para testar o ->unique()
+            ['grup_alert_id' => $groupId, 'user_id' => 10],
+            ['grup_alert_id' => $groupId, 'user_id' => 20],
+            ['grup_alert_id' => $groupId, 'user_id' => 10], 
         ];
 
-        // Simulamos o comportamento da Transação do DB
-        DB::shouldReceive('transaction')
-            ->once()
-            ->andReturnUsing(function ($callback) {
-                return $callback();
-            });
+        DB::shouldReceive('transaction')->once()->andReturnUsing(fn($callback) => $callback());
 
-        // Verificamos se o repositório chama a limpeza para o grupo 1
-        $this->repositoryMock
-            ->shouldReceive('forceDeleteBy')
+        // 1. Mock da busca inicial para o Diff
+        $this->repositoryMock->shouldReceive('findBy')
             ->once()
-            ->with('grup_alert_id', 1)
+            ->with(['grup_alert_id' => $groupId])
+            ->andReturn($existingInDb);
+
+        // 2. Mock da limpeza
+        $this->repositoryMock->shouldReceive('forceDeleteBy')
+            ->once()
+            ->with('grup_alert_id', $groupId)
             ->andReturn(true);
 
-        // Verificamos se o repositório chama o insertMany com apenas 2 registros 
-        // (devido ao unique('user_id') no Service)
-        $this->repositoryMock
-            ->shouldReceive('insertMany')
+        // 3. Mock do insert (deve inserir apenas 10 e 20, sem duplicatas)
+        $this->repositoryMock->shouldReceive('insertMany')
             ->once()
-            ->with(\Mockery::on(function ($payload) {
-                return count($payload) === 2 && $payload[0]['user_id'] === 10;
+            ->with(Mockery::on(function ($payload) {
+                return count($payload) === 2; // User 10 e 20
             }))
             ->andReturn(true);
 
         $result = $this->service->syncGroupUsers($data);
 
-        $this->assertTrue($result);
+        // Asserções do Resumo
+        $this->assertIsArray($result);
+        $this->assertEquals($groupId, $result['group_id']);
+        $this->assertEquals(1, $result['summary']['added_count']);   // User 20
+        $this->assertEquals(1, $result['summary']['removed_count']); // User 30
+        $this->assertEquals(1, $result['summary']['kept_count']);    // User 10
+        
+        // Asserções de Detalhes
+        $this->assertContains(20, $result['details']['added']);
+        $this->assertContains(30, $result['details']['removed']);
+        $this->assertContains(10, $result['details']['kept']);
     }
 
     /**
@@ -78,39 +92,27 @@ class UserGrupoAlertServiceTest extends TestCase
         $this->service->syncGroupUsers($data);
     }
 
+    /**
+     * Testa se o payload interno enviado ao banco está correto (timestamps e IDs).
+     */
     public function test_sync_group_users_produces_correct_payload_structure()
     {
-        // 1. Dados de entrada com um duplicado (user_id 10 aparece duas vezes)
-        $data = [
-            ['grup_alert_id' => 5, 'user_id' => 10],
-            ['grup_alert_id' => 5, 'user_id' => 20],
-            ['grup_alert_id' => 5, 'user_id' => 10],
-        ];
+        $groupId = 5;
+        $data = [['grup_alert_id' => $groupId, 'user_id' => 10]];
 
         DB::shouldReceive('transaction')->andReturnUsing(fn($callback) => $callback());
+        
+        // Simula banco vazio
+        $this->repositoryMock->shouldReceive('findBy')->andReturn(collect());
+        $this->repositoryMock->shouldReceive('forceDeleteBy')->once();
 
-        $this->repositoryMock
-            ->shouldReceive('forceDeleteBy')
-            ->once();
-
-        // 2. A validação do "X" (o segredo está aqui)
-        $this->repositoryMock
-            ->shouldReceive('insertMany')
+        $this->repositoryMock->shouldReceive('insertMany')
             ->once()
-            ->with(\Mockery::on(function ($payload) {
-                // Verificação 1: O unique('user_id') funcionou? (Devem restar 2 itens)
-                $countMatch = count($payload) === 2;
-
-                // Verificação 2: O primeiro item tem os campos corretos?
-                $firstItem = $payload[0];
-                $structureMatch = isset($firstItem['created_at']) &&
-                    $firstItem['user_id'] === 10 &&
-                    $firstItem['grup_alert_id'] === 5;
-
-                // Verificação 3: O ID do grupo foi forçado corretamente em todos?
-                $groupIdMatch = collect($payload)->every('grup_alert_id', 5);
-
-                return $countMatch && $structureMatch && $groupIdMatch;
+            ->with(Mockery::on(function ($payload) use ($groupId) {
+                $item = $payload[0];
+                return $item['user_id'] === 10 && 
+                       $item['grup_alert_id'] === $groupId && 
+                       isset($item['created_at']);
             }))
             ->andReturn(true);
 
@@ -118,16 +120,14 @@ class UserGrupoAlertServiceTest extends TestCase
     }
 
     /**
-     * Testa se retorna true quando o payload está vazio.
+     * Testa se o código lida corretamente com o envio de uma lista vazia 
+     * (deve remover todos os usuários atuais).
      */
-    public function test_should_return_true_if_payload_is_empty_after_mapping()
+    public function test_should_return_error_on_empty_array_due_to_missing_id()
     {
-        $data = []; // Array vazio
-
-        // O PHPUnit/Mockery não deve esperar chamadas de DB ou Repo aqui 
-        // pois a validação do ID do grupo no seu código atual falharia antes.
-        // Nota: Se enviar [], o $data[0] dará erro, cobrimos isso com a exceção acima.
-
-        $this->assertTrue(true);
+        // Como o seu código busca o ID em $data[0], um array vazio dispara a exceção de ID não encontrado.
+        $this->expectException(Exception::class);
+        
+        $this->service->syncGroupUsers([]);
     }
 }

@@ -23,38 +23,58 @@ class UserGrupoAlertService extends AbstractService
      */
     public function syncGroupUsers(array $data)
     {
-        // 1. Extração e Validação do ID do Grupo
         $grupAlertId = $data[0]['grup_alert_id'] ?? null;
 
         if (!$grupAlertId) {
             throw new \Exception("Dados inválidos: id do grupo não encontrado.");
         }
 
-        return DB::transaction(function () use ($data, $grupAlertId) {
+        // 1. Obter IDs atuais no banco antes de deletar
+        $currentIds = $this->repository->findBy(['grup_alert_id' => $grupAlertId])
+            ->pluck('user_id')
+            ->toArray();
+
+        // 2. IDs enviados pelo Front-end (sanitizados)
+        $newIds = collect($data)->pluck('user_id')->unique()->toArray();
+
+        // 3. Cálculo do Diff
+        $toAdd    = array_diff($newIds, $currentIds);    // Está no novo, mas não no banco
+        $toRemove = array_diff($currentIds, $newIds);   // Está no banco, mas não no novo
+        $kept     = array_intersect($currentIds, $newIds); // Está em ambos
+
+        return DB::transaction(function () use ($grupAlertId, $newIds, $toAdd, $toRemove, $kept) {
             $now = now();
 
-            // 2. Limpeza do estado atual (Reutilizando Repository)
+            // 4. Execução no Banco
             $this->repository->forceDeleteBy('grup_alert_id', $grupAlertId);
 
-            // 3. Preparação do novo estado (Payload)
-            $payload = collect($data)
-                ->map(function ($item) use ($grupAlertId, $now) {
-                    return [
-                        'grup_alert_id' => $grupAlertId,
-                        'user_id'       => $item['user_id'],
-                        'created_at'    => $now,
-                        'updated_at'    => $now,
-                    ];
-                })
-                ->unique('user_id') // Evita erro de duplicidade no banco
-                ->toArray();
+            $payload = collect($newIds)->map(fn($userId) => [
+                'grup_alert_id' => $grupAlertId,
+                'user_id'       => $userId,
+                'created_at'    => $now,
+                'updated_at'    => $now,
+            ])->toArray();
 
-            // 4. Inserção em Massa (Reutilizando Repository)
-            if (empty($payload)) {
-                return true;
+            if (!empty($payload)) {
+                $this->repository->insertMany($payload);
             }
 
-            return $this->repository->insertMany($payload);
+            // 5. Resposta clara e rica
+            return [
+                'group_id' => $grupAlertId,
+                'summary' => [
+                    'total_before' => count($toRemove) + count($kept),
+                    'total_after'  => count($newIds),
+                    'added_count'  => count($toAdd),
+                    'removed_count' => count($toRemove),
+                    'kept_count'    => count($kept),
+                ],
+                'details' => [
+                    'added'   => array_values($toAdd),
+                    'removed' => array_values($toRemove),
+                    'kept'    => array_values($kept)
+                ]
+            ];
         });
     }
 }
