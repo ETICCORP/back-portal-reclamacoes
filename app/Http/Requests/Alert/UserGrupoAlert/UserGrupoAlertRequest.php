@@ -31,9 +31,9 @@ class UserGrupoAlertRequest extends BaseFormRequest
     public function messages(): array
     {
         return [
-            '*.grup_alert_id.required' => 'O campo grup_alert_id é obrigatório.',
+            '*.grup_alert_id.required' => 'O campo id do grupo é obrigatório.',
             '*.grup_alert_id.exists'   => 'O grupo informado não existe.',
-            '*.user_id.required'  => 'O campo user_id é obrigatório.',
+            '*.user_id.required'  => 'O campouser_id é obrigatório.',
             '*.user_id.exists'    => 'O usuário informado não existe.',
         ];
     }
