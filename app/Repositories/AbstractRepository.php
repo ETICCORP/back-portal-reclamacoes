@@ -52,7 +52,6 @@ abstract class AbstractRepository
         $query = $this->applyFilter($query, $filterParams);
         $query = $this->applyOrder($query, $orderByParams);
         return $this->paginateQuery($query, $paginate, $filterParams);
-
     }
 
     protected function applyFilter($query, $filterParams)
@@ -183,6 +182,22 @@ abstract class AbstractRepository
         $model->update($data);
 
         return $model;
+    }
+
+    /**
+     * Remove the specified resource from storage permanently.
+     */
+    public function forceDeleteBy(string $column, int $id): bool
+    {
+        return $this->model->where($column, $id)->forceDelete();
+    }
+
+    /**
+     * Insere múltiplos registros de uma vez (Bulk Insert).
+     */
+    public function insertMany(array $payload): bool
+    {
+        return $this->model->insert($payload);
     }
 
     /**
