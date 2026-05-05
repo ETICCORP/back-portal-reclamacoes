@@ -47,7 +47,7 @@ class ProviderRequest extends BaseFormRequest
                 'email',
                 'max:255',
                 // Garante unicidade na tabela users, ignorando o próprio registro no update
-                Rule::unique('users', 'email')->ignore($providerId)
+                Rule::unique('provider', 'email')->ignore($providerId)
             ]
         ];
     }
@@ -59,7 +59,7 @@ class ProviderRequest extends BaseFormRequest
     {
         return [
             'email.unique' => 'Este endereço de e-mail já está registado no sistema.',
-            'nif.unique'   => 'Este NIF já se encontra associado a outro fornecedor.',
+            'nif.unique'   => 'Este NIF já se encontra associado a outro provedor.',
         ];
     }
 }
