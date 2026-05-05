@@ -1,39 +1,24 @@
-name: Deploy to Server
+name: Deploy Automático
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
 jobs:
   deploy:
-    runs-on: self-hosted
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Setup SSH
-        uses: webfactory/ssh-agent@v0.9.0
+      - name: SSH Deploy
+        uses: appleboy/ssh-action@v1.0.3
         with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Add server to known_hosts
-        run: |
-          mkdir -p ~/.ssh
-          echo "${{ secrets.SERVER_KNOWN_HOST }}" >> ~/.ssh/known_hosts
-          chmod 600 ~/.ssh/known_hosts
-
-      - name: Test SSH connection
-        run: ssh -p 2822 -o StrictHostKeyChecking=yes ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} "echo ✅ Conectado com sucesso"
-
-      - name: Deploy to server
-        run: |
-          ssh -T -p 2822 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-            set -e
-            cd /opt/back-Portal-denucias || exit 1
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /var/www/keepcomply
             git pull origin main
-            docker compose pull
-            docker compose up -d --build
-            docker system prune -f
-          EOF
+            docker exec portalReclamacoes-php composer install --no-dev --optimize-autoloader
+            docker exec portalReclamacoes-php php artisan migrate --force
+            docker exec portalReclamacoes-php php artisan config:cache
+            docker exec portalReclamacoes-php php artisan route:cache
+            docker exec portalReclamacoes-php php artisan view:cache
