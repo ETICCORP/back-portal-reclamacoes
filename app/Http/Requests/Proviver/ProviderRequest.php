@@ -27,7 +27,7 @@ class ProviderRequest extends BaseFormRequest
             'name' => 'required',
             'email' => 'required',
             'phone' => 'required',
-          
+
             'email' => ['required', 'email', 'max:255', "unique:users,email,{$id},id"],
 
 

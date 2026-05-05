@@ -20,10 +20,11 @@ abstract class AbstractController extends Controller
     protected ?string $fieldName = "name";
     protected ?string $logType = 'entity';
     protected bool $logRequest = true;
+    protected string $resourceName = 'registro';
 
     public function __construct(AbstractService $service)
     {
-        $this->service = $service;       
+        $this->service = $service;
     }
 
     /**
@@ -128,6 +129,40 @@ abstract class AbstractController extends Controller
             }
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+    protected function logAction(string $level = 'info', array $params = [])
+    {
+        $action = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
+        $user = optional(Auth::user())->first_name ?? 'Sistema';
+
+        // Busca a definição no controller filho
+        $definition = $this->logDefinitions()[$action] ?? null;
+
+        if ($definition) {
+            // Substitui placeholders como :id ou :status se passados no array $params
+            $message = str_replace(
+                array_map(fn($k) => ":$k", array_keys($params)),
+                array_values($params),
+                $definition
+            );
+            $finalMessage = "O usuário {$user} {$message}";
+        } else {
+            // Fallback para não ficar sem log
+            $finalMessage = "O usuário {$user} realizou uma operação técnica em {$action}";
+        }
+
+        $this->logToDatabase(
+            type: $this->logType,
+            level: $level,
+            customMessage: $finalMessage
+        );
+    }
+
+    // Método que será sobrescrito nos controllers filhos
+    protected function logDefinitions(): array
+    {
+        return [];
     }
 
     /**

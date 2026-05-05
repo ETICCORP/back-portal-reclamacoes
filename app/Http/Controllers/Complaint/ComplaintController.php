@@ -4,25 +4,32 @@ namespace App\Http\Controllers\Complaint;
 
 use App\Http\Controllers\AbstractController;
 use App\Http\Requests\Complaint\UpdateRequest;
-use App\Jobs\SendReportCopy;
-use App\Mail\ReportAlertMail;
 use App\Services\Complaint\ComplaintService;
 use App\Http\Requests\Complaint\ComplaintRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use App\Actions\StatusAction;
 use App\Http\Requests\Complaint\UpdateStatusRequest;
 
-use Illuminate\Support\Facades\Mail;
-
 class ComplaintController extends AbstractController
 {
+    protected string $resourceName = "reclamações";
+
     public function __construct(ComplaintService $service)
     {
         $this->service = $service;
+    }
+
+    protected function logDefinitions(): array
+    {
+        return [
+            'index'           => 'consultou o painel geral de reclamações',
+            'store'           => 'registrou uma nova ocorrência no sistema',
+            'showFile'        => 'acessou os documentos anexos da reclamação #:id',
+            'update'          => 'atualizou os dados da reclamação #:id',
+        ];
     }
 
     public function index(Request $request)
@@ -30,12 +37,9 @@ class ComplaintController extends AbstractController
         try {
             if ($this->logRequest) {
                 $this->logRequest();
-                $this->logToDatabase(
-                    type: $this->logType,
-                    level: 'info',
-                    customMessage: "O usuário " . Auth::user()->first_name . "Visualizou todos os registros os registros de  reclamacões",
-                );
             }
+
+            $this->logAction();
 
             $filters = $request['filters'] ?? $request['filtersV2'];
 
@@ -44,9 +48,7 @@ class ComplaintController extends AbstractController
                 $filters,
                 $request->input('orderBy', ['id' => 'desc']),
                 $request->input('relationships', []),
-                $filters // se realmente precisas passar $filters de novo
             );
-
 
             // 🔹 Se for um paginator (quando existe "paginate")
             if ($service instanceof \Illuminate\Pagination\AbstractPaginator) {
@@ -93,6 +95,8 @@ class ComplaintController extends AbstractController
             // Envia tudo para o service
             $complaint = $this->service->storeData($data);
 
+            $this->logAction();
+
             //SendReportCopy::dispatch($complaint->id);
             return response()->json($complaint, Response::HTTP_CREATED);
         } catch (Exception $e) {
@@ -105,6 +109,8 @@ class ComplaintController extends AbstractController
 
         try {
             $this->logRequest();
+            $this->logAction();
+
             $complaint = $this->service->showFile($id);
             return response()->json($complaint, Response::HTTP_CREATED);
         } catch (Exception $e) {
@@ -120,6 +126,8 @@ class ComplaintController extends AbstractController
     {
         try {
             $this->logRequest();
+            $this->logAction(params: ['id' => $id]);
+
             $complaint = $this->service->update($request->validated(), $id);
             return response()->json($complaint, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
