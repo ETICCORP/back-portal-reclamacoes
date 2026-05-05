@@ -27,8 +27,8 @@ class ComplaintController extends AbstractController
         return [
             'index'           => 'consultou o painel geral de reclamações',
             'store'           => 'registrou uma nova ocorrência no sistema',
-            'showFile'        => 'acessou os documentos anexos da reclamação #:id',
-            'update'          => 'atualizou os dados da reclamação #:id',
+            'showFile'        => 'acessou os documentos anexos da reclamação #:code',
+            'update'          => 'atualizou os dados da reclamação #:code',
         ];
     }
 

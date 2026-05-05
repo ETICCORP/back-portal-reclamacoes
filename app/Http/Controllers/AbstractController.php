@@ -140,7 +140,7 @@ abstract class AbstractController extends Controller
         $definition = $this->logDefinitions()[$action] ?? null;
 
         if ($definition) {
-            // Substitui placeholders como :id ou :status se passados no array $params
+            // Substitui placeholders como :id, :code ou :status se passados no array $params
             $message = str_replace(
                 array_map(fn($k) => ":$k", array_keys($params)),
                 array_values($params),
