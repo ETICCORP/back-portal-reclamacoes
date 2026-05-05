@@ -3,11 +3,12 @@
 namespace App\Http\Requests\Proviver;
 
 use App\Http\Requests\BaseFormRequest;
+use Illuminate\Validation\Rule;
 
 class ProviderRequest extends BaseFormRequest
 {
     /**
-     * Determine if the user is authorized to make this request.
+     * Determina se o utilizador tem autorização para esta operação.
      */
     public function authorize(): bool
     {
@@ -15,22 +16,50 @@ class ProviderRequest extends BaseFormRequest
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     * Regras de validação aplicadas ao pedido.
      */
     public function rules(): array
     {
-        $id = $this->route('id') ?? null;
+        // Tenta capturar o ID da rota (suporta 'id' ou 'provider')
+        $providerId = $this->route('provider') ?? $this->route('id');
+
+        // Verifica se é uma criação ou atualização
+        $isUpdate = $this->isMethod('PUT') || $this->isMethod('PATCH');
+
         return [
-            'nif' => 'required',
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-          
-            'email' => ['required', 'email', 'max:255', "unique:users,email,{$id},id"],
+            'name' => [
+                $isUpdate ? 'sometimes' : 'required',
+                'string',
+                'max:255'
+            ],
+            'nif' => [
+                $isUpdate ? 'sometimes' : 'required',
+                'string',
+                Rule::unique('providers', 'nif')->ignore($providerId)
+            ],
+            'phone' => [
+                $isUpdate ? 'sometimes' : 'required',
+                'string',
+                'max:20'
+            ],
+            'email' => [
+                $isUpdate ? 'sometimes' : 'required',
+                'email',
+                'max:255',
+                // Garante unicidade na tabela users, ignorando o próprio registro no update
+                Rule::unique('users', 'email')->ignore($providerId)
+            ]
+        ];
+    }
 
-
+    /**
+     * Customização das mensagens (opcional, mas pragmático para UX)
+     */
+    public function messages(): array
+    {
+        return [
+            'email.unique' => 'Este endereço de e-mail já está registado no sistema.',
+            'nif.unique'   => 'Este NIF já se encontra associado a outro fornecedor.',
         ];
     }
 }
