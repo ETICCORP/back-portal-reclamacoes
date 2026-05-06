@@ -25,8 +25,8 @@ class ComplaintController extends AbstractController
     protected function logDefinitions(): array
     {
         return [
-            'index'           => 'consultou o painel geral de reclamações',
-            'store'           => 'registrou uma nova ocorrência no sistema',
+            'index'           => 'visualizou todas as reclamações',
+            'show'            => 'visualizou os detalhes da reclamação #:code',
             'showFile'        => 'acessou os documentos anexos da reclamação #:code',
             'update'          => 'atualizou os dados da reclamação #:code',
         ];
@@ -49,7 +49,7 @@ class ComplaintController extends AbstractController
                 $request->input('orderBy', ['id' => 'desc']),
                 $request->input('relationships', []),
             );
-
+s
             // 🔹 Se for um paginator (quando existe "paginate")
             if ($service instanceof \Illuminate\Pagination\AbstractPaginator) {
                 $service->getCollection()->transform(function ($item) {
@@ -84,7 +84,6 @@ class ComplaintController extends AbstractController
     public function store(ComplaintRequest $request)
     {
         try {
-            $this->logRequest();
             // Concatena os anexos ao array de dados
             $attachments = $request->file('attachments');
             if ($attachments && !is_array($attachments)) {

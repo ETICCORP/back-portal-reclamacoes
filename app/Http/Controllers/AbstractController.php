@@ -8,6 +8,7 @@ use Illuminate\Http\Response;
 use App\Services\AbstractService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 /**
  * Ao usar o AbstractController é necessário criar manualmente os métodos store e update.
@@ -21,6 +22,12 @@ abstract class AbstractController extends Controller
     protected ?string $logType = 'entity';
     protected bool $logRequest = true;
     protected string $resourceName = 'registro';
+
+    /**
+     * Define o tempo padrão da janela de silêncio (1 hora).
+     * Pode ser sobrescrito nos controllers filhos.
+     */
+    protected int $auditTtl = 3600;
 
     public function __construct(AbstractService $service)
     {
@@ -63,6 +70,8 @@ abstract class AbstractController extends Controller
                 $this->logRequest();
             }
 
+            $this->logAction();
+
             $service = $this->service->show($id);
 
             if ($this->logRequest) {
@@ -90,6 +99,61 @@ abstract class AbstractController extends Controller
             }
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+    }
+
+/**
+     * Ponto de entrada único para logs.
+     * Chamado tanto pelos métodos mágicos (show, index) quanto manualmente.
+     */
+    protected function logAction(string $level = 'info', array $params = [])
+    {
+        // 1. Identifica o método que chamou o logAction (show, index, update, etc)
+        $trace = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2);
+        $action = $trace[1]['function'] ?? 'unknown';
+
+        // 2. Verifica se o filho definiu log para este método
+        $definitions = method_exists($this, 'logDefinitions') ? $this->logDefinitions() : [];
+        $definition = $definitions[$action] ?? null;
+
+        // Se não houver definição, encerramos aqui (ignora o log silenciosamente)
+        if (!$definition) {
+            return;
+        }
+
+        // 3. Aplica a Trava de Silêncio (Cache)
+        $url = request()->url();
+        $userId = auth()->id() ?? 'guest';
+        $className = class_basename($this); 
+        
+        $cacheKey = "audit_lock:" . md5("{$className}:{$userId}:{$url}:{$action}");
+
+        // Só executa se o cache permitir (primeiro acesso na janela de tempo)
+        if (Cache::add($cacheKey, true, $this->auditTtl)) {
+            $this->executePragmaticLog($definition, $level, $params);
+        }
+    }
+
+    /**
+     * Faz a montagem final e grava no banco
+     */
+    private function executePragmaticLog(string $definition, string $level, array $params)
+    {
+        $user = optional(auth()->user())->first_name ?? 'Sistema';
+
+        // Substituição de placeholders (:id, :nome, etc)
+        $message = str_replace(
+            array_map(fn($k) => ":$k", array_keys($params)),
+            array_values($params),
+            $definition
+        );
+
+        $finalMessage = "O usuário {$user} {$message}";
+
+        $this->logToDatabase(
+            type: $this->logType,
+            level: $level,
+            customMessage: $finalMessage
+        );
     }
 
     /**
@@ -129,34 +193,6 @@ abstract class AbstractController extends Controller
             }
             return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-    }
-
-    protected function logAction(string $level = 'info', array $params = [])
-    {
-        $action = debug_backtrace(DEBUG_BACKTRACE_IGNORE_ARGS, 2)[1]['function'];
-        $user = optional(Auth::user())->first_name ?? 'Sistema';
-
-        // Busca a definição no controller filho
-        $definition = $this->logDefinitions()[$action] ?? null;
-
-        if ($definition) {
-            // Substitui placeholders como :id, :code ou :status se passados no array $params
-            $message = str_replace(
-                array_map(fn($k) => ":$k", array_keys($params)),
-                array_values($params),
-                $definition
-            );
-            $finalMessage = "O usuário {$user} {$message}";
-        } else {
-            // Fallback para não ficar sem log
-            $finalMessage = "O usuário {$user} realizou uma operação técnica em {$action}";
-        }
-
-        $this->logToDatabase(
-            type: $this->logType,
-            level: $level,
-            customMessage: $finalMessage
-        );
     }
 
     // Método que será sobrescrito nos controllers filhos
