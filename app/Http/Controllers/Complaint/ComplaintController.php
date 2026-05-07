@@ -28,6 +28,8 @@ class ComplaintController extends AbstractController
             'index'           => 'visualizou todas as reclamações',
             'show'            => 'visualizou os detalhes da reclamação #:code',
             'update'          => 'atualizou os dados da reclamação #:code',
+            'delete'          => 'excluiu a reclamação #:code',
+            'updateStatus'    => 'atualizou o status da reclamação #:code',
         ];
     }
 

@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Services\AbstractService;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 
 /**
@@ -194,7 +193,7 @@ abstract class AbstractController extends Controller
             if ($this->logRequest) {
                 $this->logRequest($e);
             }
-            
+
             return response()->json(['error' => 'Recurso não encontrado.'], Response::HTTP_NOT_FOUND);
         } catch (Exception $e) {
             if ($this->logRequest) {
