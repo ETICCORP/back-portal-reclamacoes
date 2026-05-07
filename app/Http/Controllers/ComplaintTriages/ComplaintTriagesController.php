@@ -17,6 +17,15 @@ class ComplaintTriagesController extends AbstractController
         $this->service = $service;
     }
 
+    protected function logDefinitions(): array
+    {
+        return [
+            'index'           => 'visualizou todas as triagens de reclamação',
+            'show'            => 'visualizou os detalhes da triagem de reclamação #:complaint.code',
+            'store'           => 'classificou a reclamação #:complaint.code'
+        ];
+    }
+
     /**
      * Store a newly created resource in storage.
      */

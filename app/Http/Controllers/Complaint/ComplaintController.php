@@ -30,6 +30,7 @@ class ComplaintController extends AbstractController
             'update'          => 'atualizou os dados da reclamação #:code',
             'delete'          => 'excluiu a reclamação #:code',
             'updateStatus'    => 'atualizou o status da reclamação #:code',
+            'getTopTypes'       => 'visualizou os tipos de reclamação mais frequentes',
         ];
     }
 
@@ -192,6 +193,7 @@ class ComplaintController extends AbstractController
     {
         try {
             $this->logRequest();
+            $this->logAction();
             $complaint = $this->service->getTopTypes();
             return response()->json($complaint, Response::HTTP_OK);
         } catch (Exception $e) {
