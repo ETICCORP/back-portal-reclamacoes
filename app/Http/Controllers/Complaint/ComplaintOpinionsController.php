@@ -40,8 +40,11 @@ class ComplaintOpinionsController extends AbstractController
             if ($this->logRequest) {
                 $this->logRequest();
             }
-
+            
             $complaintOpinions = $this->service->store($data);
+
+            $this->logAction(params: $complaintOpinions);
+            
             return response()->json($complaintOpinions, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -57,6 +60,7 @@ class ComplaintOpinionsController extends AbstractController
         try {
             $this->logRequest();
             $complaintOpinions = $this->service->update($request->validated(), $id);
+            $this->logAction(params: $complaintOpinions);
             return response()->json($complaintOpinions, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);

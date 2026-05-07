@@ -45,6 +45,8 @@ class ComplaintResponsesController extends AbstractController
 
             $complaintResponses = $this->service->store($data);
 
+            $this->logAction(params: $complaintResponses);
+
             ComplaintDeadline::where('complaint_id', $request->input('complaint_id'))
                 ->update([
                     'end_date' => null
@@ -65,12 +67,12 @@ class ComplaintResponsesController extends AbstractController
     public function complaintResponse(ComplaintResponsesRequest $request)
     {
         try {
-
             $this->logRequest();
             $data = $request->validated();
             // Atribui automaticamente o ID do utilizador autenticado
             $data['user_id'] = auth()->id();
             $complaintResponses = $this->service->complaintResponse($data);
+            $this->logAction(params: $complaintResponses);
             return response()->json($complaintResponses, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -99,6 +101,7 @@ class ComplaintResponsesController extends AbstractController
         try {
             $this->logRequest();
             $complaintResponses = $this->service->update($request->validated(), $id);
+            $this->logAction(params: $complaintResponses);
             return response()->json($complaintResponses, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
