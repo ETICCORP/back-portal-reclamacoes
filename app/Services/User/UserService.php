@@ -130,7 +130,7 @@ class UserService extends AbstractService
 
         // 2. Verificação de expiração
         if ($user->two_factor_expires_at->isPast()) {
-            return response()->json(['status' => 'error', 'message' => 'Código expirou.'], 401);
+            return response()->json(['status' => 'error', 'message' => 'O Código expirou, solicite um novo.'], 401);
         }
 
         // 3. Autentica o usuário manualmente na instância do Auth para esta requisição
