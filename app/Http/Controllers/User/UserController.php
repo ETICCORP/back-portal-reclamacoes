@@ -193,6 +193,11 @@ class UserController extends AbstractController
         try {
             $user = $this->service->verify2fa($request->validated());
             $this->logAction(params: $user);
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: 'Iniciou sessão na aplicação.',
+            );
             return response()->json($user, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
