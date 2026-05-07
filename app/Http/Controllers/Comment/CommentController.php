@@ -17,6 +17,13 @@ class CommentController extends AbstractController
         $this->service = $service;
     }
 
+    protected function logDefinitions(): array
+    {
+        return [
+            'store' => 'registrou um novo comentário na reclamação #:compliant.code'
+        ];
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -28,13 +35,9 @@ class CommentController extends AbstractController
             $data['fk_user'] = Auth::id();
             if ($this->logRequest) {
                 $this->logRequest();
-                $this->logToDatabase(
-                    type: $this->logType,
-                    level: 'info',
-                    complaint_id: $data['report_id'],
-                    customMessage: "O usuário " . Auth::user()->first_name . "Registou um comentário.",
-                );
             }
+
+            $this->logAction();
 
             $comment = $this->service->store($data);
             return response()->json($comment, Response::HTTP_CREATED);
