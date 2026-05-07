@@ -143,7 +143,7 @@ abstract class AbstractController extends Controller
 
         // 3. Faz o replace final
         $message = strtr($definition, $replacements);
-        $finalMessage = "O usuário {$user} {$message}";
+        $finalMessage = "{$user} {$message}";
 
         $this->logToDatabase(
             type: $this->logType,
