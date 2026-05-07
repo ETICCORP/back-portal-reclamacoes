@@ -102,7 +102,7 @@ abstract class AbstractController extends Controller
 
         // 3. Aplica a Trava de Silêncio (Cache)
         $url = request()->url();
-        $userId = auth()->id() ?? 'guest';
+        $userId = auth()->check() ? auth()->id() : 'guest';
         $className = class_basename($this);
 
         $cacheKey = "audit_lock:" . md5("{$className}:{$userId}:{$url}:{$action}");
@@ -123,7 +123,7 @@ abstract class AbstractController extends Controller
      */
     private function executePragmaticLog(string $definition, string $level, mixed $dataSource)
     {
-        $user = optional(auth()->user())->first_name ?? 'Sistema';
+        $user = optional(auth()->check() ? auth()->user() : null)->first_name ?? 'Sistema';
 
         if ($user === 'Sistema') return;
 
