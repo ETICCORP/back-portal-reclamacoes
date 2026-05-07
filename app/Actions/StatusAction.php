@@ -25,7 +25,7 @@ class StatusAction
             "Encaminhado ao Provedor"  => "Enviámos os detalhes ao provedor responsável para obter esclarecimentos adicionais.",
             "Respondida pelo Provedor" => "Recebemos o feedback do provedor e estamos a consolidar a resposta final.",
             "Respondida ao Reclamante" => "O seu processo foi concluído. A resposta oficial já se encontra disponível.",
-            default                    => "O seu processo registou uma nova movimentação e está a ser processado pela nossa equipa."
+            default                    => "O seu processo registrou uma nova movimentação e está a ser processado pela nossa equipa."
         };
     }
 }

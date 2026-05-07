@@ -17,7 +17,7 @@ class ComplaintDeadlineController extends AbstractController
         return [
             'index'           => 'visualizou os prazos das reclamações',
             'show'            => 'visualizou os detalhes do prazo da reclamação #:complaint.code',
-            'store'           => 'registou um novo prazo para a reclamação #:complaint.code',
+            'store'           => 'registrou um novo prazo para a reclamação #:complaint.code',
             'update'          => 'atualizou o prazo da reclamação #:complaint.code'
         ];
     }

@@ -20,7 +20,7 @@ class grupProvederController extends AbstractController
     {
         return [
             'index' => 'visualizou a lista de provedores',
-            'show' => 'visualizou os detalhes do provedor #:name',
+            'show' => 'visualizou os detalhes do provedor',
             'store' => 'registrou um novo provedor #:name',
             'update' => 'atualizou os dados do provedor #:name',
             'delete' => 'excluiu o provedor #:name',
@@ -35,6 +35,7 @@ class grupProvederController extends AbstractController
         try {
             $this->logRequest();
             $userGrupoAlert = $this->service->storeMany($request->validated());
+            $this->logAction(params: $userGrupoAlert);
             return response()->json($userGrupoAlert, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -50,6 +51,7 @@ class grupProvederController extends AbstractController
         try {
             $this->logRequest();
             $grupProveder = $this->service->update($request->validated(), $id);
+            $this->logAction(params: $grupProveder);
             return response()->json($grupProveder, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);

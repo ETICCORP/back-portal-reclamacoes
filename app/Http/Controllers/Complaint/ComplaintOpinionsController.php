@@ -21,7 +21,7 @@ class ComplaintOpinionsController extends AbstractController
         return [
             'index'           => 'visualizou todos os pareceres de reclamacão',
             'show'            => 'visualizou os detalhes do parecer de reclamação #:code',
-            'store'           => 'registou um novo parecer de reclamação #:complaint.code',
+            'store'           => 'registrou um novo parecer de reclamação #:complaint.code',
             'update'          => 'atualizou o parecer de reclamação #:complaint.code',
             'delete'          => 'excluiu o parecer de reclamação #:complaint.code'
         ];
