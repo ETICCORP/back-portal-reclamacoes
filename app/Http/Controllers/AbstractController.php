@@ -26,7 +26,7 @@ abstract class AbstractController extends Controller
      * Define o tempo padrão da janela de silêncio (1 hora).
      * Pode ser sobrescrito nos controllers filhos.
      */
-    protected int $auditTtl = 900; // 15 minutos em segundos
+    protected int $auditTtl = 5 * 60; // 5 minutos
 
     public function __construct(AbstractService $service)
     {
