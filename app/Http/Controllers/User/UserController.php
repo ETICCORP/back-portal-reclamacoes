@@ -13,11 +13,9 @@ use App\Http\Requests\User\ChangePasswordRequest;
 use App\Http\Requests\User\changePasswordUser;
 use App\Http\Requests\User\EnabledRequest;
 use App\Http\Requests\User\Verify2faRequest;
-use App\Traits\DatabaseLogger;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Monolog\Level;
 
 class UserController extends AbstractController
 {
@@ -28,6 +26,18 @@ class UserController extends AbstractController
     public function __construct(UserService $service)
     {
         $this->service = $service;
+    }
+
+    protected function logDefinitions(): array
+    {
+        return [
+            'index' => 'visualizou a lista de usuários',
+            'show' => 'visualizou os detalhes do usuário (nome: #:name)',
+            'store' => 'registrou um novo usuário (nome: #:name)',
+            'update' => 'atualizou os dados do usuário (nome: #:name)',
+            'enabled' => 'atualizou o status do usuário (nome: #:name)',
+            'changePasswordUser' => 'atualizou a senha do usuário (nome: #:name)',
+        ];
     }
 
     /**
@@ -41,7 +51,7 @@ class UserController extends AbstractController
             $this->logToDatabase(
                 type: 'user',
                 level: 'info',
-                customMessage: 'Iniciou sessão.',
+                customMessage: 'Iniciou sessão na aplicação.',
             );
             return response()->json(['api_token' => $token], Response::HTTP_OK);
         } catch (Exception $e) {
@@ -57,7 +67,7 @@ class UserController extends AbstractController
             $this->logToDatabase(
                 type: 'user',
                 level: 'info',
-                customMessage: 'Terminou sessão.',
+                customMessage: 'Terminou sessão na aplicação.',
             );
             $response = $this->service->logout($request);
             return response()->json(["message" => "Sessão terminada!"], Response::HTTP_OK);
