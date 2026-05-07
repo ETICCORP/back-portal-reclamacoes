@@ -58,7 +58,7 @@ class ProviderRequest extends BaseFormRequest
     public function messages(): array
     {
         return [
-            'email.unique' => 'Este endereço de e-mail já está registado no sistema.',
+            'email.unique' => 'Este endereço de e-mail já está registrado no sistema.',
             'nif.unique'   => 'Este NIF já se encontra associado a outro provedor.',
         ];
     }

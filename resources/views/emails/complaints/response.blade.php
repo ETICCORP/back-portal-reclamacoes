@@ -31,7 +31,7 @@
               </p>
               
               <p style="margin:0 0 30px 0; font-size:16px; line-height:1.7; color:#64748b;">
-                Dando seguimento à sua exposição registada sob o protocolo <strong>#{{ $response->complaint->code }}</strong>, apresentamos abaixo a nossa resposta oficial:
+                Dando seguimento à sua exposição registrada sob o protocolo <strong>#{{ $response->complaint->code }}</strong>, apresentamos abaixo a nossa resposta oficial:
               </p>
 
               <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:16px; padding:35px; margin-bottom:40px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);">
