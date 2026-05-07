@@ -125,8 +125,6 @@ abstract class AbstractController extends Controller
     {
         $user = optional(auth()->user())->first_name ?? 'Sistema';
 
-        if ($user === 'Sistema') return;
-
         // 1. Encontrar todos os placeholders que começam com ':' (ex: :nome, :categoria.titulo)
         preg_match_all('/:([a-zA-Z0-9_.]+)/', $definition, $matches);
         $placeholders = $matches[1] ?? [];
@@ -143,7 +141,7 @@ abstract class AbstractController extends Controller
 
         // 3. Faz o replace final
         $message = strtr($definition, $replacements);
-        $finalMessage = "O usuário {$user} {$message}";
+        $finalMessage = "{$user} {$message}";
 
         $this->logToDatabase(
             type: $this->logType,
