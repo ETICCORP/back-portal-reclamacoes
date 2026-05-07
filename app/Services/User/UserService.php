@@ -142,7 +142,7 @@ class UserService extends AbstractService
         // 5. Gera o token definitivo para o frontend usar nas próximas rotas
         $token = $user->createToken("NOSSA_SEGUROS")->plainTextToken;
 
-        return response()->json([
+        return [
             'status' => 'success',
             'message' => 'Autenticação 2FA validada.',
             'token' => $token,
@@ -150,7 +150,7 @@ class UserService extends AbstractService
                 'id' => Auth::id(), // Já funciona por causa do setUser
                 'name' => Auth::user()->name
             ]
-        ]);
+        ];
     }
 
     public function changePasswordUser(array $data, $id)
