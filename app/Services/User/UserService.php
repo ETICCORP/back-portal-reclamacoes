@@ -116,39 +116,42 @@ class UserService extends AbstractService
             throw new Exception(trans($status));
         }
     }
-    // Valida o código
+
+    // Método para validar o código 2FA e autenticar o usuário
     public function verify2fa(array $request)
     {
-        $code = $request['code'] ?? null; // <- pega o campo do array
+        $code = $request['code'] ?? null;
 
         $user = User::where('two_factor_code', $code)->first();
 
         if (!$user) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Código inválido.'
-            ], 401);
+            return response()->json(['status' => 'error', 'message' => 'Código inválido.'], 401);
         }
 
-        if ($user->two_factor_expires_at->lt(now())) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'O código expirou, solicite um novo.'
-            ], 401);
+        // 2. Verificação de expiração
+        if ($user->two_factor_expires_at->isPast()) {
+            return response()->json(['status' => 'error', 'message' => 'Código expirou.'], 401);
         }
 
+        // 3. Autentica o usuário manualmente na instância do Auth para esta requisição
+        Auth::setUser($user);
+
+        // 4. Limpa o código 2FA
         $user->resetTwoFactorCode();
 
+        // 5. Gera o token definitivo para o frontend usar nas próximas rotas
         $token = $user->createToken("NOSSA_SEGUROS")->plainTextToken;
 
-        return [
+        return response()->json([
             'status' => 'success',
-            'message' => 'Autenticação 2FA validada com sucesso.',
+            'message' => 'Autenticação 2FA validada.',
             'token' => $token,
-            // 'user'  => $user
-        ];
+            'user' => [
+                'id' => Auth::id(), // Já funciona por causa do setUser
+                'name' => Auth::user()->name
+            ]
+        ]);
     }
-
 
     public function changePasswordUser(array $data, $id)
     {
