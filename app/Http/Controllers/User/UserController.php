@@ -52,6 +52,11 @@ class UserController extends AbstractController
             $this->logRequest();
             $token = $this->service->login($request);
             $this->logAction();
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: 'Iniciou sessão na aplicação.',
+            );
             return response()->json(['api_token' => $token], Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -64,6 +69,11 @@ class UserController extends AbstractController
         try {
             $this->logRequest();
             $this->logAction();
+            $this->logToDatabase(
+                type: 'user',
+                level: 'info',
+                customMessage: 'Terminou sessão na aplicação.',
+            );
             $this->service->logout($request);
             return response()->json(["message" => "Sessão terminada!"], Response::HTTP_OK);
         } catch (Exception $e) {
