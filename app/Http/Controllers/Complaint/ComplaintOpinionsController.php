@@ -8,7 +8,6 @@ use App\Http\Requests\Complaint\ComplaintOpinionsRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 class ComplaintOpinionsController extends AbstractController
 {
@@ -17,25 +16,28 @@ class ComplaintOpinionsController extends AbstractController
         $this->service = $service;
     }
 
+    protected function logDefinitions(): array
+    {
+        return [
+            'store'           => 'registou um novo parecer de reclamação #:complaint.code',
+            'update'          => 'atualizou o parecer de reclamação #:complaint.code'
+        ];
+    }
+
     /**
      * Store a newly created resource in storage.
      */
     public function store(ComplaintOpinionsRequest $request)
     {
         try {
-            $this->logRequest();
             $data = $request->validated();
             // Atribui automaticamente o ID do utilizador autenticado
             $data['user_id'] = auth()->id();
+
             if ($this->logRequest) {
                 $this->logRequest();
-                $this->logToDatabase(
-                    type: $this->logType,
-                    level: 'info',
-                    complaint_id: $data['complaint_id'],
-                    customMessage: "O usuário " . Auth::user()->first_name . "Registou um novo parecer de reclamação.",
-                );
             }
+
             $complaintOpinions = $this->service->store($data);
             return response()->json($complaintOpinions, Response::HTTP_CREATED);
         } catch (Exception $e) {

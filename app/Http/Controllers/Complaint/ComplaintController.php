@@ -27,7 +27,6 @@ class ComplaintController extends AbstractController
         return [
             'index'           => 'visualizou todas as reclamações',
             'show'            => 'visualizou os detalhes da reclamação #:code',
-            'showFile'        => 'acessou os documentos anexos da reclamação #:code',
             'update'          => 'atualizou os dados da reclamação #:code',
         ];
     }
@@ -49,7 +48,7 @@ class ComplaintController extends AbstractController
                 $request->input('orderBy', ['id' => 'desc']),
                 $request->input('relationships', []),
             );
-s
+
             // 🔹 Se for um paginator (quando existe "paginate")
             if ($service instanceof \Illuminate\Pagination\AbstractPaginator) {
                 $service->getCollection()->transform(function ($item) {
@@ -94,8 +93,6 @@ s
             // Envia tudo para o service
             $complaint = $this->service->storeData($data);
 
-            $this->logAction();
-
             //SendReportCopy::dispatch($complaint->id);
             return response()->json($complaint, Response::HTTP_CREATED);
         } catch (Exception $e) {
@@ -105,10 +102,8 @@ s
     }
     public function showFile($id)
     {
-
         try {
             $this->logRequest();
-            $this->logAction();
 
             $complaint = $this->service->showFile($id);
             return response()->json($complaint, Response::HTTP_CREATED);
@@ -125,9 +120,10 @@ s
     {
         try {
             $this->logRequest();
-            $this->logAction(params: ['id' => $id]);
-
             $complaint = $this->service->update($request->validated(), $id);
+
+            $this->logAction(params: $complaint);
+
             return response()->json($complaint, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
@@ -233,29 +229,16 @@ s
 
     public function updateStatus(UpdateStatusRequest $request, $id)
     {
-
         $this->logRequest();
         $complaint = $this->service->updateStatus($request->validated(), $id);
         return response()->json($complaint, Response::HTTP_OK);
-        try {
-        } catch (Exception $e) {
-
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
     }
-
 
     public function byManth()
     {
-
         $this->logRequest();
         $complaint = $this->service->byManth();
         return response()->json($complaint, Response::HTTP_OK);
-        try {
-        } catch (Exception $e) {
-
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
     }
 
 
@@ -265,10 +248,5 @@ s
         $this->logRequest();
         $complaint = $this->service->repeatOffenders();
         return response()->json($complaint, Response::HTTP_OK);
-        try {
-        } catch (Exception $e) {
-
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
     }
 }

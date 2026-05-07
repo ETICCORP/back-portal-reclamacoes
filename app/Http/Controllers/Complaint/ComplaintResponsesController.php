@@ -8,10 +8,8 @@ use App\Http\Requests\Complaint\ComplaintResponsesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
-use App\Http\Requests\Complaint\SendEmailResponseRequest;
 use App\Models\Complaint\ComplaintDeadline;
 use App\Services\Complaint\ComplaintDeadlineService;
-use Carbon\Carbon;
 
 class ComplaintResponsesController extends AbstractController
 {
@@ -23,37 +21,44 @@ class ComplaintResponsesController extends AbstractController
         $this->complaintDeadlineService = $complaintDeadlineService;
     }
 
+    protected function logDefinitions(): array
+    {
+        return [
+            'index'           => 'visualizou as respostas de reclamação',
+            'store'           => 'registou uma nova resposta de reclamação #:complaint.code',
+            'update'          => 'atualizou a resposta de reclamação #:complaint.code'
+        ];
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-   public function store(ComplaintResponsesRequest $request)
-{
-    try {
+    public function store(ComplaintResponsesRequest $request)
+    {
+        try {
 
-        $this->logRequest();
+            $this->logRequest();
 
-        $data = $request->validated();
+            $data = $request->validated();
 
-        $complaintResponses = $this->service->store($data);
+            $complaintResponses = $this->service->store($data);
 
-        ComplaintDeadline::where('complaint_id', $request->input('complaint_id'))
-            ->update([
-                'end_date' => null
-            ]);
+            ComplaintDeadline::where('complaint_id', $request->input('complaint_id'))
+                ->update([
+                    'end_date' => null
+                ]);
 
-        return response()->json($complaintResponses, Response::HTTP_CREATED);
+            return response()->json($complaintResponses, Response::HTTP_CREATED);
+        } catch (\Throwable $e) {
 
-    } catch (\Throwable $e) {
+            $this->logRequest($e);
 
-        $this->logRequest($e);
-
-        return response()->json([
-            'message' => 'Erro interno',
-            'error' => $e->getMessage()
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
-
+            return response()->json([
+                'message' => 'Erro interno',
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-}
 
     public function complaintResponse(ComplaintResponsesRequest $request)
     {
