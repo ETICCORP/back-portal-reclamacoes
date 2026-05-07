@@ -8,10 +8,8 @@ use App\Http\Requests\Complaint\ComplaintResponsesRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
-use App\Http\Requests\Complaint\SendEmailResponseRequest;
 use App\Models\Complaint\ComplaintDeadline;
 use App\Services\Complaint\ComplaintDeadlineService;
-use Carbon\Carbon;
 
 class ComplaintResponsesController extends AbstractController
 {
@@ -23,47 +21,58 @@ class ComplaintResponsesController extends AbstractController
         $this->complaintDeadlineService = $complaintDeadlineService;
     }
 
+    protected function logDefinitions(): array
+    {
+        return [
+            'index'           => 'visualizou a lista de respostas de reclamação',
+            'show'            => 'visualizou os detalhes da resposta de reclamação #:code',
+            'store'           => 'registou uma nova resposta de reclamação #:complaint.code',
+            'update'          => 'atualizou a resposta de reclamação #:complaint.code',
+            'delete'          => 'excluiu a resposta de reclamação #:complaint.code'
+        ];
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-   public function store(ComplaintResponsesRequest $request)
-{
-    try {
+    public function store(ComplaintResponsesRequest $request)
+    {
+        try {
 
-        $this->logRequest();
+            $this->logRequest();
 
-        $data = $request->validated();
+            $data = $request->validated();
 
-        $complaintResponses = $this->service->store($data);
+            $complaintResponses = $this->service->store($data);
 
-        ComplaintDeadline::where('complaint_id', $request->input('complaint_id'))
-            ->update([
-                'end_date' => null
-            ]);
+            $this->logAction(params: $complaintResponses);
 
-        return response()->json($complaintResponses, Response::HTTP_CREATED);
+            ComplaintDeadline::where('complaint_id', $request->input('complaint_id'))
+                ->update([
+                    'end_date' => null
+                ]);
 
-    } catch (\Throwable $e) {
+            return response()->json($complaintResponses, Response::HTTP_CREATED);
+        } catch (\Throwable $e) {
 
-        $this->logRequest($e);
+            $this->logRequest($e);
 
-        return response()->json([
-            'message' => 'Erro interno',
-            'error' => $e->getMessage()
-        ], Response::HTTP_INTERNAL_SERVER_ERROR);
-
+            return response()->json([
+                'message' => 'Erro interno',
+                'error' => $e->getMessage()
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
-}
 
     public function complaintResponse(ComplaintResponsesRequest $request)
     {
         try {
-
             $this->logRequest();
             $data = $request->validated();
             // Atribui automaticamente o ID do utilizador autenticado
             $data['user_id'] = auth()->id();
             $complaintResponses = $this->service->complaintResponse($data);
+            $this->logAction(params: $complaintResponses);
             return response()->json($complaintResponses, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -92,6 +101,7 @@ class ComplaintResponsesController extends AbstractController
         try {
             $this->logRequest();
             $complaintResponses = $this->service->update($request->validated(), $id);
+            $this->logAction(params: $complaintResponses);
             return response()->json($complaintResponses, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);

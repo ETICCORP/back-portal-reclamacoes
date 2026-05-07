@@ -4,25 +4,34 @@ namespace App\Http\Controllers\Complaint;
 
 use App\Http\Controllers\AbstractController;
 use App\Http\Requests\Complaint\UpdateRequest;
-use App\Jobs\SendReportCopy;
-use App\Mail\ReportAlertMail;
 use App\Services\Complaint\ComplaintService;
 use App\Http\Requests\Complaint\ComplaintRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 use App\Actions\StatusAction;
 use App\Http\Requests\Complaint\UpdateStatusRequest;
 
-use Illuminate\Support\Facades\Mail;
-
 class ComplaintController extends AbstractController
 {
+    protected string $resourceName = "reclamações";
+
     public function __construct(ComplaintService $service)
     {
         $this->service = $service;
+    }
+
+    protected function logDefinitions(): array
+    {
+        return [
+            'index'           => 'visualizou todas as reclamações',
+            'show'            => 'visualizou os detalhes da reclamação #:code',
+            'update'          => 'atualizou os dados da reclamação #:code',
+            'delete'          => 'excluiu a reclamação #:code',
+            'updateStatus'    => 'atualizou o status da reclamação #:code',
+            'getTopTypes'       => 'visualizou os tipos de reclamação mais frequentes',
+        ];
     }
 
     public function index(Request $request)
@@ -30,12 +39,9 @@ class ComplaintController extends AbstractController
         try {
             if ($this->logRequest) {
                 $this->logRequest();
-                $this->logToDatabase(
-                    type: $this->logType,
-                    level: 'info',
-                    customMessage: "O usuário " . Auth::user()->first_name . "Visualizou todos os registros os registros de  reclamacões",
-                );
             }
+
+            $this->logAction();
 
             $filters = $request['filters'] ?? $request['filtersV2'];
 
@@ -44,9 +50,7 @@ class ComplaintController extends AbstractController
                 $filters,
                 $request->input('orderBy', ['id' => 'desc']),
                 $request->input('relationships', []),
-                $filters // se realmente precisas passar $filters de novo
             );
-
 
             // 🔹 Se for um paginator (quando existe "paginate")
             if ($service instanceof \Illuminate\Pagination\AbstractPaginator) {
@@ -82,7 +86,6 @@ class ComplaintController extends AbstractController
     public function store(ComplaintRequest $request)
     {
         try {
-            $this->logRequest();
             // Concatena os anexos ao array de dados
             $attachments = $request->file('attachments');
             if ($attachments && !is_array($attachments)) {
@@ -102,9 +105,9 @@ class ComplaintController extends AbstractController
     }
     public function showFile($id)
     {
-
         try {
             $this->logRequest();
+
             $complaint = $this->service->showFile($id);
             return response()->json($complaint, Response::HTTP_CREATED);
         } catch (Exception $e) {
@@ -121,6 +124,9 @@ class ComplaintController extends AbstractController
         try {
             $this->logRequest();
             $complaint = $this->service->update($request->validated(), $id);
+
+            $this->logAction(params: $complaint);
+
             return response()->json($complaint, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
@@ -187,6 +193,7 @@ class ComplaintController extends AbstractController
     {
         try {
             $this->logRequest();
+            $this->logAction();
             $complaint = $this->service->getTopTypes();
             return response()->json($complaint, Response::HTTP_OK);
         } catch (Exception $e) {
@@ -226,29 +233,16 @@ class ComplaintController extends AbstractController
 
     public function updateStatus(UpdateStatusRequest $request, $id)
     {
-
         $this->logRequest();
         $complaint = $this->service->updateStatus($request->validated(), $id);
         return response()->json($complaint, Response::HTTP_OK);
-        try {
-        } catch (Exception $e) {
-
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
     }
-
 
     public function byManth()
     {
-
         $this->logRequest();
         $complaint = $this->service->byManth();
         return response()->json($complaint, Response::HTTP_OK);
-        try {
-        } catch (Exception $e) {
-
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
     }
 
 
@@ -258,10 +252,5 @@ class ComplaintController extends AbstractController
         $this->logRequest();
         $complaint = $this->service->repeatOffenders();
         return response()->json($complaint, Response::HTTP_OK);
-        try {
-        } catch (Exception $e) {
-
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
     }
 }

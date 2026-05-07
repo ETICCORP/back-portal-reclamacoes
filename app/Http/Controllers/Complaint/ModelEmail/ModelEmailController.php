@@ -17,6 +17,17 @@ class ModelEmailController extends AbstractController
         $this->service = $service;
     }
 
+    protected function logDefinitions(): array
+    {
+        return [
+            'index' => 'visualizou todas as minutas',
+            'show' => 'visualizou os detalhes da minuta #:name',
+            'store' => 'registrou a minuta #:name',
+            'update' => 'atualizou a minuta #:name',
+            'delete' => 'excluiu a minuta #:name',
+        ];
+    }
+
     /**
      * Store a newly created resource in storage.
      */
@@ -63,7 +74,7 @@ class ModelEmailController extends AbstractController
     {
         try {
 
-        
+
             $this->logRequest();
             $modelEmail = $this->service->update($request->validated(), $id);
             return response()->json($modelEmail, Response::HTTP_OK);

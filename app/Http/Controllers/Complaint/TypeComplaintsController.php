@@ -17,12 +17,25 @@ class TypeComplaintsController extends AbstractController
         $this->service = $service;
     }
 
+    public function logDefinitions(): array
+    {
+        return [
+            'index'           => 'visualizou todos os tipos de reclamação',
+            'show'            => 'visualizou os detalhes do tipo de reclamação #:name',
+            'store'           => 'registou um novo tipo de reclamação #:name',
+            'update'          => 'atualizou o tipo de reclamação #:name',
+            'delete'          => 'excluiu o tipo de reclamação #:name'
+        ];
+    }
+
     public function index(Request $request)
     {
         try {
             if ($this->logRequest) {
                 $this->logRequest();
             }
+
+            $this->logAction();
 
             $filters = $request['filters'] ?? $request['filtersV2'];
 
@@ -48,6 +61,7 @@ class TypeComplaintsController extends AbstractController
         try {
             $this->logRequest();
             $typeComplaints = $this->service->store($request->validated());
+            $this->logAction(params: $typeComplaints);
             return response()->json($typeComplaints, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -60,6 +74,7 @@ class TypeComplaintsController extends AbstractController
         try {
             $this->logRequest();
             $typeComplaints = $this->service->update($request->validated(), $id);
+            $this->logAction(params: $typeComplaints);
             return response()->json($typeComplaints, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
