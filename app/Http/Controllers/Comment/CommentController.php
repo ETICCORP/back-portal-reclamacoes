@@ -37,9 +37,10 @@ class CommentController extends AbstractController
                 $this->logRequest();
             }
 
-            $this->logAction();
-
             $comment = $this->service->store($data);
+            
+            $this->logAction(params: $comment);
+
             return response()->json($comment, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);

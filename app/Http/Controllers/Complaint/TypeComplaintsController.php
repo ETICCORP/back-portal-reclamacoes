@@ -22,7 +22,7 @@ class TypeComplaintsController extends AbstractController
         return [
             'index'           => 'visualizou todos os tipos de reclamação',
             'show'            => 'visualizou os detalhes do tipo de reclamação #:name',
-            'store'           => 'registou um novo tipo de reclamação #:name',
+            'store'           => 'registrou um novo tipo de reclamação #:name',
             'update'          => 'atualizou o tipo de reclamação #:name',
             'delete'          => 'excluiu o tipo de reclamação #:name'
         ];

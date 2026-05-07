@@ -36,7 +36,7 @@
                                 Olá, {{ explode(' ', trim($complaint->full_name ?? 'Cliente'))[0] }}.
                             </h2>
                             <p style="margin:0 0 24px 0; font-size:16px; line-height:1.6; color:#475569;">
-                                Informamos que o seu processo registou uma nova movimentação. O estado atual da sua
+                                Informamos que o seu processo registrou uma nova movimentação. O estado atual da sua
                                 exposição foi atualizado:
                             </p>
 

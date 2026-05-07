@@ -26,7 +26,7 @@ class ComplaintResponsesController extends AbstractController
         return [
             'index'           => 'visualizou a lista de respostas de reclamação',
             'show'            => 'visualizou os detalhes da resposta de reclamação #:code',
-            'store'           => 'registou uma nova resposta de reclamação #:complaint.code',
+            'store'           => 'registrou uma nova resposta de reclamação #:complaint.code',
             'update'          => 'atualizou a resposta de reclamação #:complaint.code',
             'delete'          => 'excluiu a resposta de reclamação #:complaint.code'
         ];
