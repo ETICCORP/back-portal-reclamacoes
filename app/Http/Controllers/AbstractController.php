@@ -124,6 +124,7 @@ abstract class AbstractController extends Controller
     private function executePragmaticLog(string $definition, string $level, mixed $dataSource)
     {
         $user = optional(auth()->user())->first_name ?? 'Sistema';
+
         if ($user === 'Sistema') return;
 
         // 1. Encontrar todos os placeholders que começam com ':' (ex: :nome, :categoria.titulo)

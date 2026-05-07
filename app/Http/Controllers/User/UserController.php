@@ -37,6 +37,9 @@ class UserController extends AbstractController
             'update' => 'atualizou os dados do usuário (nome: #:name)',
             'enabled' => 'atualizou o status do usuário (nome: #:name)',
             'changePasswordUser' => 'atualizou a senha do usuário (nome: #:name)',
+
+            'login' => 'iniciou sessão na aplicação',
+            'logout' => 'terminou sessão na aplicação'
         ];
     }
 
@@ -48,11 +51,7 @@ class UserController extends AbstractController
         try {
             $this->logRequest();
             $token = $this->service->login($request);
-            $this->logToDatabase(
-                type: 'user',
-                level: 'info',
-                customMessage: 'Iniciou sessão na aplicação.',
-            );
+            $this->logAction();
             return response()->json(['api_token' => $token], Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -64,12 +63,8 @@ class UserController extends AbstractController
     {
         try {
             $this->logRequest();
-            $this->logToDatabase(
-                type: 'user',
-                level: 'info',
-                customMessage: 'Terminou sessão na aplicação.',
-            );
-            $response = $this->service->logout($request);
+            $this->logAction();
+            $this->service->logout($request);
             return response()->json(["message" => "Sessão terminada!"], Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -86,11 +81,7 @@ class UserController extends AbstractController
         try {
             $this->logRequest();
             $user = $this->service->store($request->validated());
-            $this->logToDatabase(
-                type: 'user',
-                level: 'info',
-                customMessage: "Usuário {$user?->first_name} criado com sucesso.",
-            );
+            $this->logAction(params: $user);
             return response()->json($user, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -111,11 +102,7 @@ class UserController extends AbstractController
         try {
             $this->logRequest();
             $user = $this->service->update($request->validated(), $id);
-            $this->logToDatabase(
-                type: 'user',
-                level: 'info',
-                customMessage: "Usuário {$user?->first_name} atualizado com sucesso.",
-            );
+            $this->logAction(params: $user);
             return response()->json($user, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
