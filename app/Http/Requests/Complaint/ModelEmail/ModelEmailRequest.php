@@ -16,17 +16,32 @@ class ModelEmailRequest extends BaseFormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
-    public function rules()
-{
-    return [
-        'subject'        => 'required|string',
-        'name'           => 'required|string',
-        'body'           => 'required|string',
-       /// 'user_id'        => 'required|integer',
-   'signature_path' => 'required',
-    ];
-}
+    public function rules(): array
+    {
+        // Define se é uma atualização (PUT ou PATCH)
+        $isUpdate = $this->isMethod('put') || $this->isMethod('patch');
+
+        // Se for update, usamos 'sometimes'. Se for post, 'required'.
+        $requiredCondition = $isUpdate ? 'sometimes' : 'required';
+
+        return [
+            'subject'        => "$requiredCondition|string|max:255",
+            'name'           => "$requiredCondition|string|max:255",
+            'body'           => "$requiredCondition|string",
+            'signature_path' => "$requiredCondition|file|mimes:jpg,jpeg,png,pdf|max:2048",
+            // 'user_id'     => "$requiredCondition|exists:users,id",
+        ];
+    }
+
+    /**
+     * Opcional: Customizar mensagens de erro
+     */
+    public function messages(): array
+    {
+        return [
+            'required' => 'O campo :attribute é obrigatório para criar um modelo.',
+            'sometimes' => 'O campo :attribute foi enviado mas contém um formato inválido.',
+        ];
+    }
 }

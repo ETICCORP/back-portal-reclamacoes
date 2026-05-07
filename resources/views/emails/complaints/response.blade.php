@@ -74,10 +74,6 @@
 
         </table>
 
-        <p style="margin-top:25px; font-size:12px; color:#94a3b8; text-align:center;">
-          Para mais informações, aceda ao nosso <a href="{{ config('app.url') }}" style="color:#3b82f6; text-decoration:none; font-weight:600;">Portal do Cliente</a>.
-        </p>
-
       </td>
     </tr>
   </table>
