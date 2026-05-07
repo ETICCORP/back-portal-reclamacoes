@@ -36,10 +36,9 @@ class UserController extends AbstractController
             'store' => 'registrou um novo usuário (nome: #:name)',
             'update' => 'atualizou os dados do usuário (nome: #:name)',
             'enabled' => 'atualizou o status do usuário (nome: #:name)',
-            'changePasswordUser' => 'atualizou a senha do usuário (nome: #:name)',
+            'changePasswordUser' => 'alterou a sua senha (nome: #:name)',
 
-            'login' => 'iniciou sessão na aplicação',
-            'logout' => 'terminou sessão na aplicação'
+            'verify2fa' => 'iniciou sessão na aplicação',
         ];
     }
 
@@ -52,11 +51,6 @@ class UserController extends AbstractController
             $this->logRequest();
             $token = $this->service->login($request);
             $this->logAction();
-            $this->logToDatabase(
-                type: 'user',
-                level: 'info',
-                customMessage: 'Iniciou sessão na aplicação.',
-            );
             return response()->json(['api_token' => $token], Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -69,11 +63,6 @@ class UserController extends AbstractController
         try {
             $this->logRequest();
             $this->logAction();
-            $this->logToDatabase(
-                type: 'user',
-                level: 'info',
-                customMessage: 'Terminou sessão na aplicação.',
-            );
             $this->service->logout($request);
             return response()->json(["message" => "Sessão terminada!"], Response::HTTP_OK);
         } catch (Exception $e) {
@@ -202,8 +191,8 @@ class UserController extends AbstractController
     public function verify2fa(Verify2faRequest $request)
     {
         try {
-
             $user = $this->service->verify2fa($request->validated());
+            $this->logAction(params: $user);
             return response()->json($user, Response::HTTP_CREATED);
         } catch (Exception $e) {
             $this->logRequest($e);
@@ -217,11 +206,7 @@ class UserController extends AbstractController
         try {
             $this->logRequest();
             $user = $this->service->changePasswordUser($request->validated(), $id);
-            $this->logToDatabase(
-                type: 'user',
-                level: 'info',
-                customMessage: "Usuário {$user?->first_name} editou sua senha com sucesso.",
-            );
+            $this->logAction(params: $user);
             return response()->json($user, Response::HTTP_OK);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
