@@ -14,8 +14,6 @@ use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
-use PhpParser\Node\Stmt\TryCatch;
-use TwoFactorCodeMail;
 
 class UserService extends AbstractService
 {
