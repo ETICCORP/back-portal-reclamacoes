@@ -10,7 +10,7 @@ use App\Http\Controllers\User\UserController;
 
 Route::prefix('reports')->group(base_path('routes/reports/reportsFre.php'));
 
-Route::middleware('auth:sanctum')->group(function () {
+Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
   Route::prefix('permission')->group(base_path('routes/user/permission/permission.php'));
   Route::prefix('role')->group(base_path('routes/user/permission/role.php'));
   Route::prefix('user')->group(base_path('routes/user/user.php'));

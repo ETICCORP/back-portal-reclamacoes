@@ -26,6 +26,10 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'can' => \App\Http\Middleware\Can::class
         ]);
+
+        $middleware->alias([
+            'is_active' => \App\Http\Middleware\CheckUserIsActive::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
