@@ -29,50 +29,56 @@ class UserGrupoAlertService extends AbstractService
             throw new \Exception("Dados inválidos: id do grupo não encontrado.");
         }
 
-        // 1. Obter IDs atuais no banco antes de deletar
+        // 1. Obter IDs atuais (Estado Atual)
         $currentIds = $this->repository->findBy(['grup_alert_id' => $grupAlertId])
             ->pluck('user_id')
             ->toArray();
 
-        // 2. IDs enviados pelo Front-end (sanitizados)
-        $newIds = collect($data)->pluck('user_id')->unique()->toArray();
+        // 2. IDs desejados (Estado Final vindo do Front)
+        $newIds = collect($data)->pluck('user_id')->filter()->unique()->toArray();
 
-        // 3. Cálculo do Diff
-        $toAdd    = array_diff($newIds, $currentIds);    // Está no novo, mas não no banco
-        $toRemove = array_diff($currentIds, $newIds);   // Está no banco, mas não no novo
-        $kept     = array_intersect($currentIds, $newIds); // Está em ambos
+        // 3. Cálculo do Diferencial (Diff)
+        $toAdd    = array_values(array_diff($newIds, $currentIds));    // Novos
+        $toRemove = array_values(array_diff($currentIds, $newIds));   // Excluídos
+        $kept     = array_values(array_intersect($currentIds, $newIds)); // Mantidos
 
-        return DB::transaction(function () use ($grupAlertId, $newIds, $toAdd, $toRemove, $kept) {
+        return DB::transaction(function () use ($grupAlertId, $newIds, $toAdd, $toRemove, $kept, $currentIds) {
             $now = now();
 
-            // 4. Execução no Banco
-            $this->repository->forceDeleteBy('grup_alert_id', $grupAlertId);
+            // 4. Remover apenas quem saiu (Otimização de Performance)
+            if (!empty($toRemove)) {
+                $this->repository->getModel()
+                    ::where('grup_alert_id', $grupAlertId)
+                    ->whereIn('user_id', $toRemove)
+                    ->forceDelete();
+            }
 
-            $payload = collect($newIds)->map(fn($userId) => [
-                'grup_alert_id' => $grupAlertId,
-                'user_id'       => $userId,
-                'created_at'    => $now,
-                'updated_at'    => $now,
-            ])->toArray();
+            // 5. Inserir apenas quem entrou
+            if (!empty($toAdd)) {
+                $payload = collect($toAdd)->map(fn($userId) => [
+                    'grup_alert_id' => $grupAlertId,
+                    'user_id'       => $userId,
+                    'created_at'    => $now,
+                    'updated_at'    => $now,
+                ])->toArray();
 
-            if (!empty($payload)) {
                 $this->repository->insertMany($payload);
             }
 
-            // 5. Resposta clara e rica
+            // 6. Retorno preciso do que aconteceu
             return [
                 'group_id' => $grupAlertId,
                 'summary' => [
-                    'total_before' => count($toRemove) + count($kept),
-                    'total_after'  => count($newIds),
-                    'added_count'  => count($toAdd),
+                    'total_before'  => count($currentIds),
+                    'total_after'   => count($newIds),
+                    'added_count'   => count($toAdd),
                     'removed_count' => count($toRemove),
                     'kept_count'    => count($kept),
                 ],
                 'details' => [
-                    'added'   => array_values($toAdd),
-                    'removed' => array_values($toRemove),
-                    'kept'    => array_values($kept)
+                    'added'   => $toAdd,
+                    'removed' => $toRemove,
+                    'kept'    => $kept
                 ]
             ];
         });

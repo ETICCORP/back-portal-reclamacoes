@@ -16,6 +16,11 @@ abstract class AbstractRepository
         $this->model = $model;
     }
 
+    public function getModel(): Model
+    {
+        return $this->model;
+    }
+
     /**
      * Display a listing of the resource.
      */
