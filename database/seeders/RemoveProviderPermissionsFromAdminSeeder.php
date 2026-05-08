@@ -9,39 +9,50 @@ use App\Helpers\Helper;
 
 class RemoveProviderPermissionsFromAdminSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // 1. Localizar a Role de Administrador (ID 1)
-        $adminRole = Role::find(1);
+        // 1. Localizar o Admin (Usando nome ou ID para garantir)
+        $adminRole = Role::where('name', 'Administrador')->orWhere('id', 1)->first();
 
         if (!$adminRole) {
-            $this->command->error("Role Administrador (ID 1) não encontrada.");
+            $this->command->error("Role Administrador não encontrada.");
             return;
         }
 
-        // 2. Definir os slugs dos módulos que o Admin NÃO deve ter
-        // Geramos os nomes conforme a lógica do seu PermissionSeed original
-        $providerSlug = Helper::formatarString('Provedor'); // ex: 'provedor'
-        $providerComplaintsSlug = Helper::formatarString('Provedor Reclamações'); // ex: 'provedor-reclamacoes'
+        // 2. Slugs específicos
+        $slugs = [
+            Helper::formatarString('Provedor'),
+            Helper::formatarString('Provedor Reclamações')
+        ];
 
-        // 3. Buscar os IDs das permissões que começam com esses slugs
-        // Isso pegará 'provedor-show', 'provedor-edit', 'provedor-reclamacoes-show', etc.
-        $permissionsToRemove = Permission::where('name', 'like', "{$providerSlug}-%")
-            ->orWhere('name', 'like', "{$providerComplaintsSlug}-%")
-            ->pluck('id')
-            ->toArray();
+        // 3. Buscar IDs de forma agrupada e segura
+        // Usamos uma função anônima no where para agrupar o OR (WHERE (name LIKE ... OR name LIKE ...))
+        $permissionsToRemove = Permission::where(function ($query) use ($slugs) {
+            foreach ($slugs as $slug) {
+                $query->orWhere('name', 'like', "{$slug}-%");
+            }
+        })->pluck('permission.id')->toArray();
 
         if (empty($permissionsToRemove)) {
-            $this->command->info("Nenhuma permissão de provedor encontrada para remover.");
+            $this->command->info("Nenhuma permissão encontrada para os slugs informados.");
             return;
         }
 
-        // 4. Remover (detach) essas permissões específicas da Role de Admin
-        $adminRole->permissions()->detach($permissionsToRemove);
+        // 4. IDEMPOTÊNCIA: Verificar quais dessas permissões o Admin REALMENTE tem antes de tentar remover
+        // Isso evita que o banco tente processar remoções de algo que já não existe
+        $currentAdminPermissions = $adminRole->permissions()
+            ->whereIn('permission_id', $permissionsToRemove)
+            ->pluck('permission.id')
+            ->toArray();
 
-        $this->command->info("Permissões de provedor removidas do Administrador com sucesso!");
+        if (empty($currentAdminPermissions)) {
+            $this->command->comment("O Admin já não possui mais essas permissões. Nada a fazer.");
+            return;
+        }
+
+        // 5. Remover apenas as que ele possui
+        $adminRole->permissions()->detach($currentAdminPermissions);
+
+        $this->command->info(count($currentAdminPermissions) . " permissões de provedor removidas do Administrador.");
     }
 }
