@@ -19,102 +19,96 @@ class PermissionSeed extends Seeder
         */
         $adminRole = Role::updateOrCreate(
             ['name' => 'Administrador'],
-            [
-                'description' => 'Administrador do sistema',
-                'is_active' => true,
-            ]
+            ['description' => 'Administrador do sistema', 'is_active' => true]
         );
 
         $providerRole = Role::updateOrCreate(
             ['name' => 'Provedor'],
-            [
-                'description' => 'Provedor do sistema',
-                'is_active' => true,
-            ]
+            ['description' => 'Provedor do sistema', 'is_active' => true]
         );
-
 
         /*
         |--------------------------------------------------------------------------
-        | MÓDULOS
+        | MÓDULOS E PERMISSÕES (Lógica encurtada para o exemplo)
         |--------------------------------------------------------------------------
         */
         $modules = [
-            ['name' => 'Usuário', 'description' => 'Permite gerenciar usuários'],
-            ['name' => 'Estatística', 'description' => 'Permite gerenciar estatísticas'],
-            ['name' => 'Regra', 'description' => 'Permite gerenciar regras'],
-            ['name' => 'Denúcias', 'description' => 'Permite gerenciar denúncias'],
-            ['name' => 'Perfil', 'description' => 'Permite gerenciar perfil'],
-            ['name' => 'Alertas', 'description' => 'Permite gerenciar alertas'],
-            ['name' => 'Histórico', 'description' => 'Permite visualizar histórico'],
-            ['name' => 'Provedor', 'description' => 'Permite gerenciar provedores'],
-
-            ['name' => 'Provedor Reclamações', 'description' => 'Permite gerenciar Provedor Reclamações'],
+            ['name' => 'Usuário'],
+            ['name' => 'Estatística'],
+            ['name' => 'Regra'],
+            ['name' => 'Denúcias'],
+            ['name' => 'Perfil'],
+            ['name' => 'Alertas'],
+            ['name' => 'Histórico'],
+            ['name' => 'Provedor'],
+            ['name' => 'Provedor Reclamações'],
         ];
 
         $operations = ['show', 'create', 'edit', 'delete'];
-
         $adminPermissions = [];
         $providerPermissions = [];
-        $providerReclamacoesPermissions = [];
 
-        /*
-        |--------------------------------------------------------------------------
-        | PERMISSÕES
-        |--------------------------------------------------------------------------
-        */
         foreach ($modules as $module) {
             foreach ($operations as $operation) {
-
                 $permissionName = Helper::formatarString($module['name']) . "-$operation";
-
                 $permission = Permission::updateOrCreate(
                     ['name' => $permissionName],
-                    [
-                        'description' => "Permite {$operation} {$module['name']}",
-                        'is_active' => true,
-                    ]
+                    ['description' => "Permite {$operation} {$module['name']}", 'is_active' => true]
                 );
 
-                // Administrador recebe TODAS
                 $adminPermissions[] = $permission->id;
 
-                if (
-                    in_array($operation, ['show', 'create', 'edit', 'delete']) &&
-                    $module['name'] === 'Provedor Reclamacoes'
-                ) {
+                // Corrigido: Verificando o nome exato do módulo conforme definido no array
+                if ($module['name'] === 'Provedor Reclamações') {
                     $providerPermissions[] = $permission->id;
                 }
-
-                // Provedor Reclamacoes recebe TODAS as permissões
-                $providerReclamacoesPermissions[] = $permission->id;
             }
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | ASSOCIAR PERMISSÕES
-        |--------------------------------------------------------------------------
-        */
         $adminRole->permissions()->sync($adminPermissions);
         $providerRole->permissions()->sync($providerPermissions);
 
-
         /*
         |--------------------------------------------------------------------------
-        | USUÁRIO ADMIN
+        | CRIAÇÃO DE USUÁRIOS VIA FUNÇÃO
         |--------------------------------------------------------------------------
         */
+
+        // Criando Admin
+        $this->createUser(
+            'Evangelina',
+            'Jaime',
+            'evangelina.jaime@keepcomply.co.ao',
+            'Evangelina123@@',
+            '922222222',
+            $adminRole->id
+        );
+
+        // Criando Provedor
+        $this->createUser(
+            'Evangelina Jaime',
+            'Provedor',
+            'keepcomply838@gmail.com',
+            'Evangelina12Provedor@@',
+            '933333333',
+            $providerRole->id
+        );
+    }
+
+    /**
+     * Função auxiliar para criar ou atualizar usuários
+     */
+    private function createUser(string $fname, string $lname, string $email, string $password, string $phone, int $roleId): void
+    {
         User::updateOrCreate(
-            ['email' => 'admin@gmail.com'],
+            ['email' => $email],
             [
-                'first_name' => 'Administrador',
-                'last_name' => 'Sistema',
-                'phone' => '11999999999',
-                'email' => 'admin@gmail.com',
-                'password' => bcrypt('12345678'),
-                'role_id' => $adminRole->id,
-                'is_active' => true
+                'first_name' => $fname,
+                'last_name'  => $lname,
+                'phone'      => $phone,
+                'password'   => bcrypt($password),
+                'role_id'    => $roleId,
+                'is_active'  => true
             ]
         );
     }
