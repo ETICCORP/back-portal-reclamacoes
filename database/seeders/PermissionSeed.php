@@ -29,7 +29,7 @@ class PermissionSeed extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | MÓDULOS E PERMISSÕES (Lógica encurtada para o exemplo)
+        | MÓDULOS E PERMISSÕES
         |--------------------------------------------------------------------------
         */
         $modules = [
@@ -51,26 +51,30 @@ class PermissionSeed extends Seeder
         foreach ($modules as $module) {
             foreach ($operations as $operation) {
                 $permissionName = Helper::formatarString($module['name']) . "-$operation";
+                
                 $permission = Permission::updateOrCreate(
                     ['name' => $permissionName],
                     ['description' => "Permite {$operation} {$module['name']}", 'is_active' => true]
                 );
 
-                $adminPermissions[] = $permission->id;
-
-                // Corrigido: Verificando o nome exato do módulo conforme definido no array
-                if ($module['name'] === 'Provedor Reclamações') {
+                // Lógica de Separação:
+                // Se o módulo for "Provedor" ou "Provedor Reclamações", vai para o Provedor.
+ ]               // Caso contrário, vai para o Administrador.
+                if (in_array($module['name'], ['Provedor', 'Provedor Reclamações'])) {
                     $providerPermissions[] = $permission->id;
+                } else {
+                    $adminPermissions[] = $permission->id;
                 }
             }
         }
 
+        // Sincroniza garantindo exclusividade
         $adminRole->permissions()->sync($adminPermissions);
         $providerRole->permissions()->sync($providerPermissions);
 
         /*
         |--------------------------------------------------------------------------
-        | CRIAÇÃO DE USUÁRIOS VIA FUNÇÃO
+        | CRIAÇÃO DE USUÁRIOS
         |--------------------------------------------------------------------------
         */
 
@@ -80,6 +84,15 @@ class PermissionSeed extends Seeder
             'Jaime',
             'evangelina.jaime@keepcomply.co.ao',
             'Evangelina123@@',
+            '922222222',
+            $adminRole->id
+        );
+
+        $this->createUser(
+            'Vicente',
+            'Eduardo',
+            'vicente.eduardo@etic.co.ao',
+            'Vicente123@@',
             '922222222',
             $adminRole->id
         );
@@ -95,9 +108,6 @@ class PermissionSeed extends Seeder
         );
     }
 
-    /**
-     * Função auxiliar para criar ou atualizar usuários
-     */
     private function createUser(string $fname, string $lname, string $email, string $password, string $phone, int $roleId): void
     {
         User::updateOrCreate(
