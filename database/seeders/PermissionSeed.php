@@ -88,6 +88,15 @@ class PermissionSeed extends Seeder
             $adminRole->id
         );
 
+        $this->createUser(
+            'Vicente',
+            'Eduardo',
+            'vicente.eduardo@etic.co.ao',
+            'Vicente123@@',
+            '922222222',
+            $adminRole->id
+        );
+
         // Criando Provedor
         $this->createUser(
             'Evangelina Jaime',
