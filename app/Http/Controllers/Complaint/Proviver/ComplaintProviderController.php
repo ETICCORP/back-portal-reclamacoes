@@ -40,15 +40,15 @@ class ComplaintProviderController extends AbstractController
                 ], 401);
             }
 
-            $providerID = $this->grupProvederService->getUserProviderIdByUser($userId);
+            // $providerID = $this->grupProvederService->getUserProviderIdByUser($userId);
 
-            // Se providerID não existir, lança um erro ou define valor padrão
-            if (!$providerID) {
-                return response()->json([
-                    'message' => 'Provedor associado ao usuário não encontrado',
-                    'code' => 404
-                ], 404);
-            }
+            // // Se providerID não existir, lança um erro ou define valor padrão
+            // if (!$providerID) {
+            //     return response()->json([
+            //         'message' => 'Provedor associado ao usuário não encontrado',
+            //         'code' => 404
+            //     ], 404);
+            // }
 
 
             if (is_callable([$this, 'logRequest'])) {
@@ -60,17 +60,17 @@ class ComplaintProviderController extends AbstractController
                 );
             }
 
-            // Valor default para filtersV2
-            $defaultFiltersV2 = [
-                [
-                    "field" => "provider_id",
-                    "filterType" => "EQUALS",
-                    "filterValue" => $providerID
-                ]
-            ];
+            // // Valor default para filtersV2
+            // $defaultFiltersV2 = [
+            //     [
+            //         "field" => "provider_id",
+            //         "filterType" => "EQUALS",
+            //         "filterValue" => $providerID
+            //     ]
+            // ];
 
             // Define filters com prioridade: filters -> filtersV2 -> defaultFiltersV2
-            $filters = $request['filters'] ?? $request['filtersV2'] ?? $defaultFiltersV2;
+            $filters = $request['filters'] ?? $request['filtersV2'] ?? null;
 
             $service = $this->service->index(
                 $request['paginate'] ?? null,
