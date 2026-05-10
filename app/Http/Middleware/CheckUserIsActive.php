@@ -20,12 +20,6 @@ class CheckUserIsActive
     {
         $user = Auth::user();
 
-        logs()->info('Verificando se o usuário está ativo', [
-            'user_id' => $user ? $user->id : null,
-            'email' => $user ? $user->email : null,
-            'is_active' => $user ? $user->is_active : null,
-        ]);
-
         // 1. Verifica se existe usuário logado e se ele está inativo
         // Usamos cast (bool) para garantir a comparação correta
         if ($user && !(bool) $user->is_active) {
@@ -34,7 +28,7 @@ class CheckUserIsActive
             if ($request->bearerToken()) {
                 // revoga o token atual
                 $user->currentAccessToken()->delete();
-                $message = 'Sua conta está inativada. Entre em contato com o suporte.';
+                $message = 'Sua conta está inativa. Entre em contato com o suporte.';
 
                 return response()->json([
                     'error' => 'Conta inativa, token revogado',

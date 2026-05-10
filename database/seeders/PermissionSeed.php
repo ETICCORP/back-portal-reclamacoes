@@ -59,7 +59,7 @@ class PermissionSeed extends Seeder
 
                 // Lógica de Separação:
                 // Se o módulo for "Provedor" ou "Provedor Reclamações", vai para o Provedor.
- ]               // Caso contrário, vai para o Administrador.
+                // Caso contrário, vai para o Administrador.
                 if (in_array($module['name'], ['Provedor', 'Provedor Reclamações'])) {
                     $providerPermissions[] = $permission->id;
                 } else {

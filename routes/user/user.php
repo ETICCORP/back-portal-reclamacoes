@@ -12,19 +12,19 @@ Route::put('/changePassword/{id}', [UserController::class, 'changePasswordUser']
 
 Route::get('', [UserController::class, 'index'])
     ->name('user.index')
-    ->middleware(['can:usuario-show']);
-
+    ->middleware(['permissao:usuario-show']);
+    
 Route::post('', [UserController::class, 'store'])
     ->name('user.store')
-    ->middleware(['can:usuario-create']);
+    ->middleware(['permissao:usuario-create']);
 
 Route::get('{id}', [UserController::class, 'show'])
     ->name('user.show')
-    ->middleware(['can:usuario-show']);
+    ->middleware(['permissao:usuario-show']);
 
 Route::put('{id}', [UserController::class, 'update'])
     ->name('user.update')
-    ->middleware(['can:usuario-edit']);
+    ->middleware(['permissao:usuario-edit']);
 
     Route::put('/enabled/{id}', [UserController::class, 'enabled'])
     ->name('user.enabled');
@@ -34,6 +34,6 @@ Route::put('{id}', [UserController::class, 'update'])
 
 Route::delete('{id}', [UserController::class, 'destroy'])
     ->name('user.destroy')
-    ->middleware(['can:usuario-delete']);
+    ->middleware(['permissao:usuario-delete']);
 
 Route::post('/logout', [UserController::class, 'logout']);

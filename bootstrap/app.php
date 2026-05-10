@@ -20,14 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
 
         $middleware->alias([
-            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
-        ]);
-
-        $middleware->alias([
-            'can' => \App\Http\Middleware\Can::class
-        ]);
-
-        $middleware->alias([
+            'verified'  => \App\Http\Middleware\EnsureEmailIsVerified::class,
+            'permissao' => \App\Http\Middleware\Can::class,
             'is_active' => \App\Http\Middleware\CheckUserIsActive::class,
         ]);
     })
