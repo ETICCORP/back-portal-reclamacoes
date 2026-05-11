@@ -140,11 +140,10 @@ class ComplaintRepository extends AbstractRepository
      */
     public function updateStatus(array $data, int $id)
     {
-
-
         $model = $this->model->findOrFail($id);
 
         $model->update(['status' => $data['status']]);
+
         if (isset($data['comment'])) {
             $this->commentRepository->model::create([
                 "comment"   => $data['comment'],

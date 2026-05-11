@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\ComplaintTriages;
 
 use App\Models\ComplaintTriages\ComplaintTriages;
@@ -6,8 +7,9 @@ use App\Repositories\AbstractRepository;
 use App\Repositories\Complaint\ComplaintRepository;
 
 class ComplaintTriagesRepository extends AbstractRepository
-{ public $complaintRepository;
-    public function __construct(ComplaintTriages $model,ComplaintRepository $complaintRepository)
+{
+    public $complaintRepository;
+    public function __construct(ComplaintTriages $model, ComplaintRepository $complaintRepository)
     {
         parent::__construct($model);
         $this->complaintRepository = $complaintRepository;
@@ -15,24 +17,28 @@ class ComplaintTriagesRepository extends AbstractRepository
 
     public function store(array $data)
     {
-        if (!empty($data['is_refused']) && $data['is_refused'] === true) {
-            $data['status'] = "Negada Classificação";
-        } else {
-            $data['status'] = "Aprovada Classificação";
+        // Determina a etiqueta de status para o comentário interno
+        $label = "Aprovada Classificação";
+
+        if (data_get($data, 'is_refused')) {
+            $label = "Negada Classificação";
+        } elseif (data_get($data, 'is_returned')) {
+            $label = "Devolvida ao Reclamante";
         }
-    
-       
-            $data['comment'] = "Classificação da Triagem: " . ($data['is_refused'] ? "Negada" : "Aprovada");
-        
-    
-        // Cria a triagem com todos os dados já definidos
-        $triagem = $this->model->create($data);
-    
+
+        // Prepara dados específicos do registro de triagem
+        $data['status'] = $label;
+        $data['comment'] = "Classificação da Triagem: " . $label;
+
         // Atualiza o status da reclamação relacionada (se existir complaint_id)
         if (!empty($data['complaint_id'])) {
-            $this->complaintRepository->updateStatus($data, $data['complaint_id']);
+            $this->complaintRepository->updateStatus(
+                $data,
+                $data['complaint_id']
+            );
         }
-    
-        return $triagem;
+
+        // Cria o registro na tabela complaint_triages
+        return $this->model->create($data);
     }
 }

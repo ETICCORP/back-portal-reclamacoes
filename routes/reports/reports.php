@@ -12,8 +12,6 @@ use App\Http\Controllers\Complaint\Proviver\ComplaintProviderResponseController;
 use App\Http\Controllers\Complaint\TypeComplaintsController;
 use App\Http\Controllers\Complaintattachment\ComplaintattachmentController;
 use App\Http\Controllers\ComplaintTriages\ComplaintTriagesController;
-use App\Http\Controllers\Permission\PermissionController;
-use App\Services\Complaint\ComplaintResponsesService;
 
 /*
 |--------------------------------------------------------------------------

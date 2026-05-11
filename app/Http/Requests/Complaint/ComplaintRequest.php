@@ -28,15 +28,14 @@ class ComplaintRequest extends BaseFormRequest
             'contact'           => ['nullable',  'max:50'],
             'source'              => ['nullable',  'max:50'],
             'location'           => ['nullable',  'string', 'max:255'],
-            'status'           => ['nullable',  'max:50'],
             'type'           => ['nullable'],
-            'email'             => ['nullable','max:255'],
+            'email'             => ['nullable', 'max:255'],
             'policy_number'     => ['nullable',  'max:100'],
             'entity'            => ['required', 'string', 'max:255'],
             'description'       => ['nullable'],
             'incidentDateTime'       => ['nullable'],
             "representative"   => ['nullable'],
-        
+
 
 
             // 📎 Validação dos anexos

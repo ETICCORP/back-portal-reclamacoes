@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Actions;
 
@@ -7,9 +7,10 @@ class StatusAction
     public static function getNextStatuses(string $status): array
     {
         return match ($status) {
-            "Pending", "Pendente"      => ["Detalhes", "Triagem ou Classificação"],
-            "Aprovada Classificação"   => ["Detalhes", "Solicitar Opinião", "Responder ao Reclamante", "Encaminhar ao Provedor"],
+            "Pending", "Pendente"      => ["Detalhes", "Triagem ou Classificação", "Devolver ao Reclamante"],
+            "Aprovada Classificação"   => ["Detalhes", "Solicitar Opinião", "Responder ao Reclamante", "Devolver ao Reclamante", "Encaminhar ao Provedor"],
             "Negada Classificação"     => ["Detalhes"],
+            "Devolvida ao Reclamante" => ["Detalhes", "Triagem ou Classificação"],
             "Encaminhado ao Provedor"  => ["Detalhes", "Solicitar Opinião"],
             "Respondida pelo Provedor" => ["Detalhes", "Solicitar Opinião", "Responder ao Reclamante", "Encaminhar ao Provedor"],
             "Respondida ao Reclamante" => ["Detalhes"],
@@ -23,6 +24,7 @@ class StatusAction
             "Aprovada Classificação"   => "A sua exposição foi validada tecnicamente e seguirá para análise interna profunda.",
             "Negada Classificação"     => "Após análise, informamos que a sua exposição não preenche os requisitos para prosseguimento.",
             "Encaminhado ao Provedor"  => "Enviámos os detalhes ao provedor responsável para obter esclarecimentos adicionais.",
+            "Devolvida ao Reclamante"  => "Identificámos a necessidade de informações complementares para avançar com a análise.",
             "Respondida pelo Provedor" => "Recebemos o feedback do provedor e estamos a consolidar a resposta final.",
             "Respondida ao Reclamante" => "O seu processo foi concluído. A resposta oficial já se encontra disponível.",
             default                    => "O seu processo registrou uma nova movimentação e está a ser processado pela nossa equipa."
