@@ -36,38 +36,36 @@ class ComplaintTriagesRequest extends BaseFormRequest
     }
 
     /**
-     * Prepara os dados para o controller após a validação.
+     * Sobrescrevemos o método validated para garantir que o array retornado 
+     * contenha os campos nulos conforme a regra de negócio.
      */
-    protected function passedValidation()
+    public function validated($key = null, $default = null)
     {
+        $validated = parent::validated($key, $default);
+
         $isRefused = $this->boolean('is_refused');
         $isReturned = $this->boolean('is_returned');
 
-        // Se for QUALQUER saída de fluxo excepcional (Recusa ou Devolução)
+        // Se for Recusa ou Devolução, força NULL nos campos técnicos
         if ($isRefused || $isReturned) {
-            $this->merge([
-                'classification_type' => null,
-                'severity'            => null,
-                'urgency'             => null,
-                'responsible_area'    => null,
-                'assigned_user_id'    => null,
-            ]);
+            $validated['classification_type'] = null;
+            $validated['severity']            = null;
+            $validated['urgency']             = null;
+            $validated['responsible_area']    = null;
+            $validated['assigned_user_id']    = null;
         }
 
-        // Limpeza mútua de motivos para evitar lixo no banco
+        // Limpeza cruzada de motivos
         if ($isRefused) {
-            $this->merge(['return_reason' => null]);
+            $validated['return_reason'] = null;
+        } elseif ($isReturned) {
+            $validated['refusal_reason'] = null;
+        } else {
+            // Se for triagem normal, limpa ambos os motivos
+            $validated['refusal_reason'] = null;
+            $validated['return_reason']  = null;
         }
 
-        if ($isReturned) {
-            $this->merge(['refusal_reason' => null]);
-        }
-
-        if (!$isRefused && !$isReturned) {
-            $this->merge([
-                'refusal_reason' => null,
-                'return_reason'  => null,
-            ]);
-        }
+        return $validated;
     }
 }
