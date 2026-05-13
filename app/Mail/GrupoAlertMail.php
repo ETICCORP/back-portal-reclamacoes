@@ -27,7 +27,7 @@ class GrupoAlertMail extends Mailable
             'alert_class' => get_class($this->alert),
         ]);
 
-        return $this->subject('Notificação de Grupo de Alerta')
+        return $this->subject('Notificação de Grupo de Reclamação')
             ->view('emails.grupo.alert')
             ->with([
                 'user' => $this->user,

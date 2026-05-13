@@ -5,9 +5,14 @@ namespace App\Http\Controllers\Complaint;
 use App\Http\Controllers\AbstractController;
 use App\Services\Complaint\ComplaintOpinionsService;
 use App\Http\Requests\Complaint\ComplaintOpinionsRequest;
+use App\Models\Alert\UserGrupoAlert\UserGrupoAlert;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ComplaintOpinionAlert;
+use App\Models\Log\Log;
+use Illuminate\Support\Facades\DB;
 
 class ComplaintOpinionsController extends AbstractController
 {
@@ -27,28 +32,84 @@ class ComplaintOpinionsController extends AbstractController
         ];
     }
 
+
     /**
-     * Store a newly created resource in storage.
+     * Notifica o grupo de alerta. Lança exceção se o utilizador específico for inválido.
+     * * @throws \InvalidArgumentException
      */
+    private function notifyAlertGroup($opinion, ?int $specificUserId = null): void
+    {
+        $query = UserGrupoAlert::where('grup_alert_id', $opinion->department_id)
+            ->with('user');
+
+        if ($specificUserId) {
+            $query->where('user_id', $specificUserId);
+        }
+
+        $recipients = $query->get()->pluck('user.email')->filter();
+
+        // Se foi solicitado um user específico e ele não está no grupo, lançamos erro.
+        if ($specificUserId && $recipients->isEmpty()) {
+            throw new \InvalidArgumentException(
+                "O utilizador selecionado (ID: {$specificUserId}) não pertence ao grupo de alerta do departamento {$opinion->department_id}."
+            );
+        }
+
+        logs()->info("Notificando grupo de alerta do departamento {$opinion->department_id} para o parecer de reclamação #{$opinion->complaint_id}. Destinatários: " . $recipients->implode(', '));
+
+        if ($recipients->isNotEmpty()) {
+            try {
+                Mail::to($recipients)->queue(new ComplaintOpinionAlert($opinion->complaint, $opinion));
+            } catch (\Throwable $e) {
+                // Se o disparo da fila falhar, lançamos uma exception para o store capturar
+                throw new \RuntimeException("Falha técnica ao enfileirar e-mail de notificação.");
+            }
+        }
+    }
+
+
     public function store(ComplaintOpinionsRequest $request)
     {
         try {
-            $data = $request->validated();
-            // Atribui automaticamente o ID do utilizador autenticado
-            $data['user_id'] = auth()->id();
+            DB::beginTransaction();
 
-            if ($this->logRequest) {
-                $this->logRequest();
-            }
-            
-            $complaintOpinions = $this->service->store($data);
+            $data = array_merge($request->validated(), [
+                'user_id'      => auth()->id(),
+                'submitted_at' => now(),
+            ]);
 
-            $this->logAction(params: $complaintOpinions);
-            
-            return response()->json($complaintOpinions, Response::HTTP_CREATED);
-        } catch (Exception $e) {
-            $this->logRequest($e);
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            $opinion = $this->service->store($data);
+            $opinion->load(['complaint', 'user']);
+
+            // Se notifyAlertGroup lançar Exception, o catch abaixo captura
+            $this->notifyAlertGroup($opinion, $request->get('user_id'));
+
+            $this->logAction(params: $opinion->complaint);
+
+            DB::commit();
+
+            return response()->json(['message' => 'Parecer registado e equipa notificada.'], 201);
+        } catch (\InvalidArgumentException $e) {
+            // Erro de regra de negócio (Ex: user não pertence ao grupo)
+            DB::rollBack();
+
+            logs()->warning("Validação de Notificação: " . $e->getMessage());
+
+            return response()->json([
+                'message' => $e->getMessage()
+            ], 422);
+        } catch (\Throwable $th) {
+            // Erros críticos de sistema
+            DB::rollBack();
+
+            logs()->error("Erro Crítico ComplaintOpinion@store: " . $th->getMessage(), [
+                'exception' => $th,
+                'payload'   => $request->all()
+            ]);
+
+            return response()->json([
+                'message' => 'Não foi possível processar o parecer. ' . $th->getMessage()
+            ], 500);
         }
     }
 
