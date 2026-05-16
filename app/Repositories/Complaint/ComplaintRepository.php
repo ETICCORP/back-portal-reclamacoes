@@ -140,22 +140,32 @@ class ComplaintRepository extends AbstractRepository
      */
     public function updateStatus(array $data, int $id)
     {
-        $model = $this->model->findOrFail($id);
+        return DB::transaction(function () use ($data, $id) {
+            $model = $this->model->findOrFail($id);
 
-        $model->update(['status' => $data['status']]);
-
-        if (isset($data['comment'])) {
-            $this->commentRepository->model::create([
-                "comment"   => $data['comment'],
-                "report_id" => $id,
-                "fk_user" => Auth::user()->id
+            logs()->info('Atualizando status da denúncia', [
+                'complaint_id' => $id,
+                'old_status' => $model->status,
+                'new_status' => $data['status'],
+                'comment' => $data['comment'] ?? null,
             ]);
-        }
 
-        // 📎 Anexos
-        $this->handleAttachments($data['attachments'] ?? null, $id);
+            $model->update(['status' => $data['status']]);
 
-        return $model;
+            if (isset($data['comment'])) {
+
+                $this->commentRepository->model::create([
+                    "comment"   => $data['comment'],
+                    "report_id" => $id,
+                    "fk_user" => Auth::user()->id
+                ]);
+            }
+
+            // 📎 Anexos
+            $this->handleAttachments($data['attachments'] ?? null, $id);
+
+            return $model;
+        });
     }
 
     /**

@@ -32,7 +32,7 @@ class StatusAction
             "Devolvida ao Reclamante"  => "Ação Necessária: Complemento de Informações",
             "Devolvida ao Provedor"    => "Reclamação Reencaminhada para Revisão",
             "Respondida ao Reclamante" => "Resposta Final Disponível",
-            "Encaminhado ao Provedor"  => "A sua exposição foi encaminhada à instituição",
+            "Encaminhado ao Provedor"  => "A sua exposição foi encaminhada ao Provedor",
             default                    => "Atualização de Status: Protocolo #{$code}"
         };
     }

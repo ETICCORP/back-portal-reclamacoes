@@ -3,11 +3,11 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Complaint\ComplaintProvider;
 
-class ComplaintForwardedMail extends Mailable
+class ComplaintForwardedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -26,13 +26,12 @@ class ComplaintForwardedMail extends Mailable
      */
     public function build()
     {
-        $email = $this->subject("Nova Reclamação Encaminhada: ID {$this->complaintProvider->complaint_id}")
-                      ->view('emails.providers.complaint_forwarded')
-                      ->with([
-                          'complaintProvider' => $this->complaintProvider,
-                      ]);
+        $email = $this->subject("Nova Reclamação Encaminhada: ID #{$this->complaintProvider->complaint->code}")
+            ->view('emails.providers.complaint_forwarded')
+            ->with([
+                'complaintProvider' => $this->complaintProvider,
+            ]);
 
-        
         return $email;
     }
 }

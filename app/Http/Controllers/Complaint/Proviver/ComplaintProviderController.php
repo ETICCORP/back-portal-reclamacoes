@@ -92,8 +92,6 @@ class ComplaintProviderController extends AbstractController
     }
 
 
-
-
     public function store(ComplaintProviderRequest $request)
     {
         try {

@@ -23,40 +23,59 @@ class ComplaintProviderRepository extends AbstractRepository
     }
     public function forwardComplaint(array $data)
     {
-
-        $complaintProvider = $this->model->create([
-            'complaint_id' => $data['complaint_id'],
-            'provider_id' => $data['provider_id'],
-            'summary' => $data['summary'],
-            'notes' => $data['notes'],
-            'sent_at'  => now(),
-            'deadline' => Carbon::now()->addWeekdays(20),
-            'status' => 'sent'
-
-        ]);
-        // 📎 Anexos
-        //  $this->uploadSignature($data['signature_path'] ?? null, $complaint->id);
-        $data['status'] = "Encaminhado ao Provedor";
-        $data['comment'] = $data['notes'];
-
-        //$this->complaintRepository->updateStatus($data, $data['complaint_id']);
-        $complaintProvider->load([
-            "complaint",
-            "provider"
-
-        ]);
+        $complaintProvider = null;
 
         try {
+            DB::beginTransaction();
+
+            $complaintProvider = $this->model->create([
+                'complaint_id' => $data['complaint_id'],
+                'provider_id' => $data['provider_id'],
+                'summary' => $data['summary'],
+                'notes' => $data['notes'],
+                'sent_at'  => now(),
+                'deadline' => Carbon::now()->addWeekdays(20),
+                'status' => 'sent'
+
+            ]);
+
+            // 📎 Anexos
+            //  $this->uploadSignature($data['signature_path'] ?? null, $complaint->id);
+            $data['status'] = "Encaminhado ao Provedor";
+            $data['comment'] = $data['notes'];
+
+            // Atualiza o status da reclamação para "Encaminhado ao Provedor"
+            $this->complaintRepository->updateStatus($data, $data['complaint_id']);
+
+            // Carrega as relações necessárias para o envio do e-mail
+            $complaintProvider->load([
+                "complaint",
+                "provider"
+            ]);
+
+            DB::commit();
+
             // Envio de e-mail ao Provedor
             Mail::to($complaintProvider->provider->email)
-                ->send(new ComplaintForwardedMail($complaintProvider));
-        } catch (\Throwable $e) {
-            Log::error('Erro ao enviar email para o provedor', [
-                'email' => $complaintProvider->provider->email,
-                'complaint_provider_id' => $complaintProvider->id,
-                'error' => $e->getMessage(),
+                ->queue(new ComplaintForwardedMail($complaintProvider));
+
+            logs()->info('Reclamação encaminhada para o provedor', [
+                'email do provedor' => $complaintProvider->provider->email,
             ]);
+        } catch (\Throwable $e) {
+            DB::rollBack();
+
+            if (isset($complaintProvider)) {
+                logs()->error('Erro ao encaminhar para o provedor', [
+                    'email do provedor' => $complaintProvider->provider->email,
+                    'complaint_provider_id' => $complaintProvider->id,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+
+            throw new \Exception('Erro ao encaminhar para o provedor 2');
         }
+
         return $complaintProvider;
     }
 

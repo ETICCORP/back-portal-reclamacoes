@@ -47,11 +47,10 @@ class ComplaintResponsesRepository extends AbstractRepository
         $this->complaintRepository->updateStatus($data, $data['complaint_id']);
 
         try {
-            Mail::to($complaint->complaint->email)->send(new ComplaintResponseMail($complaint));
+            Mail::to($complaint->complaint->email)->queue(new ComplaintResponseMail($complaint));
         } catch (\Throwable $th) {
             //throw $th;
         }
-
 
         return $complaint;
     }
@@ -123,7 +122,7 @@ class ComplaintResponsesRepository extends AbstractRepository
         $complaint = $this->model::with('complaint', 'user')->find($id);
 
         try {
-            Mail::to($complaint->complaint->email)->send(new ComplaintResponseMail($complaint));
+            Mail::to($complaint->complaint->email)->queue(new ComplaintResponseMail($complaint));
             return $complaint;
         } catch (\Throwable $th) {
             return response()->json([

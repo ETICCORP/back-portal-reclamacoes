@@ -23,8 +23,8 @@ class ComplaintTriagesRequest extends BaseFormRequest
             'is_returned'         => ['required', 'boolean'],
 
             // Motivos obrigatórios condicionalmente
-            'refusal_reason'      => ['required_if:is_refused,true', 'nullable', 'string'],
-            'return_reason'       => ['required_if:is_returned,true', 'nullable', 'string'],
+            'refusal_reason'      => ['required_if:is_refused,true', 'nullable', 'string', 'max:1000'],
+            'return_reason'       => ['required_if:is_returned,true', 'nullable', 'string', 'max:1000'],
 
             // Campos de triagem técnica
             'classification_type' => [$technicalRule, 'string'],

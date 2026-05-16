@@ -40,16 +40,19 @@ class ComplaintObserver
             // 4. Fluxo Pragmático com Operadores Ternários
             $isActionable = $latestTriage && ($latestTriage->is_returned || $latestTriage->is_refused);
 
+            // Se for status relacionado ao provedor, não é acionável para o reclamante
+            $isActionable = str_contains($status, 'Provedor') ? false : $isActionable;
+
             // 5. Envia o e-mail apropriado com base na triagem
             $isActionable
-                ? Mail::to($recipient)->send(
+                ? Mail::to($recipient)->queue(
                     new ComplaintNeedMoreInfoMail(
                         $complaint,
                         $latestTriage,
                         $latestTriage->is_refused ? 'refusal' : 'return'
                     )
                 )
-                : Mail::to($recipient)->send(
+                : Mail::to($recipient)->queue(
                     new ComplaintUpdatedMail(
                         $complaint,
                         StatusAction::getStatusDescription($status),
@@ -67,10 +70,8 @@ class ComplaintObserver
 
     private function determineRecipient(Complaint $complaint): ?string
     {
-        if ($complaint->status === "Devolvida ao Provedor" || $complaint->status === "Encaminhado ao Provedor") {
-            return $complaint->forwardProvider?->provider?->email ?? null;
-        }
-
+        // Se a reclamação foi encaminhada para o provedor, o e-mail já foi enviado no momento do encaminhamento
+        // portanto, o email do reclamante é o destinatário para notificações futuras
         return $complaint->email;
     }
 }
