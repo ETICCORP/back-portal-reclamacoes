@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Mail; 
+namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class TwoFactorCodeMail extends Mailable
+class TwoFactorCodeMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -19,7 +20,7 @@ class TwoFactorCodeMail extends Mailable
 
     public function build()
     {
-        return $this->subject('Seu código de autenticação')
-                    ->view('emails.two_factor_code');
+        return $this->subject('Codigo de autenticação 2FA')
+            ->view('emails.two_factor_code');
     }
 }
