@@ -55,7 +55,7 @@ class UserController extends AbstractController
         } catch (Exception $e) {
             $this->logRequest($e);
             $this->logToDatabase('error', 'Erro ao iniciar sessão do usuário.');
-            return response()->json($e->getMessage(), Response::HTTP_UNAUTHORIZED);
+            return response()->json('Erro ao iniciar sessão do usuário.', Response::HTTP_UNAUTHORIZED);
         }
     }
     public function logout(Request $request)
@@ -72,7 +72,7 @@ class UserController extends AbstractController
                 level: 'error',
                 customMessage: 'Erro ao terminar sessão do usuário.',
             );
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json('Erro ao terminar sessão do usuário.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
     public function store(UserRequest $request)
@@ -89,7 +89,7 @@ class UserController extends AbstractController
                 level: 'error',
                 customMessage: 'Erro ao criar usuário.',
             );
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json('Erro ao criar usuário.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -118,7 +118,7 @@ class UserController extends AbstractController
                 level: 'error',
                 customMessage: 'Erro ao atualizar usuário.',
             );
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json('Erro ao atualizar usuário.', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
