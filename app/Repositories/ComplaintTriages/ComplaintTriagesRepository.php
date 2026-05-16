@@ -30,15 +30,18 @@ class ComplaintTriagesRepository extends AbstractRepository
         $data['status'] = $label;
         $data['comment'] = "Classificação da Triagem: " . $label;
 
+        // Cria o registro na tabela complaint_triages
+        $model = $this->model->create($data);
+
         // Atualiza o status da reclamação relacionada (se existir complaint_id)
         if (!empty($data['complaint_id'])) {
+
             $this->complaintRepository->updateStatus(
                 $data,
                 $data['complaint_id']
             );
         }
 
-        // Cria o registro na tabela complaint_triages
-        return $this->model->create($data);
+        return $model;
     }
 }

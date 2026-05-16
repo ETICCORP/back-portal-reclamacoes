@@ -151,6 +151,7 @@ class ComplaintRepository extends AbstractRepository
                 "fk_user" => Auth::user()->id
             ]);
         }
+
         // 📎 Anexos
         $this->handleAttachments($data['attachments'] ?? null, $id);
 

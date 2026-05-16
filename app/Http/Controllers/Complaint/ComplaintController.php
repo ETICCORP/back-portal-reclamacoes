@@ -232,9 +232,7 @@ class ComplaintController extends AbstractController
 
     public function updateStatus(UpdateStatusRequest $request, $id)
     {
-        $this->logRequest();
-        $complaint = $this->service->updateStatus($request->validated(), $id);
-        return response()->json($complaint, Response::HTTP_OK);
+        return response()->json('operation not allowed', Response::HTTP_FORBIDDEN);
     }
 
     public function byManth()

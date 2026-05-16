@@ -18,6 +18,25 @@ class StatusAction
         };
     }
 
+    /**
+     * retorna o assunto do email com base no status e código da reclamação
+     * @param string $status o status atual da reclamação
+     * @param string $code o código da reclamação para incluir no assunto caso seja necessário
+     * @return string
+     */
+    public static function getStatusSubject(string $status, string $code): string
+    {
+        return match ($status) {
+            "Aprovada Classificação"   => "Exposição Aprovada para Análise",
+            "Negada Classificação"     => "Atualização: Exposição Não Classificada",
+            "Devolvida ao Reclamante"  => "Ação Necessária: Complemento de Informações",
+            "Devolvida ao Provedor"    => "Reclamação Reencaminhada para Revisão",
+            "Respondida ao Reclamante" => "Resposta Final Disponível",
+            "Encaminhado ao Provedor"  => "A sua exposição foi encaminhada à instituição",
+            default                    => "Atualização de Status: Protocolo #{$code}"
+        };
+    }
+
     public static function getStatusDescription(string $status): string
     {
         return match ($status) {

@@ -2,9 +2,10 @@
 
 namespace App\Observers;
 
-use App\Models\Complaint\Complaint;
-use App\Mail\ComplaintUpdatedMail;
 use App\Actions\StatusAction;
+use App\Mail\ComplaintNeedMoreInfoMail;
+use App\Mail\ComplaintUpdatedMail;
+use App\Models\Complaint\Complaint;
 use Illuminate\Support\Facades\Mail;
 
 class ComplaintObserver
@@ -12,45 +13,64 @@ class ComplaintObserver
     public function updated(Complaint $complaint): void
     {
         // Só dispara se o status mudou
-        if (!$complaint->isDirty('status')) {
+        if (!$complaint->wasChanged('status')) {
             return;
         }
 
-        // 1. Obtemos a mensagem amigável da Action (que já configuramos anteriormente)
-        $statusDescription = StatusAction::getStatusDescription($complaint->status);
+        $status = $complaint->status;
 
-        // 2. Definimos o assunto dinamicamente incluindo os novos estados
-        $subject = match ($complaint->status) {
-            "Aprovada Classificação"   => "Exposição Aprovada para Análise",
-            "Negada Classificação"     => "Atualização: Exposição Não Classificada",
-            "Devolvida ao Reclamante"  => "Ação Necessária: Complemento de Informações",
-            "Devolvida ao Provedor"    => "Reclamação Reencaminhada para Revisão",
-            "Respondida ao Reclamante" => "Resposta Final Disponível",
-            "Encaminhado ao Provedor"  => "A sua exposição foi encaminhada à instituição",
-            default                    => "Atualização de Status: Protocolo #{$complaint->code}"
-        };
+        try {
+            // 2. Define o destinatário
+            $recipient = $this->determineRecipient($complaint);
 
-        // 3. Lógica de destino (Quem deve receber o e-mail?)
-        $recipient = $this->determineRecipient($complaint);
+            if (!$recipient) {
+                logs()->warning("Observer: Nenhum destinatário encontrado para Reclamação #{$complaint->code}");
+                return;
+            }
 
-        if ($recipient) {
-            Mail::to($recipient)->send(
-                new ComplaintUpdatedMail($complaint, $statusDescription, $subject)
-            );
+            // 3. Busca a última triagem
+            $latestTriage = $complaint->triages()->latest()->first();
+
+            // Log para depuração da triagem
+            if (!$latestTriage) {
+                logs()->info("Observer: Nenhuma triagem encontrada para Reclamação #{$complaint->code}");
+                return;
+            }
+
+            // 4. Fluxo Pragmático com Operadores Ternários
+            $isActionable = $latestTriage && ($latestTriage->is_returned || $latestTriage->is_refused);
+
+            // 5. Envia o e-mail apropriado com base na triagem
+            $isActionable
+                ? Mail::to($recipient)->send(
+                    new ComplaintNeedMoreInfoMail(
+                        $complaint,
+                        $latestTriage,
+                        $latestTriage->is_refused ? 'refusal' : 'return'
+                    )
+                )
+                : Mail::to($recipient)->send(
+                    new ComplaintUpdatedMail(
+                        $complaint,
+                        StatusAction::getStatusDescription($status),
+                        StatusAction::getStatusSubject($status, $complaint->code)
+                    )
+                );
+
+            logs()->info("E-mail processado via triagem para {$recipient} (Protocolo #{$complaint->code})");
+        } catch (\Exception $e) {
+            logs()->error("Erro crítico no ComplaintObserver: " . $e->getMessage(), [
+                'complaint_id' => $complaint->id
+            ]);
         }
     }
 
-    /**
-     * Determina quem deve receber a notificação com base no status.
-     */
     private function determineRecipient(Complaint $complaint): ?string
     {
-        // Se foi devolvida ao provedor, o e-mail deve ir para o e-mail do Provedor vinculado
-        if ($complaint->status === "Devolvida ao Provedor") {
+        if ($complaint->status === "Devolvida ao Provedor" || $complaint->status === "Encaminhado ao Provedor") {
             return $complaint->forwardProvider?->provider?->email ?? null;
         }
 
-        // Por padrão, envia para o reclamante
         return $complaint->email;
     }
 }
