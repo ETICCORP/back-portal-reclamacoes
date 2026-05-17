@@ -2,6 +2,7 @@
 
 namespace App\Models\Complaint;
 
+use App\Enum\ClaimStatus;
 use App\Models\Complaint\ComplaintInteraction\ComplaintInteraction;
 use App\Models\Complaint\Proviver\ComplaintProvider;
 use App\Models\Complaint\Proviver\ComplaintProviderResponse;
@@ -12,6 +13,7 @@ use App\Models\Soluction\Soluction;
 use App\Models\ComplaintAttachment\ComplaintAttachment; // cuidado: Service não é Model!
 use App\Models\ComplaintTriages\ComplaintTriages;
 use App\Models\User;
+use Illuminate\Support\Str;
 
 class Complaint extends Model
 {
@@ -22,12 +24,10 @@ class Complaint extends Model
     protected $casts = [
         'isAnonymous' => 'boolean', // Define o cast para o atributo isAnonymous
         'enabled' => 'boolean',
+        'status' => ClaimStatus::class,
     ];
 
-
-
     // Quem registrou (gestor ou sistema)
-  
 
     protected $fillable = [
         'policy_number',
@@ -50,31 +50,36 @@ class Complaint extends Model
     ];
 
 
-
-    public static function generateCustomRandomCode($length = 10)
+    /**
+     * gera um código aleatório customizado para a reclamação
+     * @param mixed $length
+     * @return string
+     */
+    public static function generateCustomRandomCode(int $length = 6): string
     {
-        $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $code = '';
+        // Prefixo: Ano Atual (2 dígitos) + Mês Atual (2 dígitos) -> Ex: 2605 (Maio de 2026)
+        $prefix = date('ym');
+
+        // Parte aleatória
+        $characters = '23456789ABCDEFGHIJKLMNPQRSTUVWXYZ';
+        $maxIndex = strlen($characters) - 1;
+        $randomPart = '';
 
         for ($i = 0; $i < $length; $i++) {
-            $code .= $characters[random_int(0, strlen($characters) - 1)];
+            $randomPart .= $characters[random_int(0, $maxIndex)];
         }
 
-        return $code;
+        // Retorna no formato: 2605-XXXXXX
+        return "{$prefix}-{$randomPart}";
     }
 
     /**
      * Relacionamentos
      */
-
-
-     
-
-
-     public function user()
-     {
-         return $this->hasMany(User::class, 'user_id');
-     }
+    public function user()
+    {
+        return $this->hasMany(User::class, 'user_id');
+    }
 
     public function typeReport()
     {
@@ -91,16 +96,16 @@ class Complaint extends Model
         return $this->hasMany(Soluction::class, 'fk_complaint');
     }
 
-     public function triages()
+    public function triages()
     {
         return $this->hasMany(ComplaintTriages::class, 'complaint_id');
     }
 
-      public function opinions()
+    public function opinions()
     {
         return $this->hasMany(ComplaintOpinions::class, 'complaint_id');
     }
-       public function interaction()
+    public function interaction()
     {
         return $this->hasMany(ComplaintInteraction::class, 'complaint_id');
     }
@@ -109,9 +114,9 @@ class Complaint extends Model
         return $this->hasMany(ComplaintDeadline::class, 'complaint_id');
     }
 
-    
 
-     public function proverResponse()
+
+    public function proverResponse()
     {
         return $this->hasMany(ComplaintProviderResponse::class, 'complaint_id');
     }
@@ -123,16 +128,8 @@ class Complaint extends Model
 
 
 
-     public function entitiyResponse()
+    public function entitiyResponse()
     {
         return $this->hasMany(ComplaintResponses::class, 'complaint_id');
     }
-    
-
-
 }
-
-
-
-
-    

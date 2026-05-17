@@ -2,25 +2,25 @@
 
 namespace App\Repositories\Complaint\Proviver;
 
+use App\Enum\ClaimStatus;
 use App\Mail\ComplaintForwardedMail;
-use App\Models\Complaint\Complaint;
 use App\Models\Complaint\Proviver\ComplaintProvider;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Complaint\ComplaintRepository;
-use App\Repositories\Reporter\ReporterRepository;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 
 class ComplaintProviderRepository extends AbstractRepository
 {
     public $complaintRepository;
+
     public function __construct(ComplaintProvider $model, ComplaintRepository $complaintRepository)
     {
         parent::__construct($model);
         $this->complaintRepository = $complaintRepository;
     }
+
     public function forwardComplaint(array $data)
     {
         $complaintProvider = null;
@@ -30,21 +30,21 @@ class ComplaintProviderRepository extends AbstractRepository
 
             $complaintProvider = $this->model->create([
                 'complaint_id' => $data['complaint_id'],
-                'provider_id' => $data['provider_id'],
-                'summary' => $data['summary'],
-                'notes' => $data['notes'],
-                'sent_at'  => now(),
-                'deadline' => Carbon::now()->addWeekdays(20),
-                'status' => 'sent'
-
+                'provider_id'  => $data['provider_id'],
+                'summary'      => $data['summary'],
+                'notes'        => $data['notes'],
+                'sent_at'      => now(),
+                'deadline'     => Carbon::now()->addWeekdays(20),
+                'status'       => 'sent'
             ]);
 
-            // 📎 Anexos
-            //  $this->uploadSignature($data['signature_path'] ?? null, $complaint->id);
-            $data['status'] = "Encaminhado ao Provedor";
+            // 1. Centralizando o status com o Enum
+            $status = ClaimStatus::ENCAMINHADO_PROVEDOR;
+
+            $data['status']  = $status->value; // 'Encaminhado ao Provedor'
             $data['comment'] = $data['notes'];
 
-            // Atualiza o status da reclamação para "Encaminhado ao Provedor"
+            // Atualiza o status da reclamação principal
             $this->complaintRepository->updateStatus($data, $data['complaint_id']);
 
             // Carrega as relações necessárias para o envio do e-mail
@@ -67,9 +67,9 @@ class ComplaintProviderRepository extends AbstractRepository
 
             if (isset($complaintProvider)) {
                 logs()->error('Erro ao encaminhar para o provedor', [
-                    'email do provedor' => $complaintProvider->provider->email,
+                    'email do provedor'     => $complaintProvider->provider?->email ?? 'Não disponível',
                     'complaint_provider_id' => $complaintProvider->id,
-                    'error' => $e->getMessage(),
+                    'error'                 => $e->getMessage(),
                 ]);
             }
 

@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 
 class TypeComplaintsController extends AbstractController
 {
-    protected $logType = 'type_complaint';
+    protected ?string $logType = 'type_complaint';
 
     public function __construct(TypeComplaintsService $service)
     {

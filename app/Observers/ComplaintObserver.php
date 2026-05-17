@@ -41,7 +41,7 @@ class ComplaintObserver
             $isActionable = $latestTriage && ($latestTriage->is_returned || $latestTriage->is_refused);
 
             // Se for status relacionado ao provedor, não é acionável para o reclamante
-            $isActionable = str_contains($status, 'Provedor') ? false : $isActionable;
+            $isActionable = str_contains($status->value, 'Provedor') ? false : $isActionable;
 
             // 5. Envia o e-mail apropriado com base na triagem
             $isActionable

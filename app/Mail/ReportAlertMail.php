@@ -3,11 +3,11 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
+use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 
-class ReportAlertMail extends Mailable
+class ReportAlertMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
@@ -20,7 +20,6 @@ class ReportAlertMail extends Mailable
 
     public function build()
     {
-
         return $this->subject('Resumo da Reclamação')
             ->view('emails.report_resume')
             ->with([

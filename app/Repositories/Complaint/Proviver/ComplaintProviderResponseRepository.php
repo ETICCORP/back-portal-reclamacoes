@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Complaint\Proviver;
 
+use App\Enum\ClaimStatus;
 use App\Models\Complaint\Proviver\ComplaintProviderResponse;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Complaint\ComplaintRepository;
@@ -18,23 +19,31 @@ class ComplaintProviderResponseRepository extends AbstractRepository
         $this->complaintRepository = $complaintRepository;
     }
 
+
     public function storeData(array $data)
     {
+        // 1. Criando o registro inicial com o status correto (Pendente)
         $complaint = $this->model->create([
             'complaint_id' => $data['complaint_id'] ?? null,
-            'provider_id' => $data['provider_id'] ?? null,
-            'status' =>"Pentende",
-            "response"=> $data['response'] ?? null,
+            'provider_id'  => $data['provider_id'] ?? null,
+            'status'       => ClaimStatus::PENDENTE_PT->value, // Garante o 'Pendente' sem erros de digitação
+            'response'     => $data['response'] ?? null,
         ]);
-        $data['status'] = "Respondida pelo Provedor";
+
+        // 2. Atualizando o status da reclamação pai para "Respondida pelo Provedor"
+        $newStatus = ClaimStatus::RESPONDIDA_PROVEDOR;
+
+        $data['status']  = $newStatus->value; // 'Respondida pelo Provedor'
         $data['comment'] = $data['response'];
 
         $this->complaintRepository->updateStatus($data, $data['complaint_id']);
+
         // 📎 Anexos
         $this->handleAttachments($data['attachments'] ?? null, $complaint->id);
 
         return $complaint;
     }
+
 
     private function handleAttachments($attachments, int $complaintId): void
     {
@@ -50,7 +59,4 @@ class ComplaintProviderResponseRepository extends AbstractRepository
             $this->attachments->createComplaintAttachment($attachments, $complaintId);
         }
     }
-
-
-
 }

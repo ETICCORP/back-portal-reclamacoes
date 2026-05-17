@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\DB;
 
 class ComplaintOpinionsController extends AbstractController
 {
-    protected $logType = 'complaint_opinion';
+    protected ?string $logType = 'complaint_opinion';
 
     public function __construct(ComplaintOpinionsService $service)
     {
