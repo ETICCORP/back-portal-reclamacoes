@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Actions\StatusAction;
+use App\Enum\ClaimStatus;
 use App\Mail\ComplaintNeedMoreInfoMail;
 use App\Mail\ComplaintUpdatedMail;
 use App\Models\Complaint\Complaint;
@@ -43,22 +44,20 @@ class ComplaintObserver
             // Se for status relacionado ao provedor, não é acionável para o reclamante
             $isActionable = str_contains($status->value, 'Provedor') ? false : $isActionable;
 
-            // 5. Envia o e-mail apropriado com base na triagem
-            $isActionable
-                ? Mail::to($recipient)->queue(
-                    new ComplaintNeedMoreInfoMail(
-                        $complaint,
-                        $latestTriage,
-                        $latestTriage->is_refused ? 'refusal' : 'return'
-                    )
+            // 5. Envia o e-mail apropriado com base na triagem utilizando o Enum
+            $mailable = $isActionable
+                ? new ComplaintNeedMoreInfoMail(
+                    $complaint,
+                    $latestTriage,
+                    $status === ClaimStatus::NEGADA_CLASSIFICACAO ? 'refusal' : 'return'
                 )
-                : Mail::to($recipient)->queue(
-                    new ComplaintUpdatedMail(
-                        $complaint,
-                        StatusAction::getStatusDescription($status),
-                        StatusAction::getStatusSubject($status, $complaint->code)
-                    )
+                : new ComplaintUpdatedMail(
+                    $complaint,
+                    $status->getDescription(),
+                    $status->getSubject($complaint->code)
                 );
+
+            Mail::to($recipient)->queue($mailable);
 
             logs()->info("E-mail processado via triagem para {$recipient} (Protocolo #{$complaint->code})");
         } catch (\Exception $e) {
