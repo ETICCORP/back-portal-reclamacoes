@@ -14,6 +14,7 @@ use App\Services\Complaint\ComplaintDeadlineService;
 class ComplaintResponsesController extends AbstractController
 {
     private  $complaintDeadlineService;
+    protected ?string $logType = 'complaint_response';
 
     public function __construct(ComplaintResponsesService $service, ComplaintDeadlineService $complaintDeadlineService)
     {

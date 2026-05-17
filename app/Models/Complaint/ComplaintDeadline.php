@@ -30,7 +30,7 @@ class ComplaintDeadline extends Model
 
     public function complaint()
     {
-        return $this->belongsTo(Complaint::class);
+        return $this->belongsTo(Complaint::class, 'complaint_id');
     }
 
     public function isExpired(): bool

@@ -16,6 +16,7 @@ use App\Http\Requests\Complaint\UpdateStatusRequest;
 class ComplaintController extends AbstractController
 {
     protected string $resourceName = "reclamações";
+    protected ?string $logType = 'complaint';
 
     public function __construct(ComplaintService $service)
     {

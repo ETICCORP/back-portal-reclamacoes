@@ -23,7 +23,7 @@ abstract class AbstractController extends Controller
     protected string $resourceName = 'registro';
 
     /**
-     * Define o tempo padrão da janela de silêncio (1 hora).
+     * Define o tempo padrão da janela de silêncio (5 minutos).
      * Pode ser sobrescrito nos controllers filhos.
      */
     protected int $auditTtl = 5 * 60; // 5 minutos

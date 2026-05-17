@@ -28,8 +28,6 @@ class ComplaintProviderController extends AbstractController
     public function index(Request $request)
     {
         try {
-
-
             $user = Auth::user();
             $userId = $user->id ?? null;
 
