@@ -27,8 +27,6 @@ class Complaint extends Model
         'status' => ClaimStatus::class,
     ];
 
-    // Quem registrou (gestor ou sistema)
-
     protected $fillable = [
         'policy_number',
         'user_id',

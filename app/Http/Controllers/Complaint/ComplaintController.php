@@ -12,6 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\Complaint\UpdateStatusRequest;
 use App\Enum\ClaimStatus;
+use App\Http\Requests\Complaint\ComplaintUpdateRequest;
 use Illuminate\Pagination\AbstractPaginator;
 
 class ComplaintController extends AbstractController
@@ -120,24 +121,27 @@ class ComplaintController extends AbstractController
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateRequest $request, $id)
+    public function update(ComplaintUpdateRequest $request, $id)
     {
         try {
             $this->logRequest();
+
             $complaint = $this->service->update($request->validated(), $id);
 
             $this->logAction(params: $complaint);
 
-            return response()->json($complaint, Response::HTTP_OK);
+            return response()->json($complaint);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
-            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+            return response()->json(['error' => 'Resource not found.'], 400);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'error' => 'Operação inválida',
+                'messages' => $e->errors()
+            ], 422);
         } catch (Exception $e) {
             $this->logRequest($e);
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($e->getMessage(), 500);
         }
     }
 

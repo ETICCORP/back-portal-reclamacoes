@@ -37,7 +37,7 @@ Route::post('/', [ComplaintController::class, 'store'])->name('complaints.store'
 Route::get('/{id}', [ComplaintController::class, 'show'])
     ->whereNumber('id')
     ->name('complaints.show');
-Route::put('/{id}', [ComplaintController::class, 'update'])->whereNumber('id')->name('complaints.update');
+Route::put('/{id}', [ComplaintController::class, 'update'])->whereNumber('id')->middleware('signed')->name('complaints.update');
 Route::delete('/{id}', [ComplaintController::class, 'destroy'])->whereNumber('id')->name('complaints.destroy');
 
 // Totais e estatísticas
@@ -51,8 +51,8 @@ Route::get('/byManth', [ComplaintController::class, 'byManth'])->name('complaint
 Route::get('/repeatOffenders', [ComplaintController::class, 'repeatOffenders'])->name('complaints.repeatOffenders');
 Route::get('/percentageServicedWithinDeadline', action: [ComplaintDeadlineController::class, 'percentageServicedWithinDeadline'])->name('complaints.percentageServicedWithinDeadline');
 
- Route::post('/type', [TypeComplaintsController::class, 'store']);
- Route::get('/type/{id}', [TypeComplaintsController::class, 'show']);
+Route::post('/type', [TypeComplaintsController::class, 'store']);
+Route::get('/type/{id}', [TypeComplaintsController::class, 'show']);
 Route::put('/type/{id}', [TypeComplaintsController::class, 'update']);
 Route::delete('/type/{id}', [TypeComplaintsController::class, 'destroy']);
 
@@ -185,7 +185,7 @@ Route::prefix('modelEmail')->group(function () {
 
 Route::prefix('providers')->group(function () {
     // Encaminhar reclamação
-  
+
     Route::get('forward', [ComplaintProviderController::class, 'index']);
 
     Route::get('response', [ComplaintProviderResponseController::class, 'index']);

@@ -8,9 +8,79 @@ use App\Mail\ComplaintUpdatedMail;
 use App\Models\Complaint\Complaint;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Validation\ValidationException;
 
 class ComplaintObserver
 {
+
+    /**
+     * Interceta o processo ANTES da gravação no banco de dados.
+     */
+    /**
+     * Interceta o processo ANTES da gravação no banco de dados.
+     */
+    public function updating(Complaint $complaint): void
+    {
+        $statusOriginal = $complaint->getOriginal('status');
+
+        // Se o status for do tipo Enum, extraímos o valor string, caso contrário usamos diretamente
+        $statusValue = $statusOriginal instanceof ClaimStatus
+            ? $statusOriginal->value
+            : $statusOriginal;
+
+        // Lista estrita de campos cadastrais que pertencem exclusivamente à retificação do reclamante
+        $camposCadastraisReclamante = [
+            'full_name',
+            'complainant_role',
+            'source',
+            'location',
+            'type',
+            'policy_number',
+            'entity',
+            'description',
+            'incidentDateTime',
+            'representative',
+        ];
+
+        // Atributos técnicos padrão que o Laravel altera automaticamente ou que controlam o fluxo
+        $atributosTecnicosPermitidos = ['status', 'updated_at'];
+
+        // Captura todos os atributos que estão a ser modificados nesta requisição
+        $camposAlterados = array_keys($complaint->getDirty());
+
+        // ---------------------------------------------------------------------
+        // CASO 1: O processo ESTÁ em "Devolvida ao Reclamante"
+        // ---------------------------------------------------------------------
+        if ($statusValue === ClaimStatus::DEVOLVIDA_RECLAMANTE->value) {
+
+            // Juntamos o cadastro com as flags técnicas para o array de total de permitidos
+            $camposPermitidosNesteStatus = array_merge($camposCadastraisReclamante, $atributosTecnicosPermitidos);
+
+            foreach ($camposAlterados as $campo) {
+                // Se tentar mudar algo do sistema (ex: user_id, internal_notes) neste status, barra!
+                if (!in_array($campo, $camposPermitidosNesteStatus)) {
+                    throw ValidationException::withMessages([
+                        'autorizacao' => ["Ação não permitida. No estado de devolução, apenas os dados cadastrais da exposição podem ser corrigidos."]
+                    ]);
+                }
+            }
+
+            return; // Regra processada com sucesso para este status, sai do método.
+        }
+
+        // ---------------------------------------------------------------------
+        // CASO 2: O processo NÃO ESTÁ em "Devolvida ao Reclamante" (Qualquer outro status)
+        // ---------------------------------------------------------------------
+        foreach ($camposAlterados as $campo) {
+            // Se tentar mexer em qualquer dado do reclamante quando o processo está Pendente/Em Análise, barra!
+            if (in_array($campo, $camposCadastraisReclamante)) {
+                throw ValidationException::withMessages([
+                    'autorizacao' => ["Os dados cadastrais desta exposição encontram-se bloqueados para edição no estado atual do processo."]
+                ]);
+            }
+        }
+    }
+
     public function updated(Complaint $complaint): void
     {
         // Só dispara se o status mudou
@@ -55,7 +125,7 @@ class ComplaintObserver
             $frontendUrl = null;
 
             if ($status === ClaimStatus::DEVOLVIDA_RECLAMANTE) {
-                $frontendUrl = $this->generateFrontendSignedUrl($complaint, 5);
+                $frontendUrl = self::generateFrontendSignedUrl($complaint, 5);
             }
 
             // 5. Envia o e-mail apropriado com base na triagem utilizando o Enum

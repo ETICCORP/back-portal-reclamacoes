@@ -23,7 +23,7 @@
     </div>
 
     @if ($triage && $triage->is_refused)
-        <div style="margin-bottom:32px; padding:24px; background-color:#f8fafc; border-radius:10px; border-left:4px solid #9d1c7f;">
+        <div style="margin-bottom:32px; padding:24px; background-color:#f8fafc; border-radius:5px; border-left:4px solid #9d1c7f;">
             <h4 style="margin:0 0 10px 0; font-size:13px; font-weight:700; color:#3b1e7a; text-transform:uppercase; letter-spacing:0.025em;">
                 Motivo da Recusa / Fundamentação:
             </h4>
