@@ -47,6 +47,13 @@ class Complaint extends Model
         'representative'
     ];
 
+    /**
+     * Força o Laravel a encontrar a Factory no caminho correto.
+     */
+    protected static function newFactory()
+    {
+        return \Database\Factories\ComplaintFactory::new();
+    }
 
     /**
      * gera um código aleatório customizado para a reclamação
@@ -111,8 +118,6 @@ class Complaint extends Model
     {
         return $this->hasMany(ComplaintDeadline::class, 'complaint_id');
     }
-
-
 
     public function proverResponse()
     {
