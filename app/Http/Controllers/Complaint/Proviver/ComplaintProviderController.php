@@ -104,7 +104,6 @@ class ComplaintProviderController extends AbstractController
     public function forwardComplaint(ComplaintProviderRequest $request)
     {
         try {
-
             $this->logRequest();
             $complaintProvider = $this->service->forwardComplaint($request->validated());
             return response()->json($complaintProvider, Response::HTTP_CREATED);

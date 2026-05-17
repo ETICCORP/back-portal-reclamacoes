@@ -15,6 +15,8 @@ class ComplaintNeedMoreInfoMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
+    public ?string $frontendUrl;
+
     /**
      * Criar uma nova instância da mensagem.
      * @param string $type Pode ser 'return' ou 'refusal'
@@ -22,17 +24,20 @@ class ComplaintNeedMoreInfoMail extends Mailable implements ShouldQueue
     public function __construct(
         public Complaint $complaint,
         public ?ComplaintTriages $triage,
-        public string $type = 'return' 
-    ) {}
+        public string $type = 'return',
+        ?string $frontendUrl = null
+    ) {
+        $this->frontendUrl = $frontendUrl ?? '';
+    }
 
     /**
      * Define o assunto dinamicamente com base no tipo
      */
     public function envelope(): Envelope
     {
-        $subject = $this->type === 'refusal' 
-            ? "Processo Recusado: Protocolo #{$this->complaint->code}"
-            : "Ação Necessária (Devolução): Protocolo #{$this->complaint->code}";
+        $subject = $this->type === 'refusal'
+            ? "Processo Recusado: ID #{$this->complaint->code}"
+            : "Ação Necessária (Devolução): ID #{$this->complaint->code}";
 
         return new Envelope(subject: $subject);
     }
@@ -52,6 +57,7 @@ class ComplaintNeedMoreInfoMail extends Mailable implements ShouldQueue
             with: [
                 'triage' => $this->triage,
                 'complaint' => $this->complaint,
+                'frontendUrl' => $this->frontendUrl
             ],
         );
     }
