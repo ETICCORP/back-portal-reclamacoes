@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Complaint;
 
+use App\Enum\ClaimStatus;
 use App\Models\Complaint\Complaint;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Comment\CommentRepository;
@@ -11,11 +12,9 @@ use App\Repositories\Description\DescriptionRepository;
 use App\Repositories\Reporter\ReporterRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use App\Jobs\AlertJob;
-use App\Jobs\GenerateAlertsJob;
 use App\Mail\ReportAlertMail;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,8 +29,6 @@ class ComplaintRepository extends AbstractRepository
 
     public function __construct(
         Complaint $model,
-
-        ReporterRepository $reporter,
         ComplaintDeadlineRepository $complaintDeadlineRepository,
         DescriptionRepository $description,
         ComplaintattachmentRepository $attachments,
@@ -44,9 +41,6 @@ class ComplaintRepository extends AbstractRepository
         parent::__construct($model);
     }
 
-    /**
-     * Armazena uma nova denúncia
-     */
     /**
      * Regista uma nova reclamação com anexos, prazos e alertas.
      */
@@ -75,7 +69,7 @@ class ComplaintRepository extends AbstractRepository
                 'incidentDateTime' => $data['incidentDateTime'] ?? null,
                 'location'         => $data['location'] ?? null,
                 'type'             => $data['type'] ?? null,
-                'status'           => 'Pendente',
+                'status'           => ClaimStatus::PENDENTE_PT->value,
                 'representative'   => $data['representative'] ?? null,
             ]);
 

@@ -10,8 +10,9 @@ use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Actions\StatusAction;
 use App\Http\Requests\Complaint\UpdateStatusRequest;
+use App\Enum\ClaimStatus;
+use Illuminate\Pagination\AbstractPaginator;
 
 class ComplaintController extends AbstractController
 {
@@ -52,26 +53,29 @@ class ComplaintController extends AbstractController
                 $request->input('relationships', []),
             );
 
-            // 🔹 Se for um paginator (quando existe "paginate")
-            if ($service instanceof \Illuminate\Pagination\AbstractPaginator) {
-                $service->getCollection()->transform(function ($item) {
-                    if (is_array($item)) {
-                        $item['nextStatus'] = StatusAction::getNextStatuses($item['status'] ?? null);
-                    } else {
-                        $item->nextStatus = StatusAction::getNextStatuses($item->status ?? null);
-                    }
-                    return $item;
-                });
+            // 1. Isolamos a função de transformação para não duplicar código (DRY)
+            $transformer = function ($item) {
+                // Captura o status atual (seja de um array ou de um objeto)
+                $enumStatus = is_array($item) ? ($item['status'] ?? null) : ($item->status ?? null);
+                $nextStatuses = $enumStatus ? $enumStatus->getNextStatuses() : [];
+
+                // Injeta o resultado de volta no item respeitando o seu tipo
+                if (is_array($item)) {
+                    $item['nextStatus'] = $nextStatuses;
+                } else {
+                    $item->nextStatus = $nextStatuses;
+                }
+
+                return $item;
+            };
+
+            // 2. Aplica a lógica dependendo do tipo de retorno do Service
+            if ($service instanceof AbstractPaginator) {
+                // Modifica a collection interna do paginador diretamente na memória
+                $service->getCollection()->transform($transformer);
             } else {
-                // 🔹 Se for apenas collection/array
-                $service = collect($service)->map(function ($item) {
-                    if (is_array($item)) {
-                        $item['nextStatus'] = StatusAction::getNextStatuses($item['status'] ?? null);
-                    } else {
-                        $item->nextStatus = StatusAction::getNextStatuses($item->status ?? null);
-                    }
-                    return $item;
-                });
+                // Se for array ou collection comum, mapeia e substitui a variável
+                $service = collect($service)->map($transformer);
             }
 
             return response()->json($service);
