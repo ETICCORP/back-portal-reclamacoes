@@ -73,15 +73,20 @@ class User extends Model implements
         return $this->belongsTo(Role::class, 'role_id', 'id');
     }
 
+    public function isAdmin() : bool
+    {
+        return $this->role && $this->role->name === 'Administrador';
+    }
+
     public function can($rule)
     {
         if (!$this->role || !$this->role->permissions) {
             return false;
         }
-    
+
         return $this->role->permissions->contains('name', $rule);
     }
-    
+
     public function hasPermissions($names)
     {
         $results = $this->permissions()
@@ -137,5 +142,4 @@ class User extends Model implements
             ->withTimestamps()
             ->withPivot('is_read', 'created_at');
     }
-
 }
