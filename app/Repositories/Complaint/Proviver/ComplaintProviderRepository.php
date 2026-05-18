@@ -68,12 +68,12 @@ class ComplaintProviderRepository extends AbstractRepository
             if (isset($complaintProvider)) {
                 logs()->error('Erro ao encaminhar para o provedor', [
                     'email do provedor'     => $complaintProvider->provider?->email ?? 'Não disponível',
-                    'complaint_provider_id' => $complaintProvider->id,
+                    'complaint_provider_id' => $complaintProvider?->id,
                     'error'                 => $e->getMessage(),
                 ]);
             }
 
-            throw new \Exception('Erro ao encaminhar para o provedor 2');
+            throw new \Exception('Erro ao encaminhar para o provedor');
         }
 
         return $complaintProvider;
