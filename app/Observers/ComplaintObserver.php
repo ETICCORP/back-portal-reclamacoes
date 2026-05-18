@@ -180,7 +180,7 @@ class ComplaintObserver
         $queryString = parse_url($relativeApiUrl, PHP_URL_QUERY);
 
         // 3. Recupera o domínio do Front-end do ficheiro .env
-        $frontendUrl = env('FRONTEND_URL', 'https://keepcomply.co.ao');
+        $frontendUrl = config('app.frontend_url');
 
         // 4. Monta o link final que o React vai ler
         return rtrim($frontendUrl, '/') . "/reclamacoes/editar/{$complaint->id}?{$queryString}";
