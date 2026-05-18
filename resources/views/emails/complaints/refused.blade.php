@@ -15,7 +15,7 @@
 
     <div style="margin-bottom:30px; text-align:center; padding:22px; background-color:#fdf2f8; border-radius:10px; border:1px dashed #fbcfe8;">
         <span style="font-size:12px; color:#9d1c7f; text-transform:uppercase; font-weight:700; display:block; margin-bottom:6px;">
-            Estado Atual do Processo:
+            Estado Actual do Processo:
         </span>
         <span style="display:inline-block; padding:8px 24px; background-color:#e61575; color:#ffffff; font-weight:700; font-size:15px; border-radius:6px; text-transform:uppercase; letter-spacing: 0.02em;">
             {{ $complaint->status }}

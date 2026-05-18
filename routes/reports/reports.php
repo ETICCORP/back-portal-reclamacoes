@@ -39,6 +39,7 @@ Route::get('/{id}', [ComplaintController::class, 'show'])
     ->name('complaints.show');
 Route::put('/{id}', [ComplaintController::class, 'update'])->whereNumber('id')->middleware('signed')->name('complaints.update');
 Route::delete('/{id}', [ComplaintController::class, 'destroy'])->whereNumber('id')->name('complaints.destroy');
+Route::post('/{id}/extend-deadline', [ComplaintDeadlineController::class, 'extendDeadline'])->name('complaints.extend-deadline');
 
 // Totais e estatísticas
 Route::get('/total', [ComplaintController::class, 'total'])->name('complaints.total');
@@ -55,13 +56,6 @@ Route::post('/type', [TypeComplaintsController::class, 'store']);
 Route::get('/type/{id}', [TypeComplaintsController::class, 'show']);
 Route::put('/type/{id}', [TypeComplaintsController::class, 'update']);
 Route::delete('/type/{id}', [TypeComplaintsController::class, 'destroy']);
-
-// Atualização de status
-Route::put('/updateStatus/{id}', [ComplaintController::class, 'updateStatus'])
-    ->whereNumber('id')
-    ->name('complaints.updateStatus');
-
-
 
 /*
     |--------------------------------------------------------------------------
@@ -93,8 +87,6 @@ Route::prefix('deadlines')->group(function () {
     Route::put('/{id}', [ComplaintDeadlineController::class, 'update'])->whereNumber('id')->name('complaintDeadlines.update');
     Route::delete('/{id}', [ComplaintDeadlineController::class, 'destroy'])->whereNumber('id')->name('complaintDeadlines.destroy');
 });
-
-
 
 /*
     |--------------------------------------------------------------------------

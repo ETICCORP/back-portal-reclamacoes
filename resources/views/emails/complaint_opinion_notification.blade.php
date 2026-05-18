@@ -6,7 +6,7 @@
 
 @section('content')
     <h2 style="margin:0 0 16px 0; font-size:20px; font-weight:700; color:#3b1e7a;">
-        Notificação de Atualização
+        Notificação de Actualização
     </h2>
     
     <p style="margin:0 0 24px 0; font-size:16px; line-height:1.6; color:#475569;">
