@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Complaint;
 
 use App\Http\Controllers\AbstractController;
-use App\Http\Requests\Complaint\UpdateRequest;
 use App\Services\Complaint\ComplaintService;
 use App\Http\Requests\Complaint\ComplaintRequest;
 use Exception;

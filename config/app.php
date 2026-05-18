@@ -14,9 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'Laravel'),
-    'frontend_url' => request()->getHost()
-        ? request()->getSchemeAndHttpHost()
-        : env('FRONTEND_URL', 'https://keepcomply.co.ao'),
+    'frontend_url' => env('FRONTEND_URL', 'https://keepcomply.co.ao'),
     /*
     |--------------------------------------------------------------------------
     | Application Environment

@@ -20,7 +20,7 @@ class ComplaintOpinionAlert extends Mailable implements ShouldQueue
 
     public function build()
     {
-        return $this->subject('Nova Opinião Técnica - Protocolo #' . $this->complaint->code)
+        return $this->subject('Nova Opinião Técnica - ID #' . $this->complaint->code)
             ->view('emails.complaint_opinion_notification');
     }
 }
