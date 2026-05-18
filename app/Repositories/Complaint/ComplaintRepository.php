@@ -158,7 +158,7 @@ class ComplaintRepository extends AbstractRepository
                 $this->commentRepository->model::create([
                     "comment"   => $data['comment'],
                     "report_id" => $id,
-                    "fk_user" => Auth::user()->id
+                    "fk_user" => Auth::user()?->id
                 ]);
             }
 
