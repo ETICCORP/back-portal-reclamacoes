@@ -22,7 +22,7 @@ class AuthRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'max:255', 'email', 'exists:users,email'],
             'password' => ['required', 'string', 'max:255'],
         ];
     }

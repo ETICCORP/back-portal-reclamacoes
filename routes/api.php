@@ -2,13 +2,10 @@
 
 use App\Http\Controllers\Complaint\ComplaintController;
 use App\Http\Controllers\Complaint\ModelEmail\ModelEmailController;
-use App\Http\Controllers\Complaint\Proviver\ComplaintProviderController;
 use App\Http\Controllers\Complaint\TypeComplaintsController;
 use App\Http\Controllers\Proviver\ProviderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
-
-Route::prefix('reports')->group(base_path('routes/reports/reportsFre.php'));
 
 Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
   Route::prefix('permission')->group(base_path('routes/user/permission/permission.php'));
@@ -17,6 +14,7 @@ Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
   Route::prefix('logs')->group(base_path('routes/logs/logs.php'));
   Route::prefix('alert')->group(base_path('routes/alert/alert.php'));
   //Route::prefix('statistics')->group(base_path('routes/statistics/statistics.php'));
+  Route::prefix('reports')->group(base_path('routes/reports/reportsFre.php'));
   Route::prefix('reports')->group(base_path('routes/reports/reports.php'));
   Route::prefix('comment')->group(base_path('routes/comment/comment.php'));
   Route::prefix('provider')->group(base_path('routes/provider/provider.php'));
@@ -39,10 +37,6 @@ Route::prefix('reports')->group(function () {
   Route::get('/type', [TypeComplaintsController::class, 'index']);
 });
 
-
 Route::prefix('provider')->group(function () {
-
   Route::get('/', [ProviderController::class, 'index']);
-  //Route::post('forward', [ComplaintProviderController::class, 'forwardComplaint']);
-
 });

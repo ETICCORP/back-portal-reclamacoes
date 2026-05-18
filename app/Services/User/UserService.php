@@ -33,7 +33,7 @@ class UserService extends AbstractService
 
         try {
             // 3. Enviar a senha por email para o usuário
-            Mail::to($data['email'])->send(new \App\Mail\UserCreatedMail($user, $password));
+            Mail::to($data['email'])->queue(new \App\Mail\UserCreatedMail($user, $password));
         } catch (\Throwable $th) {
             Log::error('Erro ao enviar email para o utilizador', [
                 'email' => $data['email'],
@@ -70,13 +70,11 @@ class UserService extends AbstractService
         $user->generateTwoFactorCode();
 
         // Envia email
-        Mail::to($user->email)->send(new MailTwoFactorCodeMail($user));
-        $token = $user->createToken("fortaleza_SEGUROS")->plainTextToken;
+        Mail::to($user->email)->queue(new MailTwoFactorCodeMail($user));
 
-        //return $token;
         return response()->json([
             'message' => 'Código 2FA enviado para seu email',
-            'user_id' => $user->id // necessário para validar o código depois
+            'user_id' => $user->id
         ]);
     }
 

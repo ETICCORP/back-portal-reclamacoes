@@ -70,4 +70,9 @@ abstract class AbstractService
     {
         return $this->repository->findOneBy($criteria);
     }
+
+    public function findOrFail(int|string $id)
+    {
+        return $this->repository->findOrFail($id);
+    }
 }

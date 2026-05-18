@@ -12,3 +12,4 @@ bootstrap/cache/*.php
 # /public/storage
  /vendor/
 .phpunit.result.cache
+.env

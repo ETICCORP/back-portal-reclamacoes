@@ -4,13 +4,14 @@ namespace App\Http\Requests\Complaint;
 
 use App\Http\Requests\BaseFormRequest;
 
-class ComplaintRequest extends BaseFormRequest
+class ComplaintUpdateRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
+        // Como a rota é pública mas usa 'signed' middleware, o 'true' aqui está correto.
         return true;
     }
 
@@ -22,8 +23,6 @@ class ComplaintRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'contact'           => ['nullable',  'max:50'],
-            'email'             => ['nullable', 'email', 'max:255'],
             'full_name'        => ['required', 'string', 'max:255'],
             'complainant_role' => ['required', 'string', 'max:100'],
             'source'           => ['nullable', 'string', 'max:50'],
@@ -41,18 +40,20 @@ class ComplaintRequest extends BaseFormRequest
         ];
     }
 
+    /**
+     * Get the error messages for the defined validation rules.
+     */
     public function messages(): array
     {
         return [
             'full_name.required'        => 'O campo Nome completo é obrigatório.',
             'complainant_role.required' => 'O campo Qualidade do reclamante é obrigatório.',
-            'contact.string'            => 'O contacto deve ser um texto válido.',
-            'email.email'               => 'Insira um endereço de e-mail válido.',
             'policy_number.string'      => 'O número da apólice deve ser um texto válido.',
             'entity.required'           => 'O campo Entidade reclamada é obrigatório.',
-            'description.required'      => 'A descrição da reclamação é obrigatória.',
-            'description.min'           => 'A descrição deve ter pelo menos 10 caracteres.',
-            'attachments.*.max' => 'Cada anexo não pode exceder o tamanho de 10MB.',
+            'incidentDateTime.date'     => 'A data e hora do incidente devem ser válidas.',
+            'status.required'           => 'O novo estado do processo deve ser informado.',
+            'attachments.array'         => 'Os anexos devem ser enviados em formato de lista.',
+            'attachments.*.max'         => 'Cada anexo não pode exceder o tamanho de 10MB.',
         ];
     }
 }

@@ -12,6 +12,8 @@ use Illuminate\Http\Request;
 
 class TypeComplaintsController extends AbstractController
 {
+    protected ?string $logType = 'type_complaint';
+
     public function __construct(TypeComplaintsService $service)
     {
         $this->service = $service;

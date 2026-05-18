@@ -170,6 +170,11 @@ abstract class AbstractRepository
         return $query->findOrFail($id);
     }
 
+    public function findOrFail(int|string $id)
+    {
+        return $this->model->findOrFail($id);
+    }
+
     /**
      * Display the first resource.
      */

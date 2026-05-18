@@ -5,6 +5,7 @@ namespace App\Repositories\ComplaintTriages;
 use App\Models\ComplaintTriages\ComplaintTriages;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Complaint\ComplaintRepository;
+use App\Enum\ClaimStatus;
 
 class ComplaintTriagesRepository extends AbstractRepository
 {
@@ -17,28 +18,33 @@ class ComplaintTriagesRepository extends AbstractRepository
 
     public function store(array $data)
     {
-        // Determina a etiqueta de status para o comentário interno
-        $label = "Aprovada Classificação";
+        // 1. Determina o Enum de status com base nas regras de negócio
+        $status = ClaimStatus::APROVADA_CLASSIFICACAO;
 
         if (data_get($data, 'is_refused')) {
-            $label = "Negada Classificação";
+            $status = ClaimStatus::NEGADA_CLASSIFICACAO;
         } elseif (data_get($data, 'is_returned')) {
-            $label = "Devolvida ao Reclamante";
+            $status = ClaimStatus::DEVOLVIDA_RECLAMANTE;
         }
 
-        // Prepara dados específicos do registro de triagem
-        $data['status'] = $label;
-        $data['comment'] = "Classificação da Triagem: " . $label;
+        // 2. Prepara os dados. Usamos '->value' para salvar a string original no banco
+        $data['status']  = $status->value;
+        $data['comment'] = "Classificação da Triagem: " . $status->value;
 
-        // Atualiza o status da reclamação relacionada (se existir complaint_id)
+        // Cria o registro na tabela complaint_triages
+        $model = $this->model->create($data);
+
+        // 3. Atualiza o status da reclamação relacionada
         if (!empty($data['complaint_id'])) {
+            // Passamos o valor do enum ('Aprovada Classificação', etc) para manter a compatibilidade
+            $data['status'] = $status->value;
+
             $this->complaintRepository->updateStatus(
                 $data,
                 $data['complaint_id']
             );
         }
 
-        // Cria o registro na tabela complaint_triages
-        return $this->model->create($data);
+        return $model;
     }
 }

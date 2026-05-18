@@ -12,6 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ComplaintDeadlineController extends AbstractController
 {
+    protected ?string $logType = 'complaint_deadline';
+
     protected function logDefinitions(): array
     {
         return [
@@ -34,9 +36,9 @@ class ComplaintDeadlineController extends AbstractController
     {
         try {
             $this->logRequest();
-            $this->logAction();
-
             $complaintDeadline = $this->service->store($request->validated());
+
+            $this->logAction(params: $complaintDeadline);
 
             return response()->json($complaintDeadline, Response::HTTP_CREATED);
         } catch (Exception $e) {

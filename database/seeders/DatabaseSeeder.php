@@ -13,7 +13,11 @@ class DatabaseSeeder extends Seeder
    */
   public function run(): void
   {
-    $this->call(PermissionSeed::class);
-    $this->call(TypeComplaintsSeeder::class);
+    $this->call([
+      PermissionSeed::class,
+      PatchAddDevolverPermissionToAdminSeeder::class,
+      AddChangePasswordPermissionSeeder::class,
+      TypeComplaintsSeeder::class
+    ]);
   }
 }

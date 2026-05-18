@@ -28,7 +28,6 @@ class UpdateRequest extends BaseFormRequest
         'urgency' => 'nullable|string|max:255',
         'gravity'=> 'nullable|string|max:255',
         'responsible_analyst' => 'nullable|string|max:255',
-
     ];
 }
 

@@ -1,120 +1,44 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <title>Código de Autenticação -Keepcomply</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #f0f4f9, #d9e4f5);
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 520px;
-            margin: 40px auto;
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 35px;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
-            border: 2px solid #0072CE;
-            position: relative;
-        }
-        .container::before {
-            content: "";
-            position: absolute;
-            top: -6px;
-            left: -6px;
-            right: -6px;
-            bottom: -6px;
-            border-radius: 20px;
-            background: linear-gradient(135deg, #003366, #0072CE);
-            z-index: -1;
-        }
-        .logo {
-            text-align: center;
-            margin-bottom: 25px;
-        }
-        .logo img {
-            max-width: 180px;
-        }
-        h2 {
-            color: #003366;
-            font-size: 36px;
-            margin: 25px 0;
-            letter-spacing: 4px;
-            text-align: center;
-            border: 2px dashed #0072CE;
-            padding: 15px;
-            border-radius: 10px;
-            background: #f0f8ff;
-        }
-        p {
-            color: #333333;
-            font-size: 16px;
-            line-height: 1.6;
-        }
-        .highlight {
-            color: #0072CE;
-            font-weight: bold;
-        }
-        .footer {
-            margin-top: 30px;
-            font-size: 13px;
-            color: #666666;
-            text-align: center;
-            border-top: 1px solid #e5e5e5;
-            padding-top: 15px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
+@extends('emails.layout')
 
-        <!-- =======================
-             LOGO CONDICIONAL
-        ======================= -->
-        @php
-            use Illuminate\Support\Str;
-            $currentHost = request()->getHost();
-        @endphp
+@section('title', 'Código de Autenticação - KEEPCOMPLY')
 
-        @if(in_array($currentHost, ['localhost', '127.0.0.1', '172.17.100.11', '172.17.100.12']))
-            <div class="logo">
-                <img src="https://nossa-denuncias.keepcomply.co.ao:1130/Keepcompay.png" alt="Keepcomply">
-            </div>
-        @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
-            <div class="logo">
-                <img src="https://www.nossaseguros.ao/assets/img/logo.png" alt="Nossa Seguros">
-            </div>
-        @endif
+{{-- Define dinamicamente o texto superior do protocolo com base na marca activa --}}
+@section('protocolo')
+    @php
+        use Illuminate\Support\Str;
+        $currentHost = request()->getHost();
+        $isLocal = in_array($currentHost, ['localhost', '127.0.0.1', '172.17.100.11', '172.17.100.12']);
+    @endphp
+    
+    @if($isLocal)
+        Segurança • KEEPCOMPLY
+    @else
+        Segurança • NOSSA SEGUROS
+    @endif
+@endsection
 
-        <!-- =======================
-             CONTEÚDO DO E-MAIL
-        ======================= -->
-        <p>Olá, {{ $user->first_name }}</p>
-        <p>Seu código de autenticação é:</p>
+@section('content')
+    <h2 style="margin:0 0 16px 0; font-size:18px; font-weight:700; color:#3b1e7a;">
+        Olá, {{ $user->first_name }},
+    </h2>
+    
+    <p style="margin:0 0 24px 0; font-size:16px; line-height:1.6; color:#475569;">
+        Foi solicitada uma autenticação para a sua conta. O seu código de verificação de dois fatores (2FA) gerado pelo sistema é:
+    </p>
 
-        <h2>{{ $user->two_factor_code }}</h2>
-
-        <p>Este código expira em <span class="highlight">10 minutos</span>.</p>
-        <p>Se você não solicitou este código, ignore esta mensagem.</p>
-
-        <!-- =======================
-             RODAPÉ
-        ======================= -->
-        <div class="footer">
-
-            <p>&copy; {{ date('Y') }}
-                
-                 @if(in_array($currentHost, ['localhost', '127.0.0.1', '172.17.100.11', '172.17.100.12']))
-              Keepcomply — Todos os direitos reservados.
-        @elseif(Str::contains($currentHost, 'nossa-denuncias.keepcomply.co.ao'))
-           Keepcomply — Todos os direitos reservados.
-        @endif
-            
-              </p>
-        </div>
+    <div style="margin:30px 0; text-align:center; padding:24px; background-color:#f5f3ff; border-radius:12px; border:2px dashed #ddd6fe;">
+        <h1 style="margin:0; font-family: monospace; font-size:38px; font-weight:700; color:#3b1e7a; letter-spacing:6px; line-height: 1.2;">
+            {{ $user->two_factor_code }}
+        </h1>
     </div>
-</body>
-</html>
+
+    <div style="background:#f8fafc; border-left:4px solid #e61575; padding:15px 20px; margin-bottom:30px; border-radius: 0 8px 8px 0;">
+        <p style="margin:0; font-size:14px; line-height:1.5; color:#475569;">
+            ⏱ Este código é estritamente confidencial e expira em <strong style="color:#e61575;">10 minutos</strong>.
+        </p>
+    </div>
+
+    <p style="margin:0 0 10px 0; font-size:14px; color:#94a3b8; text-align:center; font-style: italic;">
+        Se não solicitou este código, por razões de segurança, ignore esta mensagem ou contacte o administrador.
+    </p>
+@endsection

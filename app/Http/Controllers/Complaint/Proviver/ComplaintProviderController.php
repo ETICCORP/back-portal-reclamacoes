@@ -28,8 +28,6 @@ class ComplaintProviderController extends AbstractController
     public function index(Request $request)
     {
         try {
-
-
             $user = Auth::user();
             $userId = $user->id ?? null;
 
@@ -92,8 +90,6 @@ class ComplaintProviderController extends AbstractController
     }
 
 
-
-
     public function store(ComplaintProviderRequest $request)
     {
         try {
@@ -108,7 +104,6 @@ class ComplaintProviderController extends AbstractController
     public function forwardComplaint(ComplaintProviderRequest $request)
     {
         try {
-
             $this->logRequest();
             $complaintProvider = $this->service->forwardComplaint($request->validated());
             return response()->json($complaintProvider, Response::HTTP_CREATED);

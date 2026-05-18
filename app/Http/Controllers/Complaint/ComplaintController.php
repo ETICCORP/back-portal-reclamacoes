@@ -3,19 +3,21 @@
 namespace App\Http\Controllers\Complaint;
 
 use App\Http\Controllers\AbstractController;
-use App\Http\Requests\Complaint\UpdateRequest;
 use App\Services\Complaint\ComplaintService;
 use App\Http\Requests\Complaint\ComplaintRequest;
 use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use App\Actions\StatusAction;
 use App\Http\Requests\Complaint\UpdateStatusRequest;
+use App\Enum\ClaimStatus;
+use App\Http\Requests\Complaint\ComplaintUpdateRequest;
+use Illuminate\Pagination\AbstractPaginator;
 
 class ComplaintController extends AbstractController
 {
     protected string $resourceName = "reclamações";
+    protected ?string $logType = 'complaint';
 
     public function __construct(ComplaintService $service)
     {
@@ -51,26 +53,29 @@ class ComplaintController extends AbstractController
                 $request->input('relationships', []),
             );
 
-            // 🔹 Se for um paginator (quando existe "paginate")
-            if ($service instanceof \Illuminate\Pagination\AbstractPaginator) {
-                $service->getCollection()->transform(function ($item) {
-                    if (is_array($item)) {
-                        $item['nextStatus'] = StatusAction::getNextStatuses($item['status'] ?? null);
-                    } else {
-                        $item->nextStatus = StatusAction::getNextStatuses($item->status ?? null);
-                    }
-                    return $item;
-                });
+            // 1. Isolamos a função de transformação para não duplicar código (DRY)
+            $transformer = function ($item) {
+                // Captura o status atual (seja de um array ou de um objeto)
+                $enumStatus = is_array($item) ? ($item['status'] ?? null) : ($item->status ?? null);
+                $nextStatuses = $enumStatus ? $enumStatus->getNextStatuses() : [];
+
+                // Injeta o resultado de volta no item respeitando o seu tipo
+                if (is_array($item)) {
+                    $item['nextStatus'] = $nextStatuses;
+                } else {
+                    $item->nextStatus = $nextStatuses;
+                }
+
+                return $item;
+            };
+
+            // 2. Aplica a lógica dependendo do tipo de retorno do Service
+            if ($service instanceof AbstractPaginator) {
+                // Modifica a collection interna do paginador diretamente na memória
+                $service->getCollection()->transform($transformer);
             } else {
-                // 🔹 Se for apenas collection/array
-                $service = collect($service)->map(function ($item) {
-                    if (is_array($item)) {
-                        $item['nextStatus'] = StatusAction::getNextStatuses($item['status'] ?? null);
-                    } else {
-                        $item->nextStatus = StatusAction::getNextStatuses($item->status ?? null);
-                    }
-                    return $item;
-                });
+                // Se for array ou collection comum, mapeia e substitui a variável
+                $service = collect($service)->map($transformer);
             }
 
             return response()->json($service);
@@ -115,24 +120,27 @@ class ComplaintController extends AbstractController
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateRequest $request, $id)
+    public function update(ComplaintUpdateRequest $request, $id)
     {
         try {
             $this->logRequest();
+
             $complaint = $this->service->update($request->validated(), $id);
 
             $this->logAction(params: $complaint);
 
-            return response()->json($complaint, Response::HTTP_OK);
+            return response()->json($complaint);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
-            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
+            return response()->json(['error' => 'Resource not found.'], 400);
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'error' => 'Operação inválida',
+                'messages' => $e->errors()
+            ], 422);
         } catch (Exception $e) {
             $this->logRequest($e);
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json($e->getMessage(), 500);
         }
     }
 
@@ -232,9 +240,7 @@ class ComplaintController extends AbstractController
 
     public function updateStatus(UpdateStatusRequest $request, $id)
     {
-        $this->logRequest();
-        $complaint = $this->service->updateStatus($request->validated(), $id);
-        return response()->json($complaint, Response::HTTP_OK);
+        return response()->json('operation not allowed', Response::HTTP_FORBIDDEN);
     }
 
     public function byManth()

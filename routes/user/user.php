@@ -5,15 +5,16 @@ use App\Http\Controllers\User\UserController;
 
 Route::get('/me', [UserController::class, 'me'])
     ->name('user.me');
-    Route::put('/changePassword', [UserController::class, 'changePassword'])
+Route::put('/changePassword', [UserController::class, 'changePassword'])
     ->name('user.changePassword');
 
-Route::put('/changePassword/{id}', [UserController::class, 'changePasswordUser']);
+Route::put('/changePassword/{id}', [UserController::class, 'changePasswordUser'])
+    ->middleware(['permissao:usuario-change-password']);
 
 Route::get('', [UserController::class, 'index'])
     ->name('user.index')
     ->middleware(['permissao:usuario-show']);
-    
+
 Route::post('', [UserController::class, 'store'])
     ->name('user.store')
     ->middleware(['permissao:usuario-create']);
@@ -26,11 +27,8 @@ Route::put('{id}', [UserController::class, 'update'])
     ->name('user.update')
     ->middleware(['permissao:usuario-edit']);
 
-    Route::put('/enabled/{id}', [UserController::class, 'enabled'])
+Route::put('/enabled/{id}', [UserController::class, 'enabled'])
     ->name('user.enabled');
-
-
-
 
 Route::delete('{id}', [UserController::class, 'destroy'])
     ->name('user.destroy')

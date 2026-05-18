@@ -2,6 +2,7 @@
 
 namespace App\Repositories\Complaint;
 
+use App\Enum\ClaimStatus;
 use App\Models\Complaint\Complaint;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Comment\CommentRepository;
@@ -11,11 +12,9 @@ use App\Repositories\Description\DescriptionRepository;
 use App\Repositories\Reporter\ReporterRepository;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use App\Jobs\AlertJob;
-use App\Jobs\GenerateAlertsJob;
 use App\Mail\ReportAlertMail;
 use Illuminate\Support\Facades\Mail;
 
@@ -30,8 +29,6 @@ class ComplaintRepository extends AbstractRepository
 
     public function __construct(
         Complaint $model,
-
-        ReporterRepository $reporter,
         ComplaintDeadlineRepository $complaintDeadlineRepository,
         DescriptionRepository $description,
         ComplaintattachmentRepository $attachments,
@@ -45,77 +42,88 @@ class ComplaintRepository extends AbstractRepository
     }
 
     /**
-     * Armazena uma nova denúncia
+     * Regista uma nova reclamação com anexos, prazos e alertas.
      */
     public function storeData(array $data): Complaint
     {
+        // 1. Operação Transacional Securizada
+        return DB::transaction(function () use ($data) {
 
-        $randomCode = $this->generateUniqueCode(6);
+            $randomCode = $this->generateUniqueCode(6);
 
+            // Determina o utilizador logado de forma segura
+            $userId = Auth::check() ? Auth::id() : null;
 
-        $complaint = $this->model->create([
+            // 2. Criação da Reclamação
+            $complaint = $this->model->create([
+                'source'           => $data['source'] ?? 'portal',
+                'user_id'          => $userId,
+                'policy_number'    => $data['policy_number'] ?? null,
+                'description'      => $data['description'] ?? null,
+                'code'             => (string) $randomCode,
+                'full_name'        => $data['full_name'] ?? null,
+                'complainant_role' => $data['complainant_role'] ?? null,
+                'contact'          => $data['contact'] ?? null,
+                'email'            => $data['email'] ?? null,
+                'entity'           => $data['entity'] ?? null,
+                'incidentDateTime' => $data['incidentDateTime'] ?? null,
+                'location'         => $data['location'] ?? null,
+                'type'             => $data['type'] ?? null,
+                'status'           => ClaimStatus::PENDENTE_PT->value,
+                'representative'   => $data['representative'] ?? null,
+            ]);
 
-            'source' => $data['source'] ?? 'portal',
-            'user_id' => !empty($data['source'])
-                ? Auth::id()
-                : null,
-            'policy_number' => $data['policy_number'] ?? null,
-            'description' => $data['description'] ?? null,
-            'code' => "" . $randomCode,
-
-            'full_name' => $data['full_name'] ?? null,
-            'complainant_role' => $data['complainant_role'] ?? null,
-            'contact' => $data['contact'] ?? null,
-            'email' => $data['email'] ?? null,
-            'entity' => $data['entity'] ?? null,
-            'incidentDateTime' => $data['incidentDateTime'] ?? null,
-            'location' => $data['location'] ?? null,
-            'type' => $data['type'] ?? null,
-            "status" => "Pendente",
-            "representative" => $data['representative'] ?? null,
-
-        ]);
-        // 📎 Anexos
-        $this->handleAttachments($data['attachments'] ?? null, $complaint->id);
-
-        $complaint->load([
-            "attachments",
-            "typeReport"
-        ]);
-
-        AlertJob::dispatch($complaint->id);
-
-        try {
-            if (!empty($data['email'])) {
-                Mail::to($data['email'])->send(new ReportAlertMail($complaint));
+            // 3. Processamento de Anexos
+            if (!empty($data['attachments'])) {
+                $this->handleAttachments($data['attachments'], $complaint->id);
             }
-        } catch (\Throwable $e) {
-            // Aqui você pode logar o erro ou apenas ignorar
-            Log::error("Falha ao enviar email para {$data['email']}: " . $e->getMessage());
-        }
-        $startDate = Carbon::now();
 
-        // Função para adicionar 15 dias úteis
-        $endDate = $startDate->copy();
-        $daysToAdd = 15;
+            // 4. Cálculo dos 15 dias úteis de forma limpa
+            $startDate = Carbon::now();
+            $endDate = $this->calculateBusinessDays($startDate, 15);
+
+            // 5. Criação do Prazo de Resposta
+            $this->complaintDeadlineRepository->model->create([
+                'complaint_id' => $complaint->id,
+                'days'         => 15,
+                'start_date'   => $startDate,
+                'end_date'     => $endDate,
+                'status'       => 'Pendente',
+                'notified_at'  => null,
+            ]);
+
+            // 6. Carregamento dos relacionamentos necessários para o Job/Mail
+            $complaint->load(['attachments', 'typeReport']);
+
+            // 7. Disparos Assíncronos (Evita lentidão no ecrã do utilizador)
+            AlertJob::dispatch($complaint->id);
+
+            if (!empty($data['email'])) {
+                // Forçamos o uso do ->queue() para libertar o PHP imediatamente
+                Mail::to($data['email'])->queue(new ReportAlertMail($complaint));
+            }
+
+            return $complaint;
+        });
+    }
+
+    /**
+     * Calcula a data final com base em dias úteis (pula fins de semana).
+     */
+    private function calculateBusinessDays(Carbon $startDate, int $daysToAdd): Carbon
+    {
+        $date = $startDate->copy();
+
         while ($daysToAdd > 0) {
-            $endDate->addDay();
-            if (!$endDate->isWeekend()) {
+            $date->addDay();
+            if (!$date->isWeekend()) {
                 $daysToAdd--;
             }
         }
 
-        $complaintDeadline = $this->complaintDeadlineRepository->model->create([
-            "complaint_id" => $complaint->id,
-            "days"         => 15,
-            "start_date"   => $startDate,
-            "end_date"     => $endDate,
-            "status"       => "Pendente",
-            "notified_at"  => null,
-        ]);
-
-        return $complaint;
+        return $date;
     }
+
 
     public function updateComplaint(array $data, int $id)
     {
@@ -140,21 +148,25 @@ class ComplaintRepository extends AbstractRepository
      */
     public function updateStatus(array $data, int $id)
     {
-        $model = $this->model->findOrFail($id);
+        return DB::transaction(function () use ($data, $id) {
+            $model = $this->model->findOrFail($id);
 
-        $model->update(['status' => $data['status']]);
+            $model->update(['status' => $data['status']]);
 
-        if (isset($data['comment'])) {
-            $this->commentRepository->model::create([
-                "comment"   => $data['comment'],
-                "report_id" => $id,
-                "fk_user" => Auth::user()->id
-            ]);
-        }
-        // 📎 Anexos
-        $this->handleAttachments($data['attachments'] ?? null, $id);
+            if (isset($data['comment'])) {
 
-        return $model;
+                $this->commentRepository->model::create([
+                    "comment"   => $data['comment'],
+                    "report_id" => $id,
+                    "fk_user" => Auth::user()->id
+                ]);
+            }
+
+            // 📎 Anexos
+            $this->handleAttachments($data['attachments'] ?? null, $id);
+
+            return $model;
+        });
     }
 
     /**
