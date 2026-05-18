@@ -14,11 +14,12 @@ Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
   Route::prefix('logs')->group(base_path('routes/logs/logs.php'));
   Route::prefix('alert')->group(base_path('routes/alert/alert.php'));
   //Route::prefix('statistics')->group(base_path('routes/statistics/statistics.php'));
-  Route::prefix('reports')->group(base_path('routes/reports/reportsFre.php'));
   Route::prefix('reports')->group(base_path('routes/reports/reports.php'));
   Route::prefix('comment')->group(base_path('routes/comment/comment.php'));
   Route::prefix('provider')->group(base_path('routes/provider/provider.php'));
 });
+
+Route::prefix('reports')->group(base_path('routes/reports/reportsFre.php'));
 
 Route::post('/auth/login', [UserController::class, 'login']);
 Route::prefix('auth')->middleware('guest')->group(base_path('routes/user/auth.php'));
