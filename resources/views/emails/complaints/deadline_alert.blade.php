@@ -29,7 +29,7 @@
                 <td width="50%" style="padding-bottom:15px;">
                     <div
                         style="font-size:11px; color:#9d1c7f; font-weight:800; text-transform:uppercase; letter-spacing: 0.05em;">
-                        Status Atual</div>
+                        Status Actual</div>
                     <div style="font-size:15px; font-weight:700; color:#3b1e7a; margin-top: 2px;">{{ $deadline->status }}
                     </div>
                 </td>

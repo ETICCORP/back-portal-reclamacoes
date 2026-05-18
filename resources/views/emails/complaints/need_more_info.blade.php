@@ -10,14 +10,14 @@
     </h2>
 
     <p style="margin:0 0 26px 0; font-size:16px; line-height:1.6; color:#475569;">
-        Informamos que a sua reclamação registou uma nova atualização durante a fase de triagem e necessita de retificações.
+        Informamos que a sua reclamação registou uma nova actualização durante a fase de triagem e necessita de retificações.
     </p>
 
     <div
         style="margin-bottom:30px; text-align:center; padding:22px; background-color:#f5f3ff; border-radius:10px; border:1px dashed #ddd6fe;">
         <span
             style="font-size:12px; color:#7c3aed; text-transform:uppercase; font-weight:700; display:block; margin-bottom:6px;">
-            Estado Atual:
+            Estado Actual:
         </span>
         <span
             style="display:inline-block; padding:8px 24px; background-color:#9d1c7f; color:#ffffff; font-weight:700; font-size:15px; border-radius:6px; text-transform:uppercase; letter-spacing: 0.02em;">

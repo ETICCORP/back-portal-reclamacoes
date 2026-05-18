@@ -5,6 +5,7 @@ namespace App\Models\Complaint;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ComplaintDeadline extends Model
 {
@@ -26,7 +27,26 @@ class ComplaintDeadline extends Model
         'notified_at'
     ];
 
+    protected $appends = [
+        'is_extended'
+    ];
+
     protected $dates = ['start_date', 'end_date', 'notified_at'];
+
+    public function logs(): HasMany
+    {
+        return $this->hasMany(ComplaintDeadlineLog::class, 'complaint_deadline_id');
+    }
+
+    /**
+     * Accessor para 'is_extended'
+     * Retorna true se o prazo já tiver sido renovado/prolongado.
+     */
+    public function getIsExtendedAttribute(): bool
+    {
+        // O item inicial de criação conta como 1. Se houver mais de 1, já foi renovado.
+        return $this->logs()->count() > 1;
+    }
 
     public function complaint()
     {

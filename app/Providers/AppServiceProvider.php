@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Complaint;
+use App\Models\Complaint\ComplaintDeadline;
+use App\Observers\ComplaintDeadlineObserver;
 use App\Observers\ComplaintObserver;
 use Dedoc\Scramble\Scramble;
 use Dedoc\Scramble\Support\Generator\OpenApi;
@@ -33,6 +35,7 @@ class AppServiceProvider extends ServiceProvider
             });
 
         Complaint\Complaint::observe(ComplaintObserver::class);
+        ComplaintDeadline::observe(ComplaintDeadlineObserver::class);
 
         $this->loadViewsFrom(resource_path('views'), 'mail');
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) {

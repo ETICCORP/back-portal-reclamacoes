@@ -46,7 +46,6 @@
                         <td style="padding:32px 40px; background-color:#f1f5f9; text-align:center; border-top: 1px solid #e2e8f0;">
                             <p style="margin:0; font-size:13px; color:#64748b; line-height:1.5; font-weight: 500;">
                                 Este é um e-mail automático enviado pela plataforma, por favor não responda diretamente.<br>
-                                <span style="color: #3b1e7a; font-weight: 700;">{{ App\Helpers\Helper::clean_app_name() }}</span>
                             </p>
                             <div style="margin-top:16px; border-top:1px solid #e2e8f0; padding-top:16px;">
                                 <p style="margin:0; font-size:11px; color:#94a3b8; text-transform:uppercase; letter-spacing:0.05em;">

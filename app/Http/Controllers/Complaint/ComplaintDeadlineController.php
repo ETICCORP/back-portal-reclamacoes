@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\Complaint;
 
 use App\Http\Controllers\AbstractController;
-use App\Services\Complaint\ComplaintDeadlineService;
 use App\Http\Requests\Complaint\ComplaintDeadlineRequest;
+use App\Http\Requests\Complaint\ExtendDeadlineRequest;
+use App\Services\Complaint\ComplaintDeadlineService;
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 class ComplaintDeadlineController extends AbstractController
 {
@@ -19,8 +18,7 @@ class ComplaintDeadlineController extends AbstractController
         return [
             'index'           => 'visualizou os prazos das reclamações',
             'show'            => 'visualizou os detalhes do prazo da reclamação #:complaint.code',
-            'store'           => 'registrou um novo prazo para a reclamação #:complaint.code',
-            'update'          => 'atualizou o prazo da reclamação #:complaint.code'
+            'extendDeadline'  => 'prolongou o prazo da reclamação #:complaint.code'
         ];
     }
 
@@ -34,36 +32,39 @@ class ComplaintDeadlineController extends AbstractController
      */
     public function store(ComplaintDeadlineRequest $request)
     {
+        return response(null, Response::HTTP_NOT_IMPLEMENTED);
+    }
+
+    public function extendDeadline(int $id, ExtendDeadlineRequest $request)
+    {
         try {
-            $this->logRequest();
-            $complaintDeadline = $this->service->store($request->validated());
+            // Passamos os dados primitivos estritos do request para o Service
+            $deadline = $this->service->extendDeadline(
+                $id,
+                (int) $request->validated('days'),
+                $request->validated('reason')
+            );
 
-            $this->logAction(params: $complaintDeadline);
+            $this->logAction(params: $deadline);
 
-            return response()->json($complaintDeadline, Response::HTTP_CREATED);
+            return response()->json([
+                'message' => 'O prazo de resposta da reclamação foi prolongado com sucesso.'
+            ]);
         } catch (Exception $e) {
-            $this->logRequest($e);
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 422);
         }
     }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(ComplaintDeadlineRequest $request, $id)
     {
-        try {
-            $this->logRequest();
-            $complaintDeadline = $this->service->update($request->validated(), $id);
-            $this->logAction(params: $complaintDeadline);
-            return response()->json($complaintDeadline, Response::HTTP_OK);
-        } catch (ModelNotFoundException $e) {
-            $this->logRequest($e);
-            return response()->json(['error' => 'Resource not found.'], Response::HTTP_NOT_FOUND);
-        } catch (Exception $e) {
-            $this->logRequest($e);
-            return response()->json($e->getMessage(), Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
+        return response(null, Response::HTTP_NOT_IMPLEMENTED);
     }
 
     public function percentageServicedWithinDeadline()

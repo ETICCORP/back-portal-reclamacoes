@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Requests\Complaint\UpdateStatusRequest;
-use App\Enum\ClaimStatus;
 use App\Http\Requests\Complaint\ComplaintUpdateRequest;
 use Illuminate\Pagination\AbstractPaginator;
 

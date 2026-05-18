@@ -1,6 +1,6 @@
 @extends('emails.layout')
 
-@section('title', 'Atualização de Processo - Portal de Reclamações')
+@section('title', 'Actualização de Processo - Portal de Reclamações')
 
 @section('protocolo', 'ID: #' . ($complaint->code ?? 'N/D'))
 
@@ -10,7 +10,7 @@
     </h2>
 
     <p style="margin:0 0 26px 0; font-size:16px; line-height:1.6; color:#475569;">
-        Informamos que o seu processo registou uma nova movimentação. O estado atual da sua exposição foi atualizado:
+        Informamos que o seu processo registou uma nova movimentação. O estado actual da sua exposição foi actualizado:
     </p>
 
     <div

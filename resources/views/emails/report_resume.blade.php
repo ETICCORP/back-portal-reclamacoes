@@ -67,6 +67,6 @@
     </div>
 
     <p style="margin: 30px 0 0 0; font-size: 13px; color: #94a3b8; text-align: center; font-style: italic;">
-        Poderá consultar atualizações sobre esta exposição acedendo diretamente ao nosso portal de reclamações.
+        Poderá consultar actualizações sobre esta exposição acedendo diretamente ao nosso portal de reclamações.
     </p>
 @endsection

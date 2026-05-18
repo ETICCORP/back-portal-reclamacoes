@@ -14,6 +14,72 @@ class ComplaintDeadlineRepository extends AbstractRepository
         parent::__construct($model);
     }
 
+    /**
+     * Prolonga o prazo de resposta de uma reclamação ativa (Apenas uma única vez).
+     *
+     * @param int $complaintId ID da reclamação
+     * @param int $additionalDays Dias úteis a somar
+     * @param string|null $reason Motivo do prolongamento
+     * @return bool
+     * @throws \Exception
+     */
+    public function extendDeadline(int $complaintId, int $additionalDays, ?string $reason = null): bool
+    {
+        return DB::transaction(function () use ($complaintId, $additionalDays, $reason) {
+
+            // 1. Procura o prazo atual ativo da reclamação
+            $deadline = $this->model
+                ->where('complaint_id', $complaintId)
+                ->where('status', 'Pendente')
+                ->first();
+
+            if (!$deadline) {
+                throw new \Exception("Não existe nenhum prazo pendente ativo para esta reclamação.");
+            }
+
+            // 🔒 Permitir o prolongamento APENAS uma vez
+            $logsCount = \App\Models\Complaint\ComplaintDeadlineLog::where('complaint_deadline_id', $deadline->id)->count();
+
+            if ($logsCount > 1) {
+                throw new \Exception("Ação recusada. O prazo desta reclamação já foi prolongado anteriormente.");
+            }
+
+            // 2. Validação cronológica: Verifica se o prazo original já expirou
+            $endDateOriginal = Carbon::parse($deadline->end_date);
+
+            if (Carbon::now()->greaterThan($endDateOriginal)) {
+                throw new \Exception("Ação não permitida. O prazo original deste processo já expirou.");
+            }
+
+            // 3. Calcula a nova data limite com base nos dias úteis
+            $newEndDate = $this->calculateBusinessDays($endDateOriginal, $additionalDays);
+
+            // 💡 AJUSTE DE SEGURANÇA: Injeta o atributo na memória e usa o save() para o SQL ignorar a coluna
+            $deadline->ext_reason = $reason;
+            $deadline->days       = $deadline->days + $additionalDays;
+            $deadline->end_date   = $newEndDate;
+
+            return $deadline->save();
+        });
+    }
+
+    /**
+     * Calcula a data final com base em dias úteis (pula fins de semana).
+     */
+    private function calculateBusinessDays(Carbon $startDate, int $daysToAdd): Carbon
+    {
+        $date = $startDate->copy();
+
+        while ($daysToAdd > 0) {
+            $date->addDay();
+            if (!$date->isWeekend()) {
+                $daysToAdd--;
+            }
+        }
+
+        return $date;
+    }
+
     public function percentageServicedWithinDeadline()
     {
         $dados = DB::table('complaint_deadlines')
