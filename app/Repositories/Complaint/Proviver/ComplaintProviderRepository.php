@@ -21,13 +21,51 @@ class ComplaintProviderRepository extends AbstractRepository
         $this->complaintRepository = $complaintRepository;
     }
 
+    /**
+     * Encaminha de forma idempotente e segura uma reclamação para um provedor técnico.
+     * * @param array $data ['complaint_id', 'provider_id', 'summary', 'notes']
+     * @return \App\Models\Complaint\Proviver\ComplaintProvider
+     * @throws \Exception
+     */
     public function forwardComplaint(array $data)
     {
+        // 1. Localiza a Reclamação Principal com segurança
+        $complaint = $this->complaintRepository->model->find($data['complaint_id']);
+
+        if (!$complaint) {
+            throw new \Exception('A reclamação indicada não foi encontrada no sistema.');
+        }
+
+        // 🔍 REGRA 1: Validação de Triagem Obrigatória
+        // Verifica se existe algum registo na relação hasMany 'triages'
+        if ($complaint->triages()->count() === 0) {
+            throw new \Exception('Operação rejeitada. Não é possível encaminhar uma reclamação que não passou pelo processo de triagem.');
+        }
+
+        // 🔄 REGRA 2: Idempotência Estrita (Evitar duplicados)
+        // Procura se já existe um encaminhamento idêntico e pendente ativo ('sent')
+        $existingForward = $this->model
+            ->where('complaint_id', $data['complaint_id'])
+            ->where('provider_id', $data['provider_id'])
+            ->where('status', 'sent')
+            ->first();
+
+        if ($existingForward) {
+            logs()->notice('Encaminhamento ignorado por duplicidade (Idempotência ativa)', [
+                'complaint_id' => $data['complaint_id'],
+                'provider_id'  => $data['provider_id']
+            ]);
+
+            // Devolve o registo que já existia sem duplicar dados na tabela nem reenviar emails
+            return $existingForward->load(['complaint', 'provider']);
+        }
+
         $complaintProvider = null;
 
         try {
             DB::beginTransaction();
 
+            // 2. Criação do registo de encaminhamento
             $complaintProvider = $this->model->create([
                 'complaint_id' => $data['complaint_id'],
                 'provider_id'  => $data['provider_id'],
@@ -38,42 +76,42 @@ class ComplaintProviderRepository extends AbstractRepository
                 'status'       => 'sent'
             ]);
 
-            // 1. Centralizando o status com o Enum
+            // 3. Centralização do status com o Enum mapeado na Model
             $status = ClaimStatus::ENCAMINHADO_PROVEDOR;
 
-            $data['status']  = $status->value; // 'Encaminhado ao Provedor'
-            $data['comment'] = $data['notes'];
+            $updateData = [
+                'status'  => $status->value, // Garante a string/int equivalente do Enum
+                'comment' => $data['notes']
+            ];
 
-            // Atualiza o status da reclamação principal
-            $this->complaintRepository->updateStatus($data, $data['complaint_id']);
+            // Atualiza o status da reclamação principal na tabela de histórico/status
+            $this->complaintRepository->updateStatus($updateData, $complaint->id);
 
-            // Carrega as relações necessárias para o envio do e-mail
-            $complaintProvider->load([
-                "complaint",
-                "provider"
-            ]);
+            // Carrega as relações necessárias para o disparo seguro do Mail Event
+            $complaintProvider->load(["complaint", "provider"]);
 
             DB::commit();
 
-            // Envio de e-mail ao Provedor
-            Mail::to($complaintProvider->provider->email)
-                ->queue(new ComplaintForwardedMail($complaintProvider));
+            // 4. Envio Assíncrono do E-mail (Fora da transação SQL para evitar deadlocks de fila)
+            if ($complaintProvider->provider && !empty($complaintProvider->provider->email)) {
+                Mail::to($complaintProvider->provider->email)
+                    ->queue(new ComplaintForwardedMail($complaintProvider));
+            }
 
-            logs()->info('Reclamação encaminhada para o provedor', [
-                'email do provedor' => $complaintProvider->provider->email,
+            logs()->info('Reclamação encaminhada para o provedor com sucesso.', [
+                'complaint_id'      => $complaint->id,
+                'email_provedor'    => $complaintProvider->provider?->email,
             ]);
         } catch (\Throwable $e) {
             DB::rollBack();
 
-            if (isset($complaintProvider)) {
-                logs()->error('Erro ao encaminhar para o provedor', [
-                    'email do provedor'     => $complaintProvider->provider?->email ?? 'Não disponível',
-                    'complaint_provider_id' => $complaintProvider?->id,
-                    'error'                 => $e->getMessage(),
-                ]);
-            }
+            logs()->error('Falha crítica ao encaminhar processo para o provedor', [
+                'complaint_id' => $data['complaint_id'] ?? null,
+                'error'        => $e->getMessage(),
+                'trace'        => $e->getTraceAsString()
+            ]);
 
-            throw new \Exception('Erro ao encaminhar para o provedor');
+            throw new \Exception('Erro interno ao processar o encaminhamento para o provedor.');
         }
 
         return $complaintProvider;
