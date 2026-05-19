@@ -30,7 +30,8 @@ class ComplaintDeadline extends Model
 
     protected $appends = [
         'is_extended',
-        'can_extend'
+        'can_extend',
+        'is_expired',
     ];
 
     protected $dates = ['start_date', 'end_date', 'notified_at'];
@@ -77,6 +78,21 @@ class ComplaintDeadline extends Model
         }
 
         return true;
+    }
+
+    /**
+     * Verifica se este prazo específico já expirou.
+     *
+     * @return bool
+     */
+    public function getIsExpiredAttribute(): bool
+    {
+        if (!$this->end_date) {
+            return false;
+        }
+
+        // Se o momento atual for MAIOR que a data de fim, significa que expirou
+        return now()->greaterThan($this->end_date);
     }
 
     public function complaint()

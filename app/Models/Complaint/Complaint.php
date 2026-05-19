@@ -13,6 +13,7 @@ use App\Models\Soluction\Soluction;
 use App\Models\ComplaintAttachment\ComplaintAttachment; // cuidado: Service não é Model!
 use App\Models\ComplaintTriages\ComplaintTriages;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Support\Str;
 
 class Complaint extends Model
@@ -114,9 +115,49 @@ class Complaint extends Model
     {
         return $this->hasMany(ComplaintInteraction::class, 'complaint_id');
     }
+
     public function deadlines()
     {
         return $this->hasMany(ComplaintDeadline::class, 'complaint_id');
+    }
+
+    /**
+     * Verifica se o prazo (deadline) mais recente da reclamação ainda está ativo/válido.
+     *
+     * @return bool
+     */
+    public function getIsDeadlineActiveAttribute(): bool
+    {
+        // Obtém apenas a última deadline registada para esta reclamação
+        $latestDeadline = $this->deadlines()->latest()->first();
+
+        // 📝 Ajustado de expire_at para end_date conforme a estrutura da tua Model
+        if (!$latestDeadline || empty($latestDeadline->end_date)) {
+            logs()->info('Debug Deadline [Não Ativo - Sem Registro ou Sem Data de Fim]:', [
+                'complaint_id'        => $this->id,
+                'has_deadline_record' => !is_null($latestDeadline),
+                'end_date_value'      => $latestDeadline->end_date ?? 'null'
+            ]);
+
+            return false;
+        }
+
+        // Como o 'end_date' está no $casts da model ComplaintDeadline, ele já é Carbon!
+        $now = now();
+
+        // Se NÃO está expirado, significa que está ativo
+        $isActive = !$latestDeadline->is_expired;
+
+        // LOG DE DEBUG: Grava as datas exatas e o resultado da comparação
+        logs()->info('Debug Deadline [Processado]:', [
+            'complaint_id'         => $this->id,
+            'deadline_record_id'   => $latestDeadline->id,
+            'data_fim_db'          => $latestDeadline->end_date->toDateTimeString(),
+            'hora_atual_servidor'  => $now->toDateTimeString(),
+            'esta_ativo_resultado' => $isActive
+        ]);
+
+        return $isActive;
     }
 
     public function proverResponse()

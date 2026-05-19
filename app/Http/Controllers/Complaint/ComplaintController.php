@@ -119,19 +119,22 @@ class ComplaintController extends AbstractController
         }
     }
 
+
     public function update(ComplaintUpdateRequest $request, $id)
     {
         try {
             $this->logRequest();
 
-            $complaint = $this->service->update($request->validated(), $id);
+            // Executa o serviço que agora valida o status e a deadline antes de atualizar
+            $complaint = $this->service->updateData($request->validated(), $id);
 
             $this->logAction(params: $complaint);
 
             return response()->json($complaint);
         } catch (ModelNotFoundException $e) {
             $this->logRequest($e);
-            return response()->json(['error' => 'Resource not found.'], 400);
+            // Ajustado para 404 (Not Found) que é o semântico correto para o padrão REST
+            return response()->json(['error' => 'Reclamação não encontrada.'], 404);
         } catch (\Illuminate\Validation\ValidationException $e) {
             return response()->json([
                 'error' => 'Operação inválida',
@@ -139,11 +142,19 @@ class ComplaintController extends AbstractController
             ], 422);
         } catch (Exception $e) {
             $this->logRequest($e);
-            return response()->json($e->getMessage(), 500);
+
+            // CAPTURA INTELIGENTE: Se a mensagem for a nossa regra de negócio do status,
+            // devolvemos 422 (Unprocessable Entity) com a mensagem amigável para o React.
+            $isBusinessRule = str_contains($e->getMessage(), 'Ação recusada');
+            $statusCode = $isBusinessRule ? 422 : 500;
+
+            $responsePayload = $isBusinessRule
+                ? ['error' => 'Operação inválida', 'message' => $e->getMessage()]
+                : ['error' => 'Ocorreu um erro interno ao processar a atualização da reclamação.'];
+
+            return response()->json($responsePayload, $statusCode);
         }
     }
-
-
 
     public function total()
     {

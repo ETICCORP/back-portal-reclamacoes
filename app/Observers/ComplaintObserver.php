@@ -18,9 +18,6 @@ class ComplaintObserver
     /**
      * Interceta o processo ANTES da gravação no banco de dados.
      */
-    /**
-     * Interceta o processo ANTES da gravação no banco de dados.
-     */
     public function updating(Complaint $complaint): void
     {
         $statusOriginal = $complaint->getOriginal('status');

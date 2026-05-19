@@ -31,7 +31,6 @@ class ComplaintTriagesRequest extends BaseFormRequest
             'severity'            => [$technicalRule, 'string'],
             'urgency'             => [$technicalRule, 'string'],
             'responsible_area'    => [$technicalRule, 'string'],
-            'assigned_user_id'    => [$technicalRule, 'exists:users,id'],
         ];
     }
 

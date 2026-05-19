@@ -6,6 +6,7 @@ use App\Models\ComplaintTriages\ComplaintTriages;
 use App\Repositories\AbstractRepository;
 use App\Repositories\Complaint\ComplaintRepository;
 use App\Enum\ClaimStatus;
+use Illuminate\Support\Facades\Auth;
 
 class ComplaintTriagesRepository extends AbstractRepository
 {
@@ -57,6 +58,7 @@ class ComplaintTriagesRepository extends AbstractRepository
         // 2. Prepara os dados. Usamos '->value' para salvar a string original no banco
         $data['status']  = $status->value;
         $data['comment'] = "Classificação da Triagem: " . $status->value;
+        $data['assigned_user_id'] = Auth::user()->id;
 
         // Cria o registro na tabela complaint_triages
         $model = $this->model->create($data);

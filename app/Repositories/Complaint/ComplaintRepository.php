@@ -146,23 +146,41 @@ class ComplaintRepository extends AbstractRepository
     /**
      * Atualiza status da denúncia e cria comentário
      */
-    public function updateStatus(array $data, int $id)
+    /**
+     * Atualiza o status da reclamação, regista comentário e processa anexos.
+     *
+     * @param array $data Dados com o status, comentário e anexos
+     * @param int $id ID da Reclamação
+     * @param bool $silent Se true, silencia os Observers/Events no update do status
+     * @return mixed
+     */
+    public function updateStatus(array $data, int $id, bool $silent = false)
     {
-        return DB::transaction(function () use ($data, $id) {
+        return DB::transaction(function () use ($data, $id, $silent) {
             $model = $this->model->findOrFail($id);
 
-            $model->update(['status' => $data['status']]);
+            // Bloco de lógica para atualizar o status
+            $updateStatusLogic = function () use ($model, $data) {
+                $model->update(['status' => $data['status']]);
+            };
 
+            // Se for silent, executa sem acordar o Observer (evita disparo de e-mails genéricos)
+            if ($silent) {
+                $model->withoutEvents($updateStatusLogic);
+            } else {
+                $updateStatusLogic();
+            }
+
+            // Regista o comentário histórico, se fornecido
             if (isset($data['comment'])) {
-
                 $this->commentRepository->model::create([
                     "comment"   => $data['comment'],
                     "report_id" => $id,
-                    "fk_user" => Auth::user()?->id
+                    "fk_user"   => Auth::user()?->id
                 ]);
             }
 
-            // 📎 Anexos
+            // 📎 Processa os Anexos
             $this->handleAttachments($data['attachments'] ?? null, $id);
 
             return $model;
