@@ -109,7 +109,7 @@
         @endif
 
         <p>Olá, <span class="highlight">{{ $user->first_name }}</span></p>
-        <p>Identificámos uma nova Reclamação associada ao sistema:</p>
+        <p>Identificamos uma nova Reclamação associada ao sistema:</p>
 
         <h2>Detalhes da Reclamação</h2>
 

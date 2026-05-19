@@ -14,27 +14,27 @@ class ComplaintProvider extends Model
     protected $table = 'complaint_provider';
     protected $primaryKey = 'id';
     protected $fillable = ['complaint_id', 'provider_id', 'summary', 'notes', 'sent_at', 'deadline', 'status'];
-protected $casts = [
-    'deadline' => 'datetime',
-];
+    protected $casts = [
+        'deadline' => 'datetime',
+    ];
 
-      public function complaint()
+    public function complaint()
     {
         return $this->belongsTo(Complaint::class, 'complaint_id');
     }
-       public function provider()
+    public function provider()
     {
         return $this->belongsTo(Provider::class, 'provider_id');
     }
 
-      public function forwardProvider()
+    public function forwardProvider()
     {
         return $this->hasMany(ComplaintProvider::class, 'complaint_id');
     }
 
 
 
-     public function entitiyResponse()
+    public function entitiyResponse()
     {
         return $this->hasMany(ComplaintResponses::class, 'complaint_id');
     }

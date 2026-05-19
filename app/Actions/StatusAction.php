@@ -43,7 +43,7 @@ class StatusAction
             "Aprovada Classificação"   => "A sua exposição foi validada tecnicamente e seguirá para análise interna profunda.",
             "Negada Classificação"     => "Após análise, informamos que a sua exposição não preenche os requisitos para prosseguimento.",
             "Encaminhado ao Provedor"  => "Enviámos os detalhes ao provedor responsável para obter esclarecimentos adicionais.",
-            "Devolvida ao Reclamante"  => "Identificámos a necessidade de informações complementares para avançar com a análise.",
+            "Devolvida ao Reclamante"  => "Identificamos a necessidade de informações complementares para avançar com a análise.",
             "Respondida pelo Provedor" => "Recebemos o feedback do provedor e estamos a consolidar a resposta final.",
             "Respondida ao Reclamante" => "O seu processo foi concluído. A resposta oficial já se encontra disponível.",
             default                    => "O seu processo registrou uma nova movimentação e está a ser processado pela nossa equipa."
