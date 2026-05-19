@@ -10,14 +10,41 @@ use App\Enum\ClaimStatus;
 class ComplaintTriagesRepository extends AbstractRepository
 {
     public $complaintRepository;
+
     public function __construct(ComplaintTriages $model, ComplaintRepository $complaintRepository)
     {
         parent::__construct($model);
         $this->complaintRepository = $complaintRepository;
     }
 
+    /**
+     * Regista a triagem inicial de uma reclamação (Operação Idempotente Única).
+     *
+     * @param array $data
+     * @return ComplaintTriages
+     * @throws \Exception
+     */
     public function store(array $data)
     {
+        $complaintId = data_get($data, 'complaint_id');
+
+        if (empty($complaintId)) {
+            throw new \Exception("Erro de integridade. O ID da reclamação é obrigatório para realizar a triagem.");
+        }
+
+        // 🔒 REGRA DE OURO: A triagem só pode acontecer uma única vez por processo
+        // Fazemos um check de existência direto e ultra-rápido na base de dados
+        $alreadyTriaged = $this->model->where('complaint_id', $complaintId)->exists();
+
+        if ($alreadyTriaged) {
+
+            logs()->notice("Tentativa de triagem duplicada bloqueada (Idempotência ativa)", [
+                'complaint_id' => $complaintId
+            ]);
+
+            throw new \Exception("Ação recusada. Esta reclamação já passou pelo processo de triagem e não permite reclassificação.");
+        }
+
         // 1. Determina o Enum de status com base nas regras de negócio
         $status = ClaimStatus::APROVADA_CLASSIFICACAO;
 
@@ -35,15 +62,13 @@ class ComplaintTriagesRepository extends AbstractRepository
         $model = $this->model->create($data);
 
         // 3. Atualiza o status da reclamação relacionada
-        if (!empty($data['complaint_id'])) {
-            // Passamos o valor do enum ('Aprovada Classificação', etc) para manter a compatibilidade
-            $data['status'] = $status->value;
+        // Passamos o valor do enum ('Aprovada Classificação', etc) para manter a compatibilidade
+        $data['status'] = $status->value;
 
-            $this->complaintRepository->updateStatus(
-                $data,
-                $data['complaint_id']
-            );
-        }
+        $this->complaintRepository->updateStatus(
+            $data,
+            $complaintId
+        );
 
         return $model;
     }

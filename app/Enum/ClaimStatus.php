@@ -56,11 +56,11 @@ enum ClaimStatus: string
         return match ($this) {
             self::APROVADA_CLASSIFICACAO => "A sua exposição foi validada tecnicamente e seguirá para análise interna profunda.",
             self::NEGADA_CLASSIFICACAO   => "Após análise, informamos que a sua exposição não preenche os requisitos para prosseguimento.",
-            self::ENCAMINHADO_PROVEDOR   => "Enviámos os detalhes ao provedor responsável para obter esclarecimentos adicionais.",
-            self::DEVOLVIDA_RECLAMANTE   => "Identificámos a necessidade de informações complementares para avançar com a análise.",
+            self::ENCAMINHADO_PROVEDOR   => "Enviamos os detalhes ao provedor responsável para obter esclarecimentos adicionais.",
+            self::DEVOLVIDA_RECLAMANTE   => "Identificamos a necessidade de informações complementares para avançar com a análise.",
             self::RESPONDIDA_PROVEDOR    => "Recebemos o feedback do provedor e estamos a consolidar a resposta final.",
             self::RESPONDIDA_RECLAMANTE  => "O seu processo foi concluído. A resposta oficial já se encontra disponível.",
-            default                      => "O seu processo registrou uma nova movimentação e está a ser processado pela nossa equipa."
+            default                      => "O seu processo registou uma nova movimentação e está a ser processado pela nossa equipa."
         };
     }
 }

@@ -3,9 +3,11 @@
 namespace App\Observers;
 
 use App\Enum\ClaimStatus;
+use App\Mail\ComplaintForwardedMail;
 use App\Mail\ComplaintNeedMoreInfoMail;
 use App\Mail\ComplaintUpdatedMail;
 use App\Models\Complaint\Complaint;
+use App\Models\Complaint\Proviver\ComplaintProvider;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Validation\ValidationException;
@@ -106,43 +108,64 @@ class ComplaintObserver
                 return;
             }
 
-            // 3. Busca a última triagem
-            $latestTriage = $complaint->triages()->latest()->first();
+            // FLUXO A: Encaminhado ao Provedor Técnico
+            if ($status === ClaimStatus::ENCAMINHADO_PROVEDOR) {
 
-            // Log para depuração da triagem
-            if (!$latestTriage) {
-                logs()->info("Observer: Nenhuma triagem encontrada para Reclamação #{$complaint->code}");
-                return;
+                // Procura o último encaminhamento ativo registado para este processo
+                $latestForward = ComplaintProvider::where('complaint_id', $complaint->id)
+                    ->latest()
+                    ->first();
+
+                if (!$latestForward) {
+                    logs()->warning("Observer: nenhum registo em complaint_provider foi localizado para #{$complaint->code}");
+                    return;
+                }
+
+                // Podes reutilizar a tua Mailable ou passar o texto dinamicamente
+                $mailable = new ComplaintForwardedMail($latestForward, 'reclamante');
+            } else {
+
+                // 3. Busca a última triagem
+                $latestTriage = $complaint->triages()->latest()->first();
+
+                // Log para depuração da triagem
+                if (!$latestTriage) {
+                    logs()->info("Observer: Nenhuma triagem encontrada para Reclamação #{$complaint->code}");
+                    return;
+                }
+
+                // 4. Fluxo Pragmático com Operadores Ternários
+                $isActionable = $latestTriage && ($latestTriage->is_returned || $latestTriage->is_refused);
+
+                // Se for status relacionado ao provedor, não é acionável para o reclamante
+                $isActionable = str_contains($status->value, 'Provedor') ? false : $isActionable;
+
+                // Se o status for Devolvida ao Reclamante, geramos a URL assinada para o React
+                $frontendUrl = null;
+
+                if ($status === ClaimStatus::DEVOLVIDA_RECLAMANTE) {
+                    $frontendUrl = self::generateFrontendSignedUrl($complaint, 5);
+                }
+
+                // 5. Envia o e-mail apropriado com base na triagem utilizando o Enum
+                $mailable = $isActionable
+                    ? new ComplaintNeedMoreInfoMail(
+                        $complaint,
+                        $latestTriage,
+                        $status === ClaimStatus::NEGADA_CLASSIFICACAO ? 'refusal' : 'return',
+                        $frontendUrl
+                    )
+                    : new ComplaintUpdatedMail(
+                        $complaint,
+                        $status->getDescription(),
+                        $status->getSubject($complaint->code)
+                    );
             }
 
-            // 4. Fluxo Pragmático com Operadores Ternários
-            $isActionable = $latestTriage && ($latestTriage->is_returned || $latestTriage->is_refused);
-
-            // Se for status relacionado ao provedor, não é acionável para o reclamante
-            $isActionable = str_contains($status->value, 'Provedor') ? false : $isActionable;
-
-            // Se o status for Devolvida ao Reclamante, geramos a URL assinada para o React
-            $frontendUrl = null;
-
-            if ($status === ClaimStatus::DEVOLVIDA_RECLAMANTE) {
-                $frontendUrl = self::generateFrontendSignedUrl($complaint, 5);
+            // 3. Executa o disparo para a fila (Queue)
+            if ($mailable) {
+                Mail::to($recipient)->queue($mailable);
             }
-
-            // 5. Envia o e-mail apropriado com base na triagem utilizando o Enum
-            $mailable = $isActionable
-                ? new ComplaintNeedMoreInfoMail(
-                    $complaint,
-                    $latestTriage,
-                    $status === ClaimStatus::NEGADA_CLASSIFICACAO ? 'refusal' : 'return',
-                    $frontendUrl
-                )
-                : new ComplaintUpdatedMail(
-                    $complaint,
-                    $status->getDescription(),
-                    $status->getSubject($complaint->code)
-                );
-
-            Mail::to($recipient)->queue($mailable);
 
             logs()->info("E-mail processado via triagem para {$recipient} (Protocolo #{$complaint->code})");
         } catch (\Exception $e) {

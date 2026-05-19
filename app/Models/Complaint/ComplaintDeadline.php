@@ -2,6 +2,7 @@
 
 namespace App\Models\Complaint;
 
+use App\Enum\ClaimStatus;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -28,7 +29,8 @@ class ComplaintDeadline extends Model
     ];
 
     protected $appends = [
-        'is_extended'
+        'is_extended',
+        'can_extend'
     ];
 
     protected $dates = ['start_date', 'end_date', 'notified_at'];
@@ -46,6 +48,35 @@ class ComplaintDeadline extends Model
     {
         // O item inicial de criação conta como 1. Se houver mais de 1, já foi renovado.
         return $this->logs()->count() > 1;
+    }
+
+    /**
+     * Accessor para 'can_extend'
+     * Atualizado para refletir todas as travas do repositório diretamente no JSON da API.
+     */
+    public function getCanExtendAttribute(): bool
+    {
+        // 1. Se estiver expirado, não pode
+        if (Carbon::now()->greaterThan($this->end_date)) {
+            return false;
+        }
+
+        // 2. Se estiver negado, não pode
+        if ($this->complaint && $this->complaint->status === ClaimStatus::NEGADA_CLASSIFICACAO) {
+            return false;
+        }
+
+        // 3. Verifica os logs apenas da fase ativa atual
+        if ($this->complaint) {
+            $currentStatus = $this->complaint->status->value;
+            $phaseLogs = $this->logs()->where('status', $currentStatus)->count();
+
+            if ($phaseLogs > 1) {
+                return false; // Já estendeu nesta fase
+            }
+        }
+
+        return true;
     }
 
     public function complaint()

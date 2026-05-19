@@ -38,6 +38,8 @@ class ComplaintDeadlineController extends AbstractController
     public function extendDeadline(int $id, ExtendDeadlineRequest $request)
     {
         try {
+            $this->logRequest();
+            
             // Passamos os dados primitivos estritos do request para o Service
             $deadline = $this->service->extendDeadline(
                 $id,
