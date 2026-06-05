@@ -15,6 +15,7 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
     'frontend_url' => env('FRONTEND_URL', 'https://keepcomply.co.ao'),
+    'branding' => env('APP_BRANDING', 'KEEPCOMPLY'),
     /*
     |--------------------------------------------------------------------------
     | Application Environment
