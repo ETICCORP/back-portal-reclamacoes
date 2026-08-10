@@ -190,19 +190,19 @@ class ComplaintObserver
     {
         // 1. Gera a rota assinada relativa correspondente ao endpoint do Back-end
         $relativeApiUrl = URL::temporarySignedRoute(
-            'complaints.update', // Nome da rota PUT definida no routes/api.php
+            'complaints.update', // Nome da rota no routes/api.php
             now()->addDays($days),
-            ['id' => $complaint->id],
-            false // Crucial: gera apenas o caminho relativo (/api/reports/...)
+            ['code' => $complaint->code],
+            false // Caminho relativo: /api/reports/...
         );
 
-        // 2. Extrai exclusivamente os parâmetros gerados (?expires=...&signature=...)
+        // 2. Extrai exclusivamente a query string (?expires=...&signature=...)
         $queryString = parse_url($relativeApiUrl, PHP_URL_QUERY);
 
-        // 3. Recupera o domínio do Front-end do ficheiro .env
-        $frontendUrl = config('app.frontend_url');
+        // 3. Recupera a URL do Front-end do arquivo de configuração (mapeado no .env)
+        $frontendUrl = config('app.frontend_url', 'http://localhost:5173');
 
-        // 4. Monta o link final que o React vai ler
-        return rtrim($frontendUrl, '/') . "/reclamacoes/editar/{$complaint->id}?{$queryString}";
+        // 4. Monta a URL final para o Front-end
+        return rtrim($frontendUrl, '/') . "/consulting-report/{$complaint->code}?{$queryString}";
     }
 }
