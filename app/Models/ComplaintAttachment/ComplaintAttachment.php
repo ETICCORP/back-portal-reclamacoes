@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Models\Complaintattachment;
+namespace App\Models\ComplaintAttachment;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Complaintattachment extends Model
+class ComplaintAttachment extends Model
 {
     use HasFactory;
 

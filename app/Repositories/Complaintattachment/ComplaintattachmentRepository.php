@@ -2,7 +2,7 @@
 
 namespace App\Repositories\Complaintattachment;
 
-use App\Models\Complaintattachment\Complaintattachment;
+use App\Models\ComplaintAttachment\ComplaintAttachment;
 use App\Repositories\AbstractRepository;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Soluction\Soluction;
-use App\Models\Complaintattachment\Complaintattachment;
+use App\Models\ComplaintAttachment\ComplaintAttachment;
 use App\Models\ComplaintTriages\ComplaintTriages;
 use App\Models\User;
 use Carbon\Carbon;
@@ -94,7 +94,7 @@ class Complaint extends Model
 
     public function attachments()
     {
-        return $this->hasMany(Complaintattachment::class, 'fk_complaint');
+        return $this->hasMany(ComplaintAttachment::class, 'fk_complaint');
     }
 
     public function soluctions()
