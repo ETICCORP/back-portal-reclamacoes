@@ -192,7 +192,7 @@ class ComplaintObserver
         $relativeApiUrl = URL::temporarySignedRoute(
             'complaints.update', // Nome da rota no routes/api.php
             now()->addDays($days),
-            ['code' => $complaint->code],
+            ['id' => $complaint->id],
             false // Caminho relativo: /api/reports/...
         );
 
