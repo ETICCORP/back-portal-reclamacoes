@@ -32,7 +32,9 @@ class SendReportCopy implements ShouldQueue
      */
     public function handle(): void
     {
-        $complaint = Complaint::find($this->complaintId)->with('reporter', 'description', 'involveColleagues',);
+        // Load the complaint with its relationships correctly
+        $complaint = Complaint::with('reporter', 'description', 'involveColleagues')
+            ->find($this->complaintId);
 
         if (!$complaint) {
             Log::error("Complaint ID {$this->complaintId} not found.");
@@ -49,8 +51,13 @@ class SendReportCopy implements ShouldQueue
 
             //Se quiser enviar e-mail, descomente abaixo
             //SendGrupoAlertEmailJob::dispatch($alert->id);
-            
-            Mail::to($complaint->reporter->email)->send(new ReportAlertMail($complaint));
+
+            // Enviar apenas se tivermos um reporter com email válido
+            if ($complaint->reporter && !empty($complaint->reporter->email)) {
+                Mail::to($complaint->reporter->email)->send(new ReportAlertMail($complaint));
+            } else {
+                Log::warning("Complaint ID {$complaint->id} has no reporter email; skipping ReportAlertMail.");
+            }
 
 
 
