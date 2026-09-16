@@ -115,7 +115,7 @@
 
         <div class="info-box">
             <p><strong>Código:</strong> {{ $alert->code }}</p>
-            <p><strong>Tipo:</strong> {{ $alert->typeReport->name }}</p>
+            <p><strong>Tipo:</strong> {{ $alert->typeReport?->name ?? $alert->type ?? 'N/D' }}</p>
             <p><strong>Data do Incidente:</strong>
                 {{ \Carbon\Carbon::parse($alert->incidentDateTime)->format('d/m/Y H:i') }}</p>
             <p><strong>Local:</strong> {{ $alert->location }}</p>

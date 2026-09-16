@@ -8,6 +8,7 @@ use App\Models\Alert\AlertUser\AlertUser;
 use App\Models\Alert\GrupoType\GrupoType;
 use App\Models\Alert\UserGrupoAlert\UserGrupoAlert;
 use App\Models\Complaint\Complaint;
+use App\Models\Complaint\TypeComplaints;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -37,14 +38,29 @@ class SendGrupoAlertEmailJob implements ShouldQueue
             return;
         }
 
-        Log::info("Processando Alert ID {$alert->id} | Tipo: {$alert->type}");
+        $complaint = Complaint::find($alert->complit_id);
+        if (!$complaint) {
+            Log::error("Complaint com ID {$alert->complit_id} não encontrado.");
+            return;
+        }
 
-        // Buscar todos os grupos que correspondem ao tipo do alert
-        $complaint =  Complaint::find($alert->complit_id);
-        $grupoTypes = GrupoType::where('type_complaints_id', $complaint->type)->get();
+        Log::info("Processando Alert ID {$alert->id} | Tipo: {$complaint->type}");
+
+        // Buscar todos os grupos que correspondem ao tipo da reclamação.
+
+        $typeComplaint = is_numeric($complaint->type)
+            ? TypeComplaints::find((int) $complaint->type)
+            : TypeComplaints::where('name', $complaint->type)->first();
+
+        if (!$typeComplaint) {
+            Log::warning("Tipo de reclamação '{$complaint->type}' não encontrado.");
+            return;
+        }
+
+        $grupoTypes = GrupoType::where('type_complaints_id', $typeComplaint->id)->get();
 
         if ($grupoTypes->isEmpty()) {
-            Log::warning("Nenhum GrupoType encontrado para alert tipo '{$alert->type}'");
+            Log::warning("Nenhum grupo de alertas configurado para o tipo de reclamação '{$typeComplaint->name}' (ID {$typeComplaint->id}).");
             return;
         }
 

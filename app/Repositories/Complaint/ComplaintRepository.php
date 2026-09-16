@@ -96,7 +96,7 @@ class ComplaintRepository extends AbstractRepository
             $complaint->load(['attachments', 'typeReport']);
 
             // 7. Disparos Assíncronos (Evita lentidão no ecrã do utilizador)
-            AlertJob::dispatch($complaint->id);
+            AlertJob::dispatch($complaint->id)->afterCommit();
 
             if (!empty($data['email'])) {
                 // Forçamos o uso do ->queue() para libertar o PHP imediatamente
