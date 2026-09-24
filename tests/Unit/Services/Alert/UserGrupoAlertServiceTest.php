@@ -25,7 +25,7 @@ class UserGrupoAlertServiceTest extends TestCase
     /**
      * Testa se o service sincroniza os dados corretamente e retorna o resumo detalhado.
      */
-    public function test_should_sync_group_users_successfully_and_return_detailed_summary()
+    public function test_should_add_group_users_successfully_without_removing_existingones()
     {
         $groupId = 1;
         // Simula que no banco já existe o usuário 10 e 30
@@ -34,33 +34,25 @@ class UserGrupoAlertServiceTest extends TestCase
             (object)['user_id' => 30]
         ]);
 
-        // Front envia 10 (mantido), 20 (novo) e um 10 duplicado. 
-        // O usuário 30 deve ser removido.
+        // Front envia o usuário 20 para adicionar. 
+        // Os usuários 10 e 30 devem ser mantidos, e o 20 adicionado.
         $data = [
-            ['grup_alert_id' => $groupId, 'user_id' => 10],
             ['grup_alert_id' => $groupId, 'user_id' => 20],
-            ['grup_alert_id' => $groupId, 'user_id' => 10], 
         ];
 
         DB::shouldReceive('transaction')->once()->andReturnUsing(fn($callback) => $callback());
 
-        // 1. Mock da busca inicial para o Diff
+        // 1. Mock da busca inicial
         $this->repositoryMock->shouldReceive('findBy')
             ->once()
             ->with(['grup_alert_id' => $groupId])
             ->andReturn($existingInDb);
 
-        // 2. Mock da limpeza
-        $this->repositoryMock->shouldReceive('forceDeleteBy')
-            ->once()
-            ->with('grup_alert_id', $groupId)
-            ->andReturn(true);
-
-        // 3. Mock do insert (deve inserir apenas 10 e 20, sem duplicatas)
+        // 2. Mock do insert (deve inserir apenas o 20)
         $this->repositoryMock->shouldReceive('insertMany')
             ->once()
             ->with(Mockery::on(function ($payload) {
-                return count($payload) === 2; // User 10 e 20
+                return count($payload) === 1 && $payload[0]['user_id'] === 20;
             }))
             ->andReturn(true);
 
@@ -70,13 +62,12 @@ class UserGrupoAlertServiceTest extends TestCase
         $this->assertIsArray($result);
         $this->assertEquals($groupId, $result['group_id']);
         $this->assertEquals(1, $result['summary']['added_count']);   // User 20
-        $this->assertEquals(1, $result['summary']['removed_count']); // User 30
-        $this->assertEquals(1, $result['summary']['kept_count']);    // User 10
+        $this->assertEquals(0, $result['summary']['removed_count']); // Nenhum removido
+        $this->assertEquals(3, $result['summary']['total_after']);   // 10, 30 e 20
         
         // Asserções de Detalhes
         $this->assertContains(20, $result['details']['added']);
-        $this->assertContains(30, $result['details']['removed']);
-        $this->assertContains(10, $result['details']['kept']);
+        $this->assertEmpty($result['details']['removed']);
     }
 
     /**
@@ -104,7 +95,6 @@ class UserGrupoAlertServiceTest extends TestCase
         
         // Simula banco vazio
         $this->repositoryMock->shouldReceive('findBy')->andReturn(collect());
-        $this->repositoryMock->shouldReceive('forceDeleteBy')->once();
 
         $this->repositoryMock->shouldReceive('insertMany')
             ->once()

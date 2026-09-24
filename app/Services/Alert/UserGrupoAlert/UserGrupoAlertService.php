@@ -34,24 +34,18 @@ class UserGrupoAlertService extends AbstractService
             ->pluck('user_id')
             ->toArray();
 
-        // 2. IDs desejados (Estado Final vindo do Front)
-        $newIds = collect($data)->pluck('user_id')->filter()->unique()->toArray();
+        // 2. IDs enviados (Novos a adicionar)
+        $inputIds = collect($data)->pluck('user_id')->filter()->unique()->toArray();
 
-        // 3. Cálculo do Diferencial (Diff)
-        $toAdd    = array_values(array_diff($newIds, $currentIds));    // Novos
-        $toRemove = array_values(array_diff($currentIds, $newIds));   // Excluídos
-        $kept     = array_values(array_intersect($currentIds, $newIds)); // Mantidos
+        // Apenas adicionar os que ainda não estão no grupo (evita duplicados e não remove os existentes)
+        $toAdd    = array_values(array_diff($inputIds, $currentIds));
+        $toRemove = []; // Não removemos nenhum utilizador existente ao adicionar
+        $kept     = array_values(array_intersect($currentIds, $inputIds));
+        // Adicionamos também os que já lá estavam ao total final
+        $finalIds = array_unique(array_merge($currentIds, $inputIds));
 
-        return DB::transaction(function () use ($grupAlertId, $newIds, $toAdd, $toRemove, $kept, $currentIds) {
+        return DB::transaction(function () use ($grupAlertId, $finalIds, $toAdd, $toRemove, $kept, $currentIds) {
             $now = now();
-
-            // 4. Remover apenas quem saiu (Otimização de Performance)
-            if (!empty($toRemove)) {
-                $this->repository->getModel()
-                    ::where('grup_alert_id', $grupAlertId)
-                    ->whereIn('user_id', $toRemove)
-                    ->forceDelete();
-            }
 
             // 5. Inserir apenas quem entrou
             if (!empty($toAdd)) {
@@ -70,15 +64,15 @@ class UserGrupoAlertService extends AbstractService
                 'group_id' => $grupAlertId,
                 'summary' => [
                     'total_before'  => count($currentIds),
-                    'total_after'   => count($newIds),
+                    'total_after'   => count($finalIds),
                     'added_count'   => count($toAdd),
                     'removed_count' => count($toRemove),
-                    'kept_count'    => count($kept),
+                    'kept_count'    => count($currentIds),
                 ],
                 'details' => [
                     'added'   => $toAdd,
                     'removed' => $toRemove,
-                    'kept'    => $kept
+                    'kept'    => $currentIds
                 ]
             ];
         });
