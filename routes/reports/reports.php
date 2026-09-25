@@ -37,7 +37,6 @@ Route::post('/', [ComplaintController::class, 'store'])->name('complaints.store'
 Route::get('/{id}', [ComplaintController::class, 'show'])
     ->whereNumber('id')
     ->name('complaints.show');
-Route::put('/{id}', [ComplaintController::class, 'update'])->whereNumber('id')->middleware('signed')->name('complaints.update');
 Route::delete('/{id}', [ComplaintController::class, 'destroy'])->whereNumber('id')->name('complaints.destroy');
 Route::post('/{id}/extend-deadline', [ComplaintDeadlineController::class, 'extendDeadline'])->name('complaints.extend-deadline');
 

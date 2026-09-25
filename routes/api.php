@@ -7,6 +7,13 @@ use App\Http\Controllers\Proviver\ProviderController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\User\UserController;
 
+Route::prefix('reports')->group(function () {
+  Route::put('/{id}', [ComplaintController::class, 'update'])
+    ->whereNumber('id')
+    ->middleware('signed:relative')
+    ->name('complaints.update');
+});
+
 Route::middleware(['auth:sanctum', 'is_active'])->group(function () {
   Route::prefix('permission')->group(base_path('routes/user/permission/permission.php'));
   Route::prefix('role')->group(base_path('routes/user/permission/role.php'));
