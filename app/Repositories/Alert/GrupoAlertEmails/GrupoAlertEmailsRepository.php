@@ -5,6 +5,7 @@ namespace App\Repositories\Alert\GrupoAlertEmails;
 use App\Models\Alert\GrupoAlertEmails\GrupoAlertEmails;
 use App\Models\Alert\GrupoType\GrupoType;
 use App\Repositories\AbstractRepository;
+use Illuminate\Support\Facades\DB;
 
 class GrupoAlertEmailsRepository extends AbstractRepository
 {
@@ -29,5 +30,26 @@ class GrupoAlertEmailsRepository extends AbstractRepository
         }
 
         return $grup->load('grupoTypes');
+    }
+
+    public function update(array $data, int $id)
+    {
+        return DB::transaction(function () use ($data, $id) {
+            $grup = $this->model->findOrFail($id);
+            $grup->update([
+                'name' => $data['name'],
+                'description' => $data['description'] ?? null,
+            ]);
+
+            $grup->grupoTypes()->delete();
+            $grup->grupoTypes()->createMany(
+                collect($data['grupo_Type'])->map(fn ($type) => [
+                    'type_complaints_id' => $type['type_complaints_id'],
+                    'grup_alert_id' => $grup->id,
+                ])->toArray()
+            );
+
+            return $grup->load('grupoTypes');
+        });
     }
 }

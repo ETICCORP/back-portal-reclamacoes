@@ -2,6 +2,7 @@
 
 namespace App\Services\Proviver;
 
+use Illuminate\Support\Facades\DB;
 use App\Repositories\Proviver\ProviderRepository;
 use App\Services\AbstractService;
 use App\Services\Proviver\grupProveder\grupProvederService;
@@ -28,22 +29,24 @@ private $grupProvederService;
 
     public function store(array $data)
     {
-        $provider = $this->repository->store($data);
-        $userData = [
+        return DB::transaction(function () use ($data) {
+            $provider = $this->repository->store($data);
+            $userData = [
 
-            "first_name" => $data['name'],
-            "last_name" => $data['name'],
-            "email" => $data['email'],
-            "role_id" => 2,
-            "phone" => $data['phone']
-        ];
-     $user=   $this->userService->store($userData);
-        $grupProvederService=[
-               "proveder_id"=>  $provider->id,
-               "user_id"=>  $user->id,
-        ];
-         $this->grupProvederService->store($grupProvederService);
+                "first_name" => $data['name'],
+                "last_name" => $data['name'],
+                "email" => $data['email'],
+                "role_id" => 2,
+                "phone" => $data['phone']
+            ];
+            $user = $this->userService->store($userData);
+            $grupProvederService = [
+                "proveder_id" => $provider->id,
+                "user_id" => $user->id,
+            ];
+            $this->grupProvederService->store($grupProvederService);
 
-        return $provider;
+            return $provider;
+        });
     }
 }
