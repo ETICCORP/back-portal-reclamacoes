@@ -3,6 +3,7 @@
 namespace App\Services\User;
 
 use App\Mail\TwoFactorCodeMail as MailTwoFactorCodeMail;
+use App\Mail\UserCreatedMail;
 use App\Models\Log\Log;
 use App\Models\User\User;
 use Illuminate\Http\Request;
@@ -153,6 +154,17 @@ class UserService extends AbstractService
 
     public function changePasswordUser(array $data, $id)
     {
-        return $this->repository->changePasswordUser($data, $id);
+        $user = $this->repository->changePasswordUser($data, $id);
+
+        try {
+            Mail::to($user->email)->queue(new UserCreatedMail($user, $data['new_password']));
+        } catch (\Throwable $th) {
+            Log::error('Erro ao enviar novas credenciais por email', [
+                'email' => $user->email,
+                'error' => $th->getMessage(),
+            ]);
+        }
+
+        return $user;
     }
 }
