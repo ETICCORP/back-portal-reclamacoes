@@ -20,13 +20,9 @@ class UserCreatedMail extends Mailable implements ShouldQueue
         $this->password = $password;
     }
 
- public function build()
+    public function build()
     {
-        return $this->subject('Seu código de autenticação')
-                      ->view('emails.user_created');
+        return $this->subject('Bem-vindo ao Portal de Reclamações')
+            ->view('emails.user_created');
     }
-
-
-   
-    
 }

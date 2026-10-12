@@ -3,7 +3,7 @@
 namespace App\Models\User;
 
 use App\Models\Permission\Role;
-use App\Notifications\CustomResetPassword;
+use App\Notifications\ResetPasswordNotification;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Auth\MustVerifyEmail;

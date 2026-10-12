@@ -30,8 +30,8 @@ Route::put('{id}', [UserController::class, 'update'])
 Route::put('/enabled/{id}', [UserController::class, 'enabled'])
     ->name('user.enabled');
 
-Route::delete('{id}', [UserController::class, 'destroy'])
+/*Route::delete('{id}', [UserController::class, 'destroy'])
     ->name('user.destroy')
-    ->middleware(['permissao:usuario-delete']);
+    ->middleware(['permissao:usuario-delete']);*/
 
 Route::post('/logout', [UserController::class, 'logout']);

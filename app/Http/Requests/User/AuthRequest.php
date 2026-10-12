@@ -22,7 +22,8 @@ class AuthRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'max:255', 'email', 'exists:users,email'],
+            // A existência é verificada com a senha no serviço para manter uma resposta genérica.
+            'email' => ['required', 'string', 'max:255', 'email'],
             'password' => ['required', 'string', 'max:255'],
         ];
     }
