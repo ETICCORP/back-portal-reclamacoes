@@ -50,8 +50,13 @@ class UserController extends AbstractController
     {
         try {
             $this->logRequest();
-            $token = $this->service->login($request);
-            return response()->json(['api_token' => $token], Response::HTTP_OK);
+            $result = $this->service->login($request);
+
+            if ($result instanceof \Illuminate\Http\JsonResponse) {
+                return $result;
+            }
+
+            return response()->json(['api_token' => $result], Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
             $this->logToDatabase('error', 'Erro ao iniciar sessão do usuário.');

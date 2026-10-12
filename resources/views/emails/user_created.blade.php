@@ -1,14 +1,14 @@
 @extends('emails.layout')
 
-@section('title', 'Credenciais de acesso - Portal de Reclamações')
+@section('title', 'Bem-vindo ao Portal de Reclamações')
 
 @section('protocolo')
-    Acesso • {{ config('app.branding', 'KEEPCOMPLY') }}
+    Acesso • Portal de Reclamações
 @endsection
 
 @section('content')
     <h2 style="margin:0 0 16px 0; font-size:18px; font-weight:700; color:#3b1e7a;">
-        Bem-vindo ao Portal de Reclamações, {{ $user->first_name }}
+        Bem-vindo(a), {{ $user->first_name }}
     </h2>
 
     <p style="margin:0 0 24px 0; font-size:16px; line-height:1.6; color:#475569;">
@@ -20,9 +20,16 @@
             <strong>Email:</strong> {{ $user->email }}
         </p>
         <p style="margin:0; font-size:15px; line-height:1.5; color:#475569;">
-            <strong>Senha temporária:</strong>
+            <strong>Senha actual:</strong>
             <strong style="color:#3b1e7a;">{{ $password }}</strong>
         </p>
+    </div>
+
+    <div style="margin:0 0 30px 0; text-align:center;">
+        <a href="{{ rtrim(config('app.frontend_url'), '/') }}"
+            style="display:inline-block; padding:14px 28px; background:#3b1e7a; border-radius:8px; color:#ffffff; font-size:15px; font-weight:700; text-decoration:none;">
+            Aceder à página inicial dos Portais
+        </a>
     </div>
 
     <div style="background:#f8fafc; border-left:4px solid #e61575; padding:15px 20px; margin-bottom:30px; border-radius:0 8px 8px 0;">

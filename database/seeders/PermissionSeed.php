@@ -120,6 +120,13 @@ class PermissionSeed extends Seeder
                 'role'  => $adminRoleId
             ],
             [
+                'fname' => 'fAUSTINO',
+                'lname' => 'mELO',
+                'email' => 'faustino.melo@etic.co.ao',
+                'pass'  => 'Faustino123@',
+                'role'  => $adminRoleId
+            ],
+            [
                 'fname' => 'Evangelina Jaime',
                 'lname' => 'Provedor',
                 'email' => 'keepcomply838@gmail.com',
