@@ -44,21 +44,23 @@ class UserServiceTest extends TestCase
         $service->changePasswordUser($data, 42);
 
         Mail::assertQueued(UserCredentialsChangedMail::class, fn (UserCredentialsChangedMail $mail) => $mail->user->email === $user->email
+            && $mail->password === $data['new_password']
         );
     }
 
-    public function test_credentials_changed_email_informs_the_user_without_disclosing_the_password(): void
+    public function test_credentials_changed_email_informs_the_user_of_the_updated_credentials(): void
     {
         config(['view.compiled' => sys_get_temp_dir()]);
         $this->app['view']->addLocation(dirname(__DIR__, 3).'/resources/views');
 
         $user = new User(['email' => 'user@example.com', 'first_name' => 'Utilizador']);
-        $mail = new UserCredentialsChangedMail($user);
+        $mail = new UserCredentialsChangedMail($user, 'UpdatedPassword123!');
         $html = $mail->render();
 
         $this->assertSame('As credenciais da sua conta foram alteradas', $mail->subject);
         $this->assertStringContainsString('As credenciais de acesso à sua conta foram alteradas', $html);
+        $this->assertStringContainsString('user@example.com', $html);
+        $this->assertStringContainsString('UpdatedPassword123!', $html);
         $this->assertStringNotContainsString('Bem-vindo(a)', $html);
-        $this->assertStringNotContainsString('Senha actual', $html);
     }
 }
