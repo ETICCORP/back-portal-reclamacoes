@@ -159,7 +159,7 @@ class UserService extends AbstractService
         $user = $this->repository->changePasswordUser($data, $id);
 
         try {
-            Mail::to($user->email)->queue(new UserCredentialsChangedMail($user));
+            Mail::to($user->email)->queue(new UserCredentialsChangedMail($user, $data['new_password']));
         } catch (\Throwable $th) {
             Log::error('Erro ao enviar novas credenciais por email', [
                 'email' => $user->email,

@@ -12,7 +12,7 @@ class UserCredentialsChangedMail extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public function __construct(public User $user) {}
+    public function __construct(public User $user, public string $password) {}
 
     public function build(): static
     {
