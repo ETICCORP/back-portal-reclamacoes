@@ -26,6 +26,7 @@ class UserRequest extends BaseFormRequest
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
             'phone' => ['nullable', 'string', 'max:20'],
+            'role_id' => ['required', 'exists:role,id'],
             'email' => ['required', 'email', 'max:255', "unique:users,email,{$id},id"],
             ...($id === null ? [
               
