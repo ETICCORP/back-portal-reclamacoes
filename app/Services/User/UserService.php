@@ -4,14 +4,15 @@ namespace App\Services\User;
 
 use App\Mail\TwoFactorCodeMail as MailTwoFactorCodeMail;
 use App\Mail\UserCreatedMail;
+use App\Mail\UserCredentialsChangedMail;
 use App\Models\Log\Log;
 use App\Models\User\User;
-use Illuminate\Http\Request;
+use App\Repositories\User\UserRepository;
 use App\Services\AbstractService;
+use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Repositories\User\UserRepository;
-use Exception;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
@@ -34,7 +35,7 @@ class UserService extends AbstractService
 
         try {
             // 3. Enviar a senha por email para o usuário
-            Mail::to($data['email'])->queue(new \App\Mail\UserCreatedMail($user, $password));
+            Mail::to($data['email'])->queue(new UserCreatedMail($user, $password));
         } catch (\Throwable $th) {
             Log::error('Erro ao enviar email para o utilizador', [
                 'email' => $data['email'],
@@ -44,23 +45,22 @@ class UserService extends AbstractService
 
         return $user;
     }
+
     public function changePassword(array $data)
     {
         return $this->repository->changePassword($data);
     }
 
-
-
     public function login(Request $request)
     {
         $request->validate([
             'email' => 'required|email',
-            'password' => 'required'
+            'password' => 'required',
         ]);
 
         $user = User::where('email', $request->email)->first();
 
-        if (!$user || !Hash::check($request->password, $user->password)) {
+        if (! $user || ! Hash::check($request->password, $user->password)) {
             return response()->json(['message' => 'Email ou senha incorretos'], 401);
         }
         if ($user->is_active == 0) {
@@ -75,15 +75,15 @@ class UserService extends AbstractService
 
         return response()->json([
             'message' => 'Código 2FA enviado para seu email',
-            'user_id' => $user->id
+            'user_id' => $user->id,
         ]);
     }
-
 
     public function logout(Request $request)
     {
         $user = Auth::user();
         $user->currentAccessToken()->delete();
+
         return true;
     }
 
@@ -100,7 +100,9 @@ class UserService extends AbstractService
             ->where('email', $userEmail)
             ->first();
 
-        if ($user->google_id !== null) return;
+        if ($user->google_id !== null) {
+            return;
+        }
 
         Password::sendResetLink(['email' => $userEmail]);
     }
@@ -123,7 +125,7 @@ class UserService extends AbstractService
 
         $user = User::where('two_factor_code', $code)->first();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['status' => 'error', 'message' => 'Código inválido.'], 401);
         }
 
@@ -139,7 +141,7 @@ class UserService extends AbstractService
         $user->resetTwoFactorCode();
 
         // 5. Gera o token definitivo para o frontend usar nas próximas rotas
-        $token = $user->createToken("NOSSA_SEGUROS")->plainTextToken;
+        $token = $user->createToken('NOSSA_SEGUROS')->plainTextToken;
 
         return [
             'status' => 'success',
@@ -147,8 +149,8 @@ class UserService extends AbstractService
             'token' => $token,
             'user' => [
                 'id' => Auth::id(), // Já funciona por causa do setUser
-                'name' => Auth::user()->name
-            ]
+                'name' => Auth::user()->name,
+            ],
         ];
     }
 
@@ -157,7 +159,7 @@ class UserService extends AbstractService
         $user = $this->repository->changePasswordUser($data, $id);
 
         try {
-            Mail::to($user->email)->queue(new UserCreatedMail($user, $data['new_password']));
+            Mail::to($user->email)->queue(new UserCredentialsChangedMail($user));
         } catch (\Throwable $th) {
             Log::error('Erro ao enviar novas credenciais por email', [
                 'email' => $user->email,

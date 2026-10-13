@@ -21,59 +21,56 @@ class UserGrupoAlertService extends AbstractService
     /**
      * Sincroniza os usuários do grupo (Lógica unificada para Store e Update)
      */
-    public function syncGroupUsers(array $data)
+    public function syncGroupUsers(array $data): array
     {
         $grupAlertId = $data[0]['grup_alert_id'] ?? null;
 
-        if (!$grupAlertId) {
-            throw new \Exception("Dados inválidos: id do grupo não encontrado.");
+        if (! $grupAlertId) {
+            throw new \Exception('Dados inválidos: id do grupo não encontrado.');
         }
 
-        // 1. Obter IDs atuais (Estado Atual)
-        $currentIds = $this->repository->findBy(['grup_alert_id' => $grupAlertId])
-            ->pluck('user_id')
-            ->toArray();
+        return DB::transaction(function () use ($grupAlertId, $data) {
+            $currentIds = $this->repository->findBy(['grup_alert_id' => $grupAlertId])
+                ->pluck('user_id')
+                ->toArray();
 
-        // 2. IDs enviados (Novos a adicionar)
-        $inputIds = collect($data)->pluck('user_id')->filter()->unique()->toArray();
+            $inputIds = collect($data)->pluck('user_id')->filter()->unique()->values()->toArray();
+            $toAdd = array_values(array_diff($inputIds, $currentIds));
+            $toRemove = array_values(array_diff($currentIds, $inputIds));
+            $kept = array_values(array_intersect($currentIds, $inputIds));
+            $finalIds = $inputIds;
 
-        // Apenas adicionar os que ainda não estão no grupo (evita duplicados e não remove os existentes)
-        $toAdd    = array_values(array_diff($inputIds, $currentIds));
-        $toRemove = []; // Não removemos nenhum utilizador existente ao adicionar
-        $kept     = array_values(array_intersect($currentIds, $inputIds));
-        // Adicionamos também os que já lá estavam ao total final
-        $finalIds = array_unique(array_merge($currentIds, $inputIds));
-
-        return DB::transaction(function () use ($grupAlertId, $finalIds, $toAdd, $toRemove, $kept, $currentIds) {
             $now = now();
 
-            // 5. Inserir apenas quem entrou
-            if (!empty($toAdd)) {
-                $payload = collect($toAdd)->map(fn($userId) => [
+            if ($toRemove !== []) {
+                $this->repository->removeUsersFromGroup($grupAlertId, $toRemove);
+            }
+
+            if ($toAdd !== []) {
+                $payload = collect($toAdd)->map(fn ($userId) => [
                     'grup_alert_id' => $grupAlertId,
-                    'user_id'       => $userId,
-                    'created_at'    => $now,
-                    'updated_at'    => $now,
+                    'user_id' => $userId,
+                    'created_at' => $now,
+                    'updated_at' => $now,
                 ])->toArray();
 
                 $this->repository->insertMany($payload);
             }
 
-            // 6. Retorno preciso do que aconteceu
             return [
                 'group_id' => $grupAlertId,
                 'summary' => [
-                    'total_before'  => count($currentIds),
-                    'total_after'   => count($finalIds),
-                    'added_count'   => count($toAdd),
+                    'total_before' => count($currentIds),
+                    'total_after' => count($finalIds),
+                    'added_count' => count($toAdd),
                     'removed_count' => count($toRemove),
-                    'kept_count'    => count($currentIds),
+                    'kept_count' => count($kept),
                 ],
                 'details' => [
-                    'added'   => $toAdd,
+                    'added' => $toAdd,
                     'removed' => $toRemove,
-                    'kept'    => $currentIds
-                ]
+                    'kept' => $kept,
+                ],
             ];
         });
     }

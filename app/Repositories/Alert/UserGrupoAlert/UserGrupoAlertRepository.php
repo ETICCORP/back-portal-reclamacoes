@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Repositories\Alert\UserGrupoAlert;
 
 use App\Models\Alert\UserGrupoAlert\UserGrupoAlert;
@@ -24,6 +25,15 @@ class UserGrupoAlertRepository extends AbstractRepository
                 ]);
             })->toArray()
         );
+
         return $inserted;
+    }
+
+    public function removeUsersFromGroup(int $grupAlertId, array $userIds): int
+    {
+        return $this->model->newQuery()
+            ->where('grup_alert_id', $grupAlertId)
+            ->whereIn('user_id', $userIds)
+            ->delete();
     }
 }
