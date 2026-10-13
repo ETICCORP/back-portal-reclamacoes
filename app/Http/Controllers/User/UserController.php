@@ -52,10 +52,6 @@ class UserController extends AbstractController
             $this->logRequest();
             $result = $this->service->login($request);
 
-            if ($result instanceof \Illuminate\Http\JsonResponse) {
-                return $result;
-            }
-
             return response()->json(['api_token' => $result], Response::HTTP_OK);
         } catch (Exception $e) {
             $this->logRequest($e);
