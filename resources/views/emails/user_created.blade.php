@@ -28,7 +28,7 @@
     <div style="margin:0 0 30px 0; text-align:center;">
         <a href="{{ rtrim(config('app.frontend_url'), '/') }}"
             style="display:inline-block; padding:14px 28px; background:#3b1e7a; border-radius:8px; color:#ffffff; font-size:15px; font-weight:700; text-decoration:none;">
-            Aceder à página inicial dos Portais
+            Aceder à página inicial do Portal
         </a>
     </div>
 
