@@ -4,6 +4,7 @@ namespace App\Repositories\Alert\UserGrupoAlert;
 
 use App\Models\Alert\UserGrupoAlert\UserGrupoAlert;
 use App\Repositories\AbstractRepository;
+use Illuminate\Database\Eloquent\Builder;
 
 class UserGrupoAlertRepository extends AbstractRepository
 {
@@ -29,11 +30,15 @@ class UserGrupoAlertRepository extends AbstractRepository
         return $inserted;
     }
 
-    public function removeUsersFromGroup(int $grupAlertId, array $userIds): int
+    public function removeUsersNotInGroup(int $grupAlertId, array $userIds): int
     {
         return $this->model->newQuery()
+            ->withTrashed()
             ->where('grup_alert_id', $grupAlertId)
-            ->whereIn('user_id', $userIds)
-            ->delete();
+            ->where(function (Builder $query) use ($userIds): void {
+                $query->whereNotIn('user_id', $userIds)
+                    ->orWhereNotNull('deleted_at');
+            })
+            ->forceDelete();
     }
 }

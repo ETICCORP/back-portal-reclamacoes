@@ -47,9 +47,9 @@ class UserGrupoAlertServiceTest extends TestCase
             ->with(['grup_alert_id' => $groupId])
             ->andReturn($existingInDb);
 
-        $this->repositoryMock->shouldReceive('removeUsersFromGroup')
+        $this->repositoryMock->shouldReceive('removeUsersNotInGroup')
             ->once()
-            ->with($groupId, [25, 26])
+            ->with($groupId, [23, 24])
             ->andReturn(2);
 
         $result = $this->service->syncGroupUsers($data);
@@ -89,6 +89,11 @@ class UserGrupoAlertServiceTest extends TestCase
 
         // Simula banco vazio
         $this->repositoryMock->shouldReceive('findBy')->andReturn(collect());
+
+        $this->repositoryMock->shouldReceive('removeUsersNotInGroup')
+            ->once()
+            ->with($groupId, [10])
+            ->andReturn(0);
 
         $this->repositoryMock->shouldReceive('insertMany')
             ->once()
