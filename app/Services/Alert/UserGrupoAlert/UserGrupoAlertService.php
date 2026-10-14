@@ -42,9 +42,7 @@ class UserGrupoAlertService extends AbstractService
 
             $now = now();
 
-            if ($toRemove !== []) {
-                $this->repository->removeUsersFromGroup($grupAlertId, $toRemove);
-            }
+            $this->repository->removeUsersNotInGroup($grupAlertId, $inputIds);
 
             if ($toAdd !== []) {
                 $payload = collect($toAdd)->map(fn ($userId) => [
